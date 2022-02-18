@@ -1,0 +1,137 @@
+.inboxContainer {
+  padding-left: 12px;
+  display: flex;
+  border: 0.5px solid #adb5bd;
+}
+.inboxContainer:hover{
+  background-color: white;
+}
+.searchContainer {
+  height: 90px;
+  width: 100%;
+  border: 0.5px solid #adb5bd;
+  display: flex;
+  align-items: center;
+  background-color: #F5F6FA;
+}
+.searchContainer input {
+  width: 93%;
+  margin-left: 10px;
+  padding: 2%;
+}
+.InboxContainer {
+  overflow-y: scroll;
+  height: 1000vh;
+  cursor: pointer;
+}
+.imgContainer {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin-top: 20px;
+  background-repeat: no-repeat;
+  background-image: url(../../../images/circul.svg);
+}
+.imgContainer h2{
+  color: white;
+  font-size: 14px;
+}
+.inboxTitleContainer {
+  margin-left: 10px;
+  margin-top: 23px;
+}
+.inboxTitleContainer p {
+  margin-bottom: -10px;
+  color: #adb5bd;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 175%;
+}
+.inboxTitleContainer span {
+  margin-top: -10px;
+  color: #adb5bd;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 175%;
+}
+.inboxTitleContainer h3 {
+  margin-bottom: -10px;
+  color: #31456a;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 175%;
+  cursor: pointer;
+}
+.bg{
+  background-color: white;
+  max-width: 98%;
+}
+.bg-2{
+  background-color: #F5F6FA;
+}
+.dateInfo span {
+  color: #adb5bd;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 175%;
+}
+.dateInfo {
+  margin-top: 50px;
+  margin-left: 50px;
+}
+.addInboxButton {
+  margin-top: 30px;
+  cursor: pointer;
+}
+.addInboxButton span {
+  margin-left: -25px;
+  color: white;
+  font-size: 25px;
+}
+.addInboxButton img {
+  margin-top: -7px;
+}
+
+.addButton{
+  padding: 16px;
+  width: 100%;
+  color: #7C057B;
+  cursor: pointer;
+  font-style: bold;
+  text-align: right;
+}
+
+/* Message Area css are starting here */
+.messageArea {
+  background: white;
+  height: 1000vh;
+  margin-left: -10px;
+}
+.dateWithTitle p {
+  color: #ADB5BD;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 175%;
+}
+.dateWithTitle h2 {
+  color: #31456A;
+  font-weight: 600;
+  font-size: 27px;
+  line-height: 175%;
+}
+.dateWithTitle {
+  margin-left: 20px;
+  padding-top: 50px;
+}
+.sentButtonInbox {
+  float: right;
+  width: 20%;
+}
+.sentButtonInbox button {
+  background: linear-gradient(134.99deg, #7C057B 0%, #CD2791 77.02%);
+border-radius: 6px;
+width: 117px;
+border: transparent;
+height: 35px;
+color: white;
+}

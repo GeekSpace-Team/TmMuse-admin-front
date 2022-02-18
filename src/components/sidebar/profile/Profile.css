@@ -1,0 +1,41 @@
+.content {
+  margin-top: 65px;
+}
+.profileName {
+  width: 96%;
+  margin-left: 2%;
+}
+.profileName p {
+  margin-top: 3%;
+  color: #31456a;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 49px;
+}
+.profileName button {
+  width: 150px;
+  margin-top: 3.5%;
+  border: 1px solid #79747e;
+  box-sizing: border-box;
+  border-radius: 100px;
+  color: #6750a4;
+  height: 35px;
+}
+.profileSelect {
+  width: 96%;
+  margin-left: 2%;
+  margin-bottom: 3%;
+}
+.profileSelect select {
+  width: 30%;
+  padding: 4px;
+}
+.ProfileModalAddButton {
+  margin-top: 5%;
+}
+
+@media (max-width: 800px) {
+  .profileSelect select {
+    width: 100%;
+  }
+}

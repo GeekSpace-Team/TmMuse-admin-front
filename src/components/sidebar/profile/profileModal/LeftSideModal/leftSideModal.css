@@ -1,0 +1,22 @@
+.inputTitle {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  color: #31456a;
+  margin-bottom: -1%;
+}
+.leftinputItem input {
+  margin-bottom: 3%;
+}
+#movie {
+  margin-top: 5px;
+}
+.leftinputItem textarea {
+  margin-bottom: 3%;
+}
+
+@media (max-width: 765px) {
+  .inputModal {
+    width: 100%;
+  }
+}

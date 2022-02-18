@@ -1,0 +1,22 @@
+.titleAndButton {
+  width: 98%;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  padding-left: 25px;
+}
+.titleAndButton button {
+  border: 1px solid #79747e;
+  box-sizing: border-box;
+  border-radius: 100px;
+  width: 150px;
+  color: #6750a4;
+  font-weight: 300;
+  height: 40px;
+  font-size: 14px;
+}
+.titleAndButton p {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: 49px;
+  color: #31456a;
+}

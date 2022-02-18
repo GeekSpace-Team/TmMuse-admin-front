@@ -1,0 +1,26 @@
+#PushInput input {
+  width: 412px;
+}
+.pushItems {
+  margin-left: 10px;
+  background: white;
+  margin-right: 20px;
+  padding-left: 40px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+.pushButton button {
+  width: 140px;
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  border-radius: 6px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 175%;
+  height: 40px;
+  border: transparent;
+}
+.pushButton {
+  margin-left: 770px;
+  margin-top: 50px;
+}

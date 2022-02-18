@@ -1,0 +1,23 @@
+
+#noButton {
+    width: 190px;
+    background: #FFFFFF;
+    border: 1px solid #31456A;
+    box-sizing: border-box;
+    color: #31456A;
+    font-weight: 800;
+    border-radius: 6px;
+}
+#yesButton {
+    width: 195px;
+    border: transparent;
+    background: linear-gradient(134.99deg, #7C057B 0%, #CD2791 77.02%);
+    border-radius: 6px;
+    font-weight: 800;
+    color: #FFFFFF;
+    height: 35px;
+}
+.deletetitLe{
+    color: #7C057B;
+    font-size: 23px;
+}

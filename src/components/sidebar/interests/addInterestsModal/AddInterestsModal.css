@@ -1,0 +1,17 @@
+#interestsAdd {
+  float: right;
+  margin-top: 30px;
+}
+#interestsInput input {
+  width: 515px;
+}
+.Addbuttons {
+  transition: 1s;
+}
+.Addbuttons:hover {
+  background: linear-gradient(134.99deg, #7C057B 0%, #CD2791 77.02%);
+  color: white;
+  border: transparent;
+  width: 160px;
+  height: 40px;
+}

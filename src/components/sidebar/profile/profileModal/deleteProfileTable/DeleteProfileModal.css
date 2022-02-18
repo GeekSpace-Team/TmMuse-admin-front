@@ -1,0 +1,34 @@
+.close {
+  cursor: pointer;
+}
+.Close {
+  display: flex;
+  justify-content: space-between;
+}
+.deleteButton {
+  display: flex;
+  margin-left: 130px;
+}
+
+.deleteButton button {
+  width: 140px;
+  height: 35px;
+  margin-top: 40px;
+}
+#noButton {
+  border: 1px solid #31456a;
+  box-sizing: border-box;
+  border-radius: 6px;
+  color: #31456a;
+  margin-left: 120px;
+}
+#yesButton {
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  border-radius: 6px;
+  color: #ffffff;
+  border: transparent;
+  margin-left: 30px;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 150%;
+}

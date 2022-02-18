@@ -1,0 +1,16 @@
+.Addbuttons {
+    border-radius: 100px;
+    width: 130px;
+    height: 33px;
+    color: #6750A4;
+    border: 1px solid #79747E;
+    box-sizing: border-box;
+    margin-right: 25px;
+}
+.titleNames {
+    color: #31456A;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 49px;
+    margin-left: 20px;
+}

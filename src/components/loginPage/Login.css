@@ -1,0 +1,146 @@
+@font-face {
+  font-family: "SiteFontRegular";
+  src: url(../fonts/Montserrat-Regular.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontLight";
+  src: url(../fonts/Montserrat-Light.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontBold";
+  src: url(../fonts/Montserrat-Bold.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontSemiBold";
+  src: url(../fonts/Montserrat-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontMedium";
+  src: url(../fonts/Montserrat-Medium.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontBlack";
+  src: url(../fonts/Montserrat-Black.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontExtraBold";
+  src: url(../fonts/Montserrat-ExtraBold.ttf);
+}
+
+.leftContainer {
+  height: 100vh;
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  clip-path: circle(86% at left);
+}
+
+.logoContainer {
+  margin-top: 30%;
+}
+
+.loginLogo {
+  width: 80%;
+  text-align: left;
+  float: left;
+}
+
+.description {
+  text-align: justify;
+  margin-top: 5%;
+  color: white;
+  font-family: "SiteFontRegular";
+}
+
+.appNameContainer h2 {
+  float: left;
+  color: white;
+  font-family: "SiteFontRegular";
+}
+
+.appNameContainer p {
+  float: right;
+  color: #e3edf7;
+  font-size: 16px;
+  font-family: "SiteFontRegular";
+}
+
+/* Right items */
+.rightItems img {
+  margin-top: 30%;
+}
+.rightItems p {
+  margin-top: 3%;
+  color: #31456a;
+  font-family: "SiteFontBold";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 29px;
+}
+.usernameInput input {
+  margin-top: 7%;
+  width: 80%;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid chocolate;
+  text-align: start;
+  padding: 12px;
+  font-family: "SiteFontMedium";
+}
+.passwordInput input {
+  width: 80%;
+  margin-top: 3%;
+  border-radius: 6px;
+  height: 40px;
+  border: 1px solid #31456a;
+  padding: 12px;
+  font-family: "SiteFontMedium";
+}
+.loginButton button {
+  margin-top: 10%;
+  width: 80%;
+  height: 40px;
+  border-radius: 13px;
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  border: transparent;
+  color: white;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 27px;
+  font-family: "SiteFontMedium";
+}
+
+.modal-content {
+  background: transparent;
+  border: none;
+}
+
+/* Media */
+@media (max-width: 800px) {
+  .leftContainer {
+    clip-path: circle(70% at left);
+  }
+}
+@media (max-width: 576px) {
+  .leftContainer {
+    clip-path: circle(0% at left);
+    clip-path: circle(70% at top);
+  }
+  .logoContainer {
+    margin-top: 10%;
+  }
+  .rightItems img {
+    margin-top: 0%;
+  }
+  .notNeedMargin {
+    display: none;
+  }
+  .rightContainer {
+    margin-top: -10%;
+  }
+}

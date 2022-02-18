@@ -1,0 +1,22 @@
+.activeButton button {
+  background: #219653;
+  border-radius: 4px;
+  height: 35px;
+  width: 130px;
+  border: transparent;
+  color: white;
+}
+.passiveButton button {
+  background: #eb5757;
+  border-radius: 4px;
+  height: 35px;
+  width: 130px;
+  border: transparent;
+  color: white;
+}
+.activeText {
+  color: #219653;
+}
+.passiveText {
+  color: #eb5757;
+}

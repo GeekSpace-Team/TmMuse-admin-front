@@ -1,0 +1,11 @@
+.modal {
+  background: white;
+}
+.addProfileTitle {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 150%;
+  font-style: "SiteFontRegular";
+  color: #7c057b;
+}
+

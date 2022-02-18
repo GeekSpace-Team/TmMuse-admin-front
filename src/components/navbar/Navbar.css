@@ -1,0 +1,52 @@
+.header {
+  width: 100%;
+  background: white;
+  height: 65px;
+  padding-top: 12px;
+  padding-bottom: 0px;
+  border-bottom-style: solid;
+  border-bottom-color: #adb5bd;
+  border-bottom-width: 0.1px;
+  position: fixed;
+}
+
+.searchBar {
+  border: 0.7px solid #adb5bd;
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 6px;
+  width: 30%;
+  margin-left: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchBar input {
+  border: none;
+  background: transparent;
+  margin-left: 6px;
+  outline: none;
+  width: 100%;
+}
+
+.userIcon {
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 50%;
+  color: white;
+}
+
+.userInfo p:nth-child(2) {
+  margin-top: -16px;
+}
+
+@media (max-width: 768px) {
+  .searchBar,
+  .userInfo {
+    display: none;
+  }
+}

@@ -1,0 +1,69 @@
+.inputSize input {
+  width: 100px;
+}
+
+.inputSize input {
+  margin-bottom: 3%;
+}
+.inputSize select {
+  margin-bottom: 3%;
+}
+.addPhoneNumber {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  color: #7c057b;
+  margin-top: 11%;
+  cursor: pointer;
+  margin-left: 3%;
+}
+
+.fullSizeInput input {
+  width: 88%;
+  margin-bottom: 3%;
+}
+.fullSizeInput button {
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  border-radius: 6px;
+  width: 150px;
+  height: 40px;
+  border: transparent;
+  color: white;
+  margin-left: -27%;
+  margin-top: 20%;
+}
+#RequiredPromotion p {
+  margin-left: 10%;
+}
+
+#cafeRestaurantContainer {
+  width: 100%;
+  display: flex;
+}
+#kitchenTmInput {
+  width: 285px;
+}
+.AddPhoneNumber {
+  width: 100%;
+  display: flex;
+}
+.normalSize {
+  width: 215px;
+}
+
+@media (max-width: 765px) {
+  .inputModal {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1300px) {
+  #normalSize {
+    width: 200px;
+  }
+}
+@media (max-width: 1220px) {
+  #normalSize {
+    width: 175px;
+  }
+}

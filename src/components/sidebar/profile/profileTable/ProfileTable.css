@@ -1,0 +1,13 @@
+.profileTable {
+  width: 96%;
+  background: #ffffff;
+  margin-left: 2%;
+}
+.profileTable th {
+  background: #31456a;
+  height: 45px;
+  color: #ffffff;
+}
+.profileTable td {
+  height: 50px;
+}

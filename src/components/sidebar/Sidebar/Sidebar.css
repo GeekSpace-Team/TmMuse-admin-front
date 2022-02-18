@@ -1,0 +1,85 @@
+body,
+html {
+  margin: 0;
+}
+
+@font-face {
+  font-family: "SiteFontRegular";
+  src: url(../../fonts/Montserrat-Regular.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontLight";
+  src: url(../../fonts/Montserrat-Light.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontBold";
+  src: url(../../fonts/Montserrat-Bold.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontSemiBold";
+  src: url(../../fonts/Montserrat-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontMedium";
+  src: url(../../fonts/Montserrat-Medium.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontBlack";
+  src: url(../../fonts/Montserrat-Black.ttf);
+}
+
+@font-face {
+  font-family: "SiteFontExtraBold";
+  src: url(../../fonts/Montserrat-ExtraBold.ttf);
+}
+* {
+  font-family: "SiteFontRegular";
+  font-size: 16px;
+}
+.sideBarContainer {
+  background: white;
+}
+
+.activeItem {
+  color: white;
+  background: linear-gradient(134.99deg, #7c057b 0%, #cd2791 77.02%);
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
+.passiveItem {
+  color: #adb5bd;
+  background: transparent;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
+.passiveItem:hover {
+  color: #7c057b;
+  background: #c4ccf8;
+}
+
+.toolbar {
+  color: #31456a;
+  margin-top: -25px;
+}
+.toolbarTitle p:nth-child(2) {
+  margin-top: -16px;
+}
+.toolbarTitle p:nth-child(1) {
+  margin-top: 16px;
+}
+
+.line {
+  width: 100%;
+  background: silver;
+  height: 0.1px;
+  margin-top: -6px;
+}

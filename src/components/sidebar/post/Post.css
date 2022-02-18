@@ -1,0 +1,7 @@
+.postSelect select {
+  margin-left: 20px;
+  width: 300px;
+}
+.postSelect {
+  padding-bottom: 20px;
+}
