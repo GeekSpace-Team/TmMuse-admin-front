@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
@@ -22,106 +21,61 @@ const style = {
 };
 
 
-const UpdateCertificate = ({selectAmount,selectProfile,selectuser,selectStatus}) => {
+const UpdateCertificate = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [amount, setAmount] = useState(selectAmount);
-  const [status, setStatus] = useState(selectStatus);
-  const [profile_id, setProfile_id] = useState(0);
-  const [user_id, setUser_id] = useState(0);
-
-
+  const handleClose = () =>{props.handleClose()}
+  const [allUser, setAllUser] = useState([]);
+  const [profileId, setProfileId] = useState(props.data.profile_id);
+  const [allProfileList, setAllProfile] = useState([]);
+  const [profile_id,setProfile_id ] = useState(props.data.profile_id);
+  const [amount, setAmount ] = useState(props.data.amount);
+  const [status, setStatus ] = useState(props.data.status);
+  const [ user_id, setUser_id ] = useState(props.data.user_id);
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
   }
-
-  const [toAdd, setToAdd] = useState(false);
-
-  const handleAdd = () => {
-    setToAdd(!toAdd);
-  }
-
-
-  const [allProfileList, setAllProfile] = useState([]);
-  const [allUser, setAllUser] = useState([]);
-
-  // useEffect(() => {
-  //   const headers = {
-  //     'Authorization': 'Bearer my-token',
-  //     'My-Custom-Header': 'foobar'
-  //   };
-  //   axiosInstanse.get("/get-name-profile", { headers })
-  //     .then(response => {
-  //       setAllProfile(response.data.body);
-  //     })
-  // },[])
-
-
-
-  // useEffect(() => {
-  //   const headers = {
-  //     'Authorization': 'Bearer my-token',
-  //     'My-Custom-Header': 'foobar'
-  //   };
-  //   axiosInstanse.get("/get-user-name", { headers })
-  //     .then(response => {
-  //       setAllUser(response.data.body);
-  //     })
-  // },[])
-
-
-
-
-
-
-
-
-  async function addCertificate() {
-    if (!toAdd)
-      return;
-
-
-    const certificate = {
-      amount: amount,
-      status: status,
-      profile_id: profile_id,
-      user_id: user_id,
-
-    };
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    await axiosInstanse.put('/update-certificate', certificate, { headers })
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
+  useEffect(() => {
+    axiosInstanse.get("/get-name-profile", { headers })
       .then(response => {
-        if (response.data.error) {
-          alert("Something is went wrong!")
-        } 
-        alert("success")
-        setToAdd(false);
-      }).catch(ex => {
-        setToAdd(false);
-        alert("Adding error:" + ex);
-      });
-  }
+        setAllProfile(response.data.body);
+      }).catch((err)=>{
+        console.log(err);
+      })
 
-
+      setProfileId(props.data.profile_id)
+  }, [])
+  console.log("data",props.data)
 
   useEffect(() => {
+    axiosInstanse.get("/get-user-name", { headers })
+      .then(response => {
+        setAllUser(response.data.body);
+      })
+  }, [])
 
-    addCertificate();
-  }, [toAdd]);
+  const UpdateMyCertificate = (id)=>{
+    axiosInstanse.put("/update-certificate?id="+id,{
+      profile_id: profile_id,
+      amount: amount,
+      status: status,
+      user_id: user_id
+      
+    },{headers}).then((data)=>{
+      console.log(data.data.body);
+      props.handleClose()
+      props.getData(1)
+    }).catch((err)=>{
+      console.log(err);
+    })
 
+  }
 
   return <div>
-    <img src="images/Edit.svg" onClick={handleOpen} alt="" />
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
       <Box sx={style}>
         <Stack direction='row' justifyContent='space-between'>
           <p className='bannerModalTitle'>Update certificate</p>
@@ -131,38 +85,30 @@ const UpdateCertificate = ({selectAmount,selectProfile,selectuser,selectStatus})
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Amount:</p>
-              <input type="text" value={amount} onInput={e => setAmount(e.target.value)} />
+              <input type="text" onChange={(e)=>setAmount(e.target.value)} defaultValue={props.data.amount} />
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Profile:</p>
-              <select name="" style={{ height: '30px' }} id="" onChange={e => setProfile_id(e.target.value)}>
+              <select onChange={(e)=>setProfile_id(e.target.value)} value={profile_id} name="" id="" style={{ height: '30px' }} >
                 <option value="0">Select...</option>
                 {
                   allProfileList.map((element, i) => {
-                    return (
-                      selectProfile==element.nameTM?
-                      <option value={element.id} selected>{element.nameTM}</option>:
-                      <option value={element.id}>{element.nameTM}</option>
-                    )
+                    return (<option key={"dsfsdffdsf"+element.id} value={element.id}>{element.nameTM}</option>)
                   })
                 }
-              </select>
+              </select> 
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>User:</p>
-              <select name="" style={{ height: '30px' }} id="" onChange={e => setUser_id(e.target.value)}>
+              <select name="" style={{ height: '30px' }} id="" onChange={e => setUser_id(e.target.value)} value={user_id}>
                 <option value="0">Select...</option>
                 {
                   allUser.map((element, i) => {
-                    return (
-                      selectuser==element.fullname?
-                      <option value={element.id} selected>{element.fullname}</option>:
-                      <option value={element.id}>{element.fullname}</option>
-                    )
+                    return (<option value={element.id}>{element.fullname}</option>)
                   })
                 }
               </select>
@@ -171,21 +117,17 @@ const UpdateCertificate = ({selectAmount,selectProfile,selectuser,selectStatus})
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Status:</p>
-              <select name="" onChange = { e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
-                <option value="0">Status...</option>
-                
-                  <option value={1}>Active</option>:
-                  <option value={0}>Passive</option>
-                
+              <select name="" onChange={e => handleSelectStatus(e)} value={status} style={{ height: '30px' }} id="">
+                <option key={"status1"} value={1}>Active</option>:
+                <option key={"status12"} value={0}>Passive</option>
               </select>
             </Stack>
           </Col>
         </Row>
         <div className="BannerAddButton" id='addPromoButton'>
-          <button>Update</button>
+          <button onClick={()=>UpdateMyCertificate(props.data.id)}>Update</button>
         </div>
       </Box>
-    </Modal>
   </div>;
 };
 

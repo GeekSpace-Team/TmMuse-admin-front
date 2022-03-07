@@ -22,7 +22,7 @@ const style = {
 };
 
 
-const AddCertificate = () => {
+const AddCertificate = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -31,91 +31,69 @@ const AddCertificate = () => {
   const [status, setStatus] = useState(0);
   const [profile_id, setProfile_id] = useState(0);
   const [user_id, setUser_id] = useState(0);
-
-
+  const [toAdd, setToAdd] = useState(false);
+  const [allProfileList, setAllProfile] = useState([]);
+  const [allUser, setAllUser] = useState([]);
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
   }
 
-  const [toAdd, setToAdd] = useState(false);
-
   const handleAdd = () => {
     setToAdd(!toAdd);
   }
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
 
 
-  const [allProfileList, setAllProfile] = useState([]);
-  const [allUser, setAllUser] = useState([]);
 
   useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
     axiosInstanse.get("/get-name-profile", { headers })
       .then(response => {
         setAllProfile(response.data.body);
       })
-  },[])
+  }, [])
 
 
 
   useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
     axiosInstanse.get("/get-user-name", { headers })
       .then(response => {
         setAllUser(response.data.body);
       })
-  },[])
-
-
-
-
-
-
-
+  }, [])
 
   async function addCertificate() {
     if (!toAdd)
       return;
-
-
-    const certificate = {
+    const certificates = {
       amount: amount,
       status: status,
       profile_id: profile_id,
       user_id: user_id,
 
     };
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    await axiosInstanse.post('/add-certificate', certificate, { headers })
+     axiosInstanse.post('/add-certificate', certificates, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")
-        } 
-        alert("success")
+        }
+        handleClose();
+        setAmount("");
+        setUser_id("");
+        props.getCertificate(1);
+
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
         alert("Adding error:" + ex);
       });
   }
-
-
-
   useEffect(() => {
 
     addCertificate();
   }, [toAdd]);
-
-
-
 
   return <div>
     <button onClick={handleOpen} className='Addbuttons' style={{ marginTop: '10px' }}>+ Add certificate</button>
@@ -140,10 +118,10 @@ const AddCertificate = () => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Profile:</p>
-              <select name="" style={{ height: '30px' }} id="" onChange={e => setProfile_id(e.target.value)}>
+              <select name="" id="" style={{ height: '30px' }} onChange={e => setProfile_id(e.target.value)}>
                 <option value="0">Select...</option>
                 {
-                  allProfileList.map((element, i) => {
+                  allProfileList?.map((element, i) => {
                     return (<option value={element.id}>{element.nameTM}</option>)
                   })
                 }
@@ -156,7 +134,7 @@ const AddCertificate = () => {
               <select name="" style={{ height: '30px' }} id="" onChange={e => setUser_id(e.target.value)}>
                 <option value="0">Select...</option>
                 {
-                  allUser.map((element, i) => {
+                  allUser?.map((element, i) => {
                     return (<option value={element.id}>{element.fullname}</option>)
                   })
                 }
@@ -166,7 +144,7 @@ const AddCertificate = () => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Status:</p>
-              <select name="" onChange = { e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
+              <select name="" onChange={e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
                 <option value="0">Status...</option>
                 <option value="1">Active</option>
                 <option value="2">Passive</option>

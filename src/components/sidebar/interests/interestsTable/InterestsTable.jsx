@@ -2,52 +2,55 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import DeleteInterestsModal from '../deleteInterestsModal/DeleteInterestsModal';
 import UpdateInterestsModal from '../updateInterestsModal/UpdateInterestsModal';
-import { axiosInstanse } from "../../../utils/axiosInstanse";
 import Pagination from '@mui/material/Pagination';
+import { Backdrop, Modal } from '@mui/material';
 
 
 
-const InterestsTable = () => {
-    const [page, setPage] = React.useState(1);
+const InterestsTable = (props) => {
+    const [page, setPage] = props.page;
+    const [pageCount, setPageCount] = props.pageCount;
+    const [interestList, setIntertestList] = props.interestList;
 
+    const [open, setOpen] = React.useState(false);
+    const [element,setElement] = useState();
+    const handleOpen = (element) => {setOpen(true);setElement(element)}
+    const handleClose = () => setOpen(false);
 
-    const [pageCount, setPageCount] = useState([]);
+    const [open1, setOpen1] = React.useState(false);
+    const [elementId,setElementId] = useState();
+    const handleOpen1 = (id) => {setOpen1(true);setElementId(id)}
+    const handleClose1 = () => setOpen1(false);
 
-    const [interestList, setIntertestList] = useState([]);
-
-    const getInterests = async () => {
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 12213'
-        };
-        await axiosInstanse.get('/get-interests?page=' + page, {
-            headers
-        })
-            .then(response => {
-                if (response.data.error) {
-                    alert("Error")
-                } else {
-                    setIntertestList(response.data.body.interests)
-                    setPageCount(response.data.body.page_count)
-                }
-            })
-            .catch(error => {
-                // alert(error);
-                console.error('There was an error!', error);
-            });
-
-
-    }
     useEffect(() => {
-
-        getInterests();
-
+        props.getInterests(page);
     }, [page]);
+
     const handleChange = (event, value) => {
         setPage(value);
     };
     return <div>
+        <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                >
+                    <UpdateInterestsModal handleClose={handleClose} getData={props.getInterests}   data={element} />
+                </Modal>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open1}
+                    onClose={handleClose1}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                    >
+                    <DeleteInterestsModal handleClose={handleClose1} getData={props.getInterests} interestid={elementId} />
+                </Modal>
         <Table responsive borderless className='profileTable'>
             <tr>
                 <th><center>ID</center></th>
@@ -63,8 +66,8 @@ const InterestsTable = () => {
                         <td><center>{element.id}</center></td>
                         <td><center>{element.titleTM}</center></td>
                         <td><center>{element.items_count}</center></td>
-                        <td><center><DeleteInterestsModal interestid={element.id} /></center></td>
-                        <td><center><UpdateInterestsModal /></center></td>
+                        <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
+                         <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
                     </tr>)
             }
             )
@@ -80,7 +83,7 @@ const InterestsTable = () => {
                 pageClassName={'page-item'}
                 pageLinkClassName={'page-link'}
                 activeClassName={'active'} 
-              style={{marginTop: '20px', marginLeft: '30%'}} />
+              style={{marginTop: '20px', justifyContent:'center', display:"flex"}} />
       }
     </div>;
 };

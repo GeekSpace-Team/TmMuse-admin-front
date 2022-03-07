@@ -20,7 +20,7 @@ const style = {
   p: 4,
 };
 
-const AddBannerModal = () => {
+const AddBannerModal = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -30,24 +30,19 @@ const AddBannerModal = () => {
   const [order, setOrder] = useState(0);
   const [comment_of_admin, setComment_of_admin] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
-
-
-
-  const [toAdd, setToAdd] = useState(false);
-
-  const handleAdd = () => {
-    setToAdd(!toAdd);
-  }
-
   const [INSERTED_ID, setINSERTED_ID] = useState(0);
-
   const [allProfileList, setAllProfile] = useState([]);
-
-  useEffect(() => {
+  const [toAdd, setToAdd] = useState(false);
+  
+    const handleAdd = () => {
+      setToAdd(!toAdd);
+    }
     const headers = {
       'Authorization': 'Bearer my-token',
       'My-Custom-Header': 'foobar'
     };
+
+  useEffect(() => {
     axiosInstanse.get("/get-name-profile", { headers })
       .then(response => {
         setAllProfile(response.data.body);
@@ -67,23 +62,23 @@ const AddBannerModal = () => {
     let data = new FormData()
     data.append('file', selectedFile, "ok.jpg")
     let url = "/update-banner-image?id=" + INSERTED_ID;
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar',
-      'Content-Type': 'multipart/form-data'
-    };
-    await axiosInstanse.put(url, data, {
+     axiosInstanse.put(url, data, {
       headers
     })
       .then(res => { // then print response status
         console.warn(res);
-        alert("Success");
+        handleClose();
+        setSiteLink('');
+        setOrder('');
+        setComment_of_admin('');
+        setSelectedFile('');
+        setPofile_id('');
+        props.getBanner(1);
         setINSERTED_ID(0);
       }).catch(ex => {
         alert("Image upload error:" + ex);
         setINSERTED_ID(0);
       })
-
   }
 
   async function addBanner() {
@@ -106,12 +101,7 @@ const AddBannerModal = () => {
 
     };
 
-
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    await axiosInstanse.post('/add-banner', banner, { headers })
+     axiosInstanse.post('/add-banner', banner, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")

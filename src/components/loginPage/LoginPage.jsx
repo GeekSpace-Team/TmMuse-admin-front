@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './Login.css'
 import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 import {CookiesProvider} from 'react-cookie';
 
@@ -12,6 +12,7 @@ import {CookiesProvider} from 'react-cookie';
 
 
 const LoginPage = () => {
+    const history = useNavigate()
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -28,7 +29,7 @@ const LoginPage = () => {
             return;
         }
         handleShow()
-        fetch('http://10.192.168.16:5000/sign-in', {
+        fetch('http://10.192.168.60:5000/sign-in', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -48,12 +49,14 @@ const LoginPage = () => {
             } else{
                 if(data.body!=null && !data.error){
                     if(data.body.token!==""){
+                        console.log("login data",data.body)
+                        localStorage.setItem("TmMuseProfile",JSON.stringify(data.body))
                         // Write token and userId to cookie storage go to next page
-                        let expires=new Date();
-                        expires.setTime(expires.getTime()+(10*1000))
-                        setCookie('userToken',data.body.token,{path:'/',expires})
-                        setCookie('userType',data.body.type,{path:'/',expires})
-                        document.location.href="/dashboard";
+                        // let expires=new Date();
+                        // expires.setTime(expires.getTime()+(10*1000))
+                        // setCookie('userToken',data.body.token,{path:'/',expires})
+                        // setCookie('userType',data.body.type,{path:'/',expires})
+                        history("/");
                     }
                 } else {
                     alert("Username or password is wrong!");

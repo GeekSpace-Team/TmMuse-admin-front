@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import './AddInterestsModal.css'
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { Col, Row } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const style = {
@@ -19,7 +21,7 @@ const style = {
   p: 4,
 };
 
-const AddInterestsModal = () => {
+const AddInterestsModal = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -29,61 +31,84 @@ const AddInterestsModal = () => {
   const [itemTM, setItemTM] = useState('');
   const [itemRU, setItemRU] = useState('');
   const [type, setType] = useState('');
+  const [ interesItems, setInteresItems ] = useState('');
 
   const [toAdd, setToAdd] = useState(false);
 
   const handleAdd = () => {
-    setToAdd(!toAdd);
+    addInterests();
   }
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
 
+  const addInterestItems=(id)=>{
+    let tms=itemTM.split(',');
+    let rus=itemRU.split(',');
+    const body = {
+      titleTM: tms,
+      titleRU: rus,
+      interest_id: id
+    }
+    axiosInstanse.post("/add-interest-items", body,{ headers })
+    .then(response => {
+      setTitleRU('');
+        setTitleTM('');
+        setItemTM('');
+        handleClose();
+        setItemRU('');
+        setType('');
+        
+        props.getInterests(1);
+      }).catch(err=>{
+        alert(err);
+      })
+  }
+   
 
-
-
-async function addPost() {
-  if (!toAdd)
-    return;
-    if (titleTM == '' || titleRU == '' || itemTM == '' || itemRU == '' ) {
-      alert("Please enter required informations!")
+  async function addInterests() {
+    let tms=itemTM.split(',');
+    let rus=itemRU.split(',');
+    if (titleTM == '' || titleRU == '' || tms.length==0 || rus.length==0 || tms.length!=rus.length) {
+      toast.warn('Please enter required informations!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
       return;
     }
-
-
-
-    const constant = {
+    const interests = {
       titleTM: titleTM,
-      titleRU: titleRU,
-      contentTM: itemTM,
-      contentRU: itemRU,
-      type: type
+      titleRU: titleRU
     };
-
-
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    await axiosInstanse.post('/add-constant', constant, { headers })
+     axiosInstanse.post('/add-interests', interests, interesItems, { headers })
       .then(response => {
         if (response.data.error) {
-          alert("Something is went wrong!")
+          toast.warn('Something is went wrong!', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
         }
-        setToAdd(false);
+        addInterestItems(response.data.body.INSERTED_ID);
       }).catch(ex => {
-        setToAdd(false);
         alert("Adding error:" + ex);
       });
   }
 
-
-
-  useEffect(() => {
-
-    addPost();
-  }, [toAdd]);
-
+ 
 
   return <div>
-    <button onClick={handleOpen} className='Addbuttons' style={{marginTop: '10px'}}>+ Add interest</button>
+    <button onClick={handleOpen} className='Addbuttons' style={{ marginTop: '10px' }}>+ Add interest</button>
     <Modal
       open={open}
       onClose={handleClose}
@@ -91,33 +116,43 @@ async function addPost() {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Stack direction='row' justifyContent='space-between'>
+      <Stack direction='row' justifyContent='space-between'>
           <p className='bannerModalTitle'>Add interest</p>
           <IoMdClose className='Xicon' onClick={handleClose} />
         </Stack>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid id='interestsInput' item xs={6}>
-            <p className='inputTitle'>Title tm:</p>
-            <input type="text" value={titleTM} onInput={e => setTitleTM(e.target.value)} style={{ width: '85%' }} />
-          </Grid>
-          <Grid id='interestsInput' item xs={6}>
-            <p className='inputTitle'>Title ru:</p>
-            <input type="text" value={titleRU} onInput={e => setTitleRU(e.target.value)} style={{ width: '85%' }} />
-          </Grid>
-          <Grid item xs={6}>
-            <p className='inputTitle'>Items tm(football, music, tennis):</p>
-            <textarea name="" id="" value={itemTM} onInput={e => setItemTM(e.target.value)} cols="45" rows="10"></textarea>
-          </Grid>
-          <Grid item xs={6}>
-            <p className='inputTitle'>Items ru(football, music, tennis):</p>
-            <textarea name="" value={itemRU} onInput={e => setItemRU(e.target.value)} id="" cols="45" rows="10"></textarea>
-          </Grid>
-        </Grid>
+        <Row>
+          <Col lg={6} md={6} sm={12} xs={12}>
+            <Stack direction='column' spacing={0} marginTop={3}>
+              <p className='inputTitle'>Title tm:</p>
+              <input type="text" value={titleTM} onInput={e => setTitleTM(e.target.value)} />
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} sm={12} xs={12}>
+            <Stack direction='column' spacing={0} marginTop={3}>
+              <p className='inputTitle'>Title ru:</p>
+              <input type="text" value={titleRU} onInput={e => setTitleRU(e.target.value)} />
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} sm={12} xs={12}>
+            <Stack direction='column' spacing={0} marginTop={3}>
+              <p className='inputTitle'>Items tm(football, music, tennis):</p>
+              <textarea name="" id="" value={itemTM} onInput={e => setItemTM(e.target.value)} cols="45" rows="10"></textarea>
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} sm={12} xs={12}>
+            <Stack direction='column' spacing={0} marginTop={3}>
+              <p className='inputTitle'>Items ru(football, music, tennis):</p>
+              <textarea name="" value={itemRU} onInput={e => setItemRU(e.target.value)} id="" cols="45" rows="10"></textarea>
+            </Stack>
+          </Col>
+        </Row>
+        
         <div id='interestsAdd' className="BannerAddButton">
-          <button>+ Add</button>
+          <button onClick={handleAdd}>+ Add</button>
         </div>
       </Box>
     </Modal>
+    <ToastContainer />
   </div>;
 };
 

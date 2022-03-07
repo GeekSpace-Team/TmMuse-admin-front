@@ -3,46 +3,59 @@ import { Table } from 'react-bootstrap'
 import DeleteProfileModal from '../profileModal/deleteProfileTable/DeleteProfileModal'
 import EditProfileModal from '../profileModal/editProfileModal/EditProfileModal'
 import './ProfileTable.css'
-import {axiosInstanse} from '../../../utils/axiosInstanse'
 import Pagination from '@mui/material/Pagination';
-import LazyLoad from 'react-lazyload';
 import ip from '../../server_adress/serveradress';
 import Loading from '../../../loading/Loading'
+import { Backdrop, Modal } from '@mui/material';
+import Empty from '../../../empty/Empty'
 
 
 
-const ProfileTable = () => {
-    const[profileList,setProfileList]=useState([]);
+const ProfileTable = (props) => {
+    const[profileList,setProfileList]=props.data;
     const[page,setPage]=useState(1);
-    const [pageCount,setPageCount]=useState([]);
+    const [pageCount,setPageCount]=props.pageCount;
+    const [category,setCategory]=useState("0");
+    const [show, setShow] = useState(false);
 
-    useEffect(()=>{
-        
-        getProfile();
-    },[page]);
+    const [open, setOpen] = React.useState(false);
+    const [element,setElement] = useState();
+    const handleOpen = (element) => {setOpen(true);setElement(element)}
+    const handleClose = () => setOpen(false);
 
-    async function getProfile(){
-        const headers = { 
-            'Authorization': 'Bearer my-token',
-            'My-Custom-Header': 'foobar'
-          };
-        await axiosInstanse.get('/get-profile?page='+page,{headers})
-        .then(response=>{
-            setProfileList(response.data.body.profiles)
-            setPageCount(response.data.body.page_count)
-        })
-        .cath(error=>{
-            alert(error)
-        });
-
-    }
-
+    const [open1, setOpen1] = React.useState(false);
+    const [elementId,setElementId] = useState();
+    const handleOpen1 = (id) => {setOpen1(true);setElementId(id)}
+    const handleClose1 = () => setOpen1(false);
+   
+    
     const handleChange = (event, value) => {
         setPage(value);
       };
     return (
         <div>
-            {profileList.length==0?<Loading/>:
+             <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                >
+                    <EditProfileModal handleClose={handleClose} category={props.category} getData={props.getProfile}   data={element} />
+                </Modal>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open1}
+                    onClose={handleClose1}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                    >
+                   <DeleteProfileModal handleClose={handleClose1} getData={props.getProfile} profile_id={elementId} />
+                </Modal>
+            {profileList.length==0?<Empty/>:
             <Table responsive borderless className='profileTable'>
             <tr>
                 <th><center>ID</center></th>
@@ -59,20 +72,19 @@ const ProfileTable = () => {
             </tr>
             {
                 
-                profileList.map((element,i)=>{
+                profileList?.map((element,i)=>{
                     return(
                         <tr>
                         <td><center>{element.id}</center></td>
                         <td><center>{element.nameTM}</center></td>
                         <td><center>
                             {
-                                (element.sliders!=null && element.sliders.length>0)?
-                                <LazyLoad  height={200} placeholder={<img src="../../../images/place.jpg" width={150} height={100}/>}>
-                                    <img src={ip+element.sliders[0].small_image}  width={150} height={100}/>
-                                </LazyLoad>
-                                :
-                                <img src="../../../images/place.jpg" width={150} height={100}/>
+                            element?.sliders &&  element?.sliders[0] && (element?.sliders[0].small_image ?  
+                            <img src={ip+element?.sliders[0]?.small_image}  width={150} height={100}/>
+                            :(element?.sliders[0]?.large_image ? <img src={ip+element?.sliders[0]?.large_image}  width={150} height={100}/>
+                            :<img src="../../../images/place.jpg" width={150} height={100}/>))
                             }
+                           
                         </center></td>
                         <td><center>{element.category_id}</center></td>
                         <td><center>{element.is_VIP}</center></td>
@@ -80,8 +92,10 @@ const ProfileTable = () => {
                         <td><center>{element.view_count}</center></td>
                         <td><center>{element.like}</center></td>
                         <td><center>{element.dislike}</center></td>
-                        <td><center><DeleteProfileModal profileId={element.id}/></center></td>
-                        <td><center><EditProfileModal/></center></td>
+                        <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
+                        <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                        {/* <td><center><DeleteProfileModal getCategory={props.getProfile} profileId={element.id}/></center></td>
+                        <td><center><EditProfileModal category={props.category} getProfile={props.getCategory} data={element}/></center></td> */}
                     </tr>
                     )
                 })
@@ -96,7 +110,7 @@ const ProfileTable = () => {
                 pageClassName={'page-item'}
                 pageLinkClassName={'page-link'}
                 activeClassName={'active'} 
-              style={{marginTop: '20px', marginLeft: '30%'}} />}
+              style={{marginTop: '20px', display:'flex', justifyContent:'center'}} />}
         </div>
     )
 }

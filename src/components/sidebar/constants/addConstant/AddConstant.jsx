@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-const AddConstant = () => {
+const AddConstant = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -28,6 +28,8 @@ const AddConstant = () => {
   const [titleRU, setTitleRU] = useState('');
   const [contentTM, setContentTm] = useState('');
   const [contentRU, setContentRU] = useState('');
+  const [ contentTM_dark, setContentTM_dark ] = useState('');
+  const [ contentRU_dark, setContentRU_dark ] = useState('');
   const [type, setType] = useState('');
 
   const [toAdd, setToAdd] = useState(false);
@@ -39,7 +41,7 @@ const AddConstant = () => {
 
 
 
-async function addPost() {
+async function addConstant() {
   if (!toAdd)
     return;
     if (titleTM == '' || titleRU == '' || contentTM == '' || contentRU == '' ) {
@@ -54,6 +56,8 @@ async function addPost() {
       titleRU: titleRU,
       contentTM: contentTM,
       contentRU: contentRU,
+      contentTM_dark: contentTM_dark,
+      contentRU_dark: contentRU_dark,
       type: type
     };
 
@@ -62,12 +66,20 @@ async function addPost() {
       'Authorization': 'Bearer my-token',
       'My-Custom-Header': 'foobar'
     };
-    await axiosInstanse.post('/add-constant', constant, { headers })
+     axiosInstanse.post('/add-constant', constant, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")
         }
-        alert("success")
+        setTitleTM('');
+        setTitleRU('');
+        setContentTm('');
+        setContentRU('');
+        setContentTM_dark('');
+        setContentRU_dark('');
+        setType('');
+        handleClose();
+        props.getConstant(1);
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
@@ -79,7 +91,7 @@ async function addPost() {
 
   useEffect(() => {
 
-    addPost();
+    addConstant();
   }, [toAdd]);
 
 
@@ -116,13 +128,25 @@ async function addPost() {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>Content tm:</p>
-              <textarea name="" id="" cols="30" rows="10" value={contentTM} onInput={e => setContentTm(e.target.value)}></textarea>
+              <textarea name="" id="" cols="30" rows="5" value={contentTM} onInput={e => setContentTm(e.target.value)}></textarea>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>Content ru:</p>
-              <textarea name="" id="" cols="30" rows="10" value={contentRU} onInput={e => setContentRU(e.target.value)}></textarea>
+              <textarea name="" id="" cols="30" rows="5" value={contentRU} onInput={e => setContentRU(e.target.value)}></textarea>
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} xs={12} sm={12}>
+            <Stack direction='column' marginTop={3} spacing={-2}>
+              <p style={{ color: '#31456A', fontSize: '15px' }}>ContentTM dark:</p>
+              <textarea name="" id="" cols="30" rows="5" value={contentTM_dark} onInput={e => setContentTM_dark(e.target.value)}></textarea>
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} xs={12} sm={12}>
+            <Stack direction='column' marginTop={3} spacing={-2}>
+              <p style={{ color: '#31456A', fontSize: '15px' }}>ContentRU dark:</p>
+              <textarea name="" id="" cols="30" rows="5" value={contentRU_dark} onInput={e => setContentRU_dark(e.target.value)}></textarea>
             </Stack>
           </Col>
           <Col lg={3} md={6} xs={12} sm={12}>

@@ -17,7 +17,9 @@ const Navbar = () => {
               <FiSearch />
               <input placeholder="Search..." type='text' autoFocus />
             </Stack>
-              <FiLogOut className="ms-auto" />
+            <NavLink to='/login' className="ms-auto" style={{textDecoration: 'none'}}>
+              <FiLogOut   />
+              </NavLink>
             <FiBell />
 
             <div className="userIcon">

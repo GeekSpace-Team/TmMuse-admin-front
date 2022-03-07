@@ -3,58 +3,60 @@ import { Table } from 'react-bootstrap'
 import DeleteAds from '../deleteAds/DeleteAds'
 import UpdateAds from '../updateAds/UpdateAds'
 import './Ads.css'
-import {axiosInstanse}  from "../../../utils/axiosInstanse"; 
 import Pagination from '@mui/material/Pagination';
 import ip from '../../server_adress/serveradress';
 import Loading from '../../../loading/Loading'
+import { Backdrop, Modal } from '@mui/material';
+import Empty from '../../../empty/Empty';
 
-const AdsTable = () => {
-    const[adsList,setAdsList]=useState([]);
-    const[page,setPage]=useState(1);
-    const [pageCount,setPageCount]=useState([]);
-    const [allProfileList, setAllProfile] = useState([]);
+
+const AdsTable = (props) => {
+    const [adsList, setAdsList] = props.adsList;
+    const [page, setPage] = useState(1);
+    const [pageCount, setPageCount] = props.pageCount;
+    const [isEmpty, setIsEmpty] = props.isEmpty;
+    const [open, setOpen] = React.useState(false);
+    const [element,setElement] = useState();
+    const handleOpen = (element) => {setOpen(true);setElement(element)}
+    const handleClose = () => setOpen(false);
+
+    const [open1, setOpen1] = React.useState(false);
+    const [elementId,setElementId] = useState();
+    const handleOpen1 = (id) => {setOpen1(true);setElementId(id)}
+    const handleClose1 = () => setOpen1(false);
 
     useEffect(() => {
-        const headers = {
-          'Authorization': 'Bearer my-token',
-          'My-Custom-Header': 'foobar'
-        };
-        axiosInstanse.get("/get-name-profile", { headers })
-          .then(response => {
-            setAllProfile(response.data.body);
-          })
-      },[])
-    
-    useEffect(()=>{
-        const headers = { 
-            'Authorization': 'Bearer my-token',
-            'My-Custom-Header': 'foobar'
-          };
-        async function getAds(){
-            await axiosInstanse.get('/get-ads?page='+page,{headers})
-            .then(response=>{
-                setAdsList(response.data.body.ads);
-                setPageCount(2);
-            })
-            .cath(error=>{
-
-            });
-
-        }
-        getAds();
-    },[page]);
-
-
-   
+        props.getAds(page);
+    }, [page]);
 
     const handleChange = (event, value) => {
         setPage(value);
-      };
-
+    };
     return (
         <div>
-            { adsList.length==0?<Loading/>:
-            <Table responsive borderless className='profileTable'>
+             <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                >
+                    <UpdateAds handleClose={handleClose} getData={props.getAds}   data={element} />
+                </Modal>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open1}
+                    onClose={handleClose1}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                    >
+                    <DeleteAds handleClose={handleClose1} getData={props.getAds} adsId={elementId} />
+                </Modal>
+                {(adsList.length==0 && !isEmpty)?<Empty/>
+      :<Table responsive borderless className='profileTable'>
             <tr>
                 <th><center>ID</center></th>
                 <th><center>Image</center></th>
@@ -70,22 +72,12 @@ const AdsTable = () => {
                     return(
                         <tr>
                             <td><center>{element.id}</center></td>
-                            <td><center><img src={ip+element.image} alt="" className='adsImage'/></center></td>
+                            <td><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }} /></td>
                             <td><center>{element.nameTM}</center></td>
                             <td><center>{element.comment_of_admin}</center></td>
-                            <td><center>{element.profile_id==0?element.site_url:element.profile_id}</center></td>
-                            <td><center><DeleteAds adsId={element.id}/></center></td>
-                            <td><center><UpdateAds 
-                            adsID={element.id} 
-                            nameTM={element.nameTM}
-                            nameRU={element.nameRU}
-                            profileID={element.profile_id}
-                            image={element.image}
-                            siteURL={element.site_url}
-                            isMain={element.is_main}
-                            comment_of_admin={element.comment_of_admin}
-                            allProfileList={allProfileList}
-                            /></center></td>
+                            <td><center>{element.profile_id == 0 ? element.site_url : element.profile_id}</center></td>
+                            <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
+                            <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
                         </tr>
                     )
                 })
@@ -103,7 +95,7 @@ const AdsTable = () => {
                 pageClassName={'page-item'}
                 pageLinkClassName={'page-link'}
                 activeClassName={'active'} 
-              style={{marginTop: '20px', marginLeft: '30%'}} />}
+              style={{marginTop: '20px',justifyContent:'center', display:"flex"}} />}
         </div>
         
     )

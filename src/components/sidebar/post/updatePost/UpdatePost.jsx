@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
+import { axiosInstanse } from '../../../utils/axiosInstanse';
 
 
 
@@ -19,18 +18,95 @@ const style = {
   p: 4,
 };
 
-const UpdatePost = () => {
+const UpdatePost = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () =>{props.handleClose()}
+  const [profileId, setProfileId] = useState(props.data.profile_id);
+  const [allProfileList, setAllProfile] = useState([]);
+  const [titleTm,setTitleTm ] = useState(props.data.titleTM);
+  const [titleRU,setTitleRU ] = useState(props.data.titleRU);
+  const [promotion,setPromotion ] = useState(props.data.promotion);
+  const [profile_id,setProfile_id ] = useState(props.data.profile_id);
+  const [descriptionTM,setDescriptionTM] = useState(props.data.descriptionTM);
+  const [descriptionRU,setDescriptionRU ] = useState(props.data.descriptionRU);
+  const [comment_of_admin,setComment_of_admin ] = useState(props.data.comment_of_admin);
+  const [INSERTED_ID, setINSERTED_ID] = useState(0);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+
+
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
+  useEffect(() => {
+    axiosInstanse.get("/get-name-profile", { headers })
+      .then(response => {
+        setAllProfile(response.data.body);
+      }).catch((err)=>{
+        console.log(err);
+      })
+
+      setProfileId(props.data.profile_id)
+  }, [])
+  console.log("data",props.data)
+
+
+  
+  const handleInputChange = (event) => {
+    console.log(event.target.files[0])
+    setSelectedFile(event.target.files[0])
+  }
+  const uploadImage = async (id) => {
+   
+    let data = new FormData()
+    data.append('file', selectedFile, "ok.jpg")
+    let url = "/update-post-image?id=" + id;
+     axiosInstanse.put(url, data, {headers})
+      .then(res => { // then print response status
+        console.warn(res);
+        props.handleClose()
+        props.getData(1);
+      }).catch(ex => {
+        alert("Image upload error:" + ex);
+      })
+
+  }
+
+  const UpdateMyPost = (id)=>{
+    axiosInstanse.put("/update-posts?id="+id,{
+      titleTM: titleTm,
+      titleRU: titleRU,
+      promotion: promotion,
+      profile_id: profile_id,
+      descriptionTM: descriptionTM,
+      descriptionRU: descriptionRU,
+      comment_of_admin: comment_of_admin,
+      status: true
+    
+    },{headers}).then((data)=>{
+      console.log("result",data.data.body);
+      if(selectedFile===null){
+        props.handleClose()
+        props.getData(1);
+      }else{
+        uploadImage(props.data.id)
+      }
+     
+
+    }).catch((err)=>{
+      console.log(err);
+    })
+
+  }
+
+
+  
+
   return <div>
     <img src="images/Edit.svg" onClick={handleOpen} alt="" />
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+   
       <Box sx={style}>
         <Stack direction='row' justifyContent='space-between'>
           <p className='bannerModalTitle'>Update post</p>
@@ -40,49 +116,56 @@ const UpdatePost = () => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Name TM:</p>
-              <input type="text" />
+              <input type="text" onChange={(e)=>setTitleTm(e.target.value)} defaultValue={props.data.titleTM} />
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Profile:</p>
-              <select name="" style={{ height: '30px' }} id=""><option value="">Select...</option></select>
+              <select onChange={(e)=>setProfile_id(e.target.value)} value={profile_id} name="" id="" style={{ height: '30px' }} >
+                <option value="0">Select...</option>
+                {
+                  allProfileList.map((element, i) => {
+                    return (<option key={"dsfsdffdsf"+element.id} value={element.id}>{element.nameTM}</option>)
+                  })
+                }
+              </select>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Name RU:</p>
-              <input type="text" />
+              <input type="text" onChange={(e)=>setTitleRU(e.target.value)} defaultValue={props.data.titleRU} />
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Post image:</p>
-              <input className='custom-file-input' type="file" />
+              <input className='custom-file-input' type="file" onChange={handleInputChange} />
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Description TM:</p>
-              <textarea name="" id="" cols="20" rows="4"></textarea>
+              <textarea name="" id="" cols="20" rows="4" onChange={(e)=>setDescriptionTM(e.target.value)} defaultValue={props.data.descriptionTM}></textarea>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5} >
               <p className='inputTitle'>Description RU:</p>
-              <textarea name="" id="" cols="20" rows="4"></textarea>
+              <textarea name="" id="" cols="20" rows="4" onChange={(e)=>setDescriptionRU(e.target.value)} defaultValue={props.data?.descriptionRU}></textarea>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Promotion:</p>
-              <input type="text" />
+              <input type="text" onChange={(e)=>setPromotion(e.target.value)} defaultValue={props.data.promotion} />
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Comment of admin:</p>
-              <input type="text" />
+              <input type="text" onChange={(e)=>setComment_of_admin(e.target.value)} defaultValue={props.data.comment_of_admin} />
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
@@ -91,18 +174,11 @@ const UpdatePost = () => {
               <select name="" style={{ height: '30px' }} id=""><option value="">Active</option><option value="">Passive</option></select>
             </Stack>
           </Col>
-          <Col lg={6} md={6} xs={12} sm={12}>
-            <Stack direction='column' spacing={0} marginTop={1.5}>
-              <p className='inputTitle'>Site link:</p>
-              <input type="text" />
-            </Stack>
-          </Col>
         </Row>
         <div id='addPostButton' className="BannerAddButton">
-          <button>Update</button>
+          <button onClick={()=>UpdateMyPost(props.data.id)}>Update</button>
         </div>
       </Box>
-    </Modal>
   </div>;
 };
 

@@ -3,53 +3,55 @@ import { Table } from 'react-bootstrap';
 import DeletePop from '../deletePop/DeletePop';
 import UpdatePop from '../updatePop/UpdatePop';
 import Loading from '../../../loading/Loading'
-import {axiosInstanse}  from "../../../utils/axiosInstanse"; 
 import Pagination from '@mui/material/Pagination';
 import ip from '../../server_adress/serveradress';
+import { Backdrop, Modal } from '@mui/material';
+import Empty from '../../../empty/Empty';
 
+const PopTable = (props) => {
+    const [popupList, setPopupList] = props.popupList;
+    const [page, setPage] = useState(1);
+    const [pageCount, setPageCount] = props.pageCount;
+    const [open, setOpen] = React.useState(false);
+    const [element,setElement] = useState();
+    const handleOpen = (element) => {setOpen(true);setElement(element)}
+    const handleClose = () => setOpen(false);
 
+    const [open1, setOpen1] = React.useState(false);
+    const [elementId,setElementId] = useState();
+    const handleOpen1 = (id) => {setOpen1(true);setElementId(id)}
+    const handleClose1 = () => setOpen1(false);
 
-const PopTable = () => {
-    const [page, setPage] = React.useState(1);
-    
+    useEffect(() => {
+        props.getPopup(page);
+    }, [page]);
 
-    const [pageCount,setPageCount]=useState([]);
-
-    const[popList,setPopup]=useState([]);
-    
-        useEffect(()=>{
-            async function getPopups(){
-                const headers = {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 12213'
-                };
-            await axiosInstanse.get('/get-popup?page='+page,{
-                headers
-            })
-                .then(response => {
-                    if(response.data.error){
-                        alert("Error")
-                    } else{ 
-                        setPopup(response.data.body.popup)
-                        setPageCount(response.data.body.page_count)
-                    }
-                })
-                .catch(error => {
-                    // alert(error);
-                    console.error('There was an error!', error);
-                });
-                
-            
-        }
-        getPopups();
-        
-    },[page]);
     const handleChange = (event, value) => {
         setPage(value);
-      };
+    };
   return <div>
-      {popList.length==0?<Loading/>:
+      <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                >
+                    <UpdatePop handleClose={handleClose} getData={props.getPopup} data={element} />
+                </Modal>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open1}
+                    onClose={handleClose1}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                    >
+                    <DeletePop handleClose={handleClose1} getData={props.getPopup} popupId={elementId} />
+                </Modal>
+      {popupList.length==0?<Empty/>:
       <Table responsive borderless className='profileTable'>
             <tr>
                 <th><center>ID</center></th>
@@ -59,15 +61,15 @@ const PopTable = () => {
                 <th><center>Delete</center></th>
                 <th><center>Edit</center></th>
             </tr>
-            {popList.map((element,i) => {
+            {popupList.map((element,i) => {
                 
             return(<tr>
                 <td><center>{element.id}</center></td>
-                <td><center><img src={ip + element.image} alt="" className='adsImage'/></center></td>
+                <td><center><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }}/></center></td>
                 <td><center>{element.descriptionTM}</center></td>
                 <td><center>{element.profile_id==0?element.site_url:element.profile_id}</center></td>
-                <td><center><DeletePop popupId={element.id}/></center></td>
-                <td><center><UpdatePop/></center></td>
+                <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
+                <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
                 </tr>)
             }
             )
@@ -75,7 +77,7 @@ const PopTable = () => {
         
             </Table>
       }
-      { popList.length == 0? null 
+      { popupList.length == 0? null 
       :
       <Pagination count={pageCount}
               page={page}
@@ -84,7 +86,7 @@ const PopTable = () => {
                 pageClassName={'page-item'}
                 pageLinkClassName={'page-link'}
                 activeClassName={'active'} 
-              style={{marginTop: '20px', marginLeft: '30%'}} />
+              style={{marginTop: '20px',justifyContent:'center', display:"flex"}} />
       }
   </div>;
 };

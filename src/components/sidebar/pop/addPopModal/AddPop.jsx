@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import axios from 'axios'
@@ -20,64 +19,87 @@ const style = {
   p: 4,
 };
 
-const AddPop = ({allProfileList,allPosts}) => {
+const AddPop = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
 
   const [siteLink, setSiteLink] = useState('');
   const [titleTm, setTitleTm] = useState('');
   const [titleRu, setTitleRu] = useState('');
   const [descTm, setDescTm] = useState('');
   const [descRu, setDescRu] = useState('');
-  const [INSERTED_ID, setINSERTED_ID] = useState(0);
+  const [profileId, setProfileId] = useState(0);
+  const [ posts_id, setPosts_id ] = useState(0);
   const [selectedFile, setSelectedFile] = useState('');
-  const [profile_id, setProfileID] = useState(0);
+  const [ comment_of_admin, setComment_of_admin ] = useState('');
+  const [toAdd, setToAdd] = useState(false);
+  const handleAdd = () => {
+    setToAdd(!toAdd);
+  }
+  const [INSERTED_ID, setINSERTED_ID] = useState(0);
+  const [allProfileList, setAllProfile] = useState([]);
+  const [ allPost, setAllPost ] = useState([]);
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
 
+  useEffect(() => {
+    axiosInstanse.get("/get-name-profile", { headers })
+      .then(response => {
+        setAllProfile(response.data.body);
+      })
+  }, [])
 
-  
+  useEffect(() => {
+    axiosInstanse.get("/get-all-posts", { headers })
+    .then(response => {
+      setAllPost(response.data.body);
+    }).catch(ex => {
+      console.log("Postda bir problema bar:" + ex);
+    })
+  },[])
 
- 
-
-
-  // File upload section
 
   const handleInputChange = (event) => {
     setSelectedFile(event.target.files[0])
   }
 
-  const uploadImage = () => {
+
+
+  const uploadImage = async (id) => {
+    if (id == 0)
+      return;
     let data = new FormData()
-    data.append('file', selectedFile)
-    let url = "http://10.192.168.16:5000/add-popup-image?id=" + INSERTED_ID;
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar',
-      'Content-Type': 'multipart/form-data'
-    };
-    axios.put(url, data, {
-      headers
-    })
+    data.append('file', selectedFile, "ok.jpg")
+    let url = "/add-popup-image?id=" + id;
+    console.log(" data:",data)
+     axiosInstanse.put(url, data, {headers})
       .then(res => { // then print response status
-        // console.warn(res);
-        alert("Success");
+        console.log("uploud Image",res);
+        handleClose();
+        setTitleTm("");
+        setTitleRu("");
+        setSiteLink("");
+        setDescTm('');
+        setDescRu('');
+        props.getPopup(1);
+
       }).catch(ex => {
-        alert(ex);
+        alert("Image upload error:" + ex);
       })
-
   }
-  // End of file upload section
 
 
-
-
-  const addPopup = () => {
-    if (profile_id != 0 && siteLink != "") {
+  async function addPopup() {
+    if (!toAdd)
+      return;
+    if (profileId != 0 && siteLink != "") {
       alert("Please clear site link fill!")
       return;
     }
-    if (titleTm == '' || titleRu == '' || selectedFile == '') {
+    if (titleTm == '' || titleRu == '' ) {
       alert("Please enter required informations!")
       return;
     }
@@ -87,25 +109,33 @@ const AddPop = ({allProfileList,allPosts}) => {
       titleRU: titleRu,
       descriptionTM: descTm,
       descriptionRU: descRu,
-      profile_id: profile_id,
-      comment_of_admin: ""
+      profile_id: profileId,
+      posts_id: posts_id,
+      comment_of_admin:comment_of_admin
     };
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    axios.post('http://10.192.168.16:5000/add-popup', popup, { headers })
+  
+     axiosInstanse.post('/add-popup', popup, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")
         } else {
-          setINSERTED_ID(response.data.body.INSERTED_ID);
-          uploadImage();
+          console.log(response.data.body.INSERTED_ID)
+
+          uploadImage(response.data.body.INSERTED_ID)
         }
+        setToAdd(false);
+        console.log("respons",response.data)
       }).catch(ex => {
-        alert(ex);
+        setToAdd(false);
+        alert("Adding error:" + ex);
       });
   }
+
+  useEffect(() => {
+
+    addPopup();
+  }, [toAdd]);
+
   return <div>
     <button onClick={handleOpen} className='Addbuttons' style={{ marginTop: '10px' }}>+ Add pop-up</button>
     <Modal
@@ -141,7 +171,7 @@ const AddPop = ({allProfileList,allPosts}) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Profile:</p>
-              <select name="" id="" style={{ height: '30px' }} onChange={e => setProfileID(e.target.value)}>
+              <select name="" id="" style={{ height: '30px' }} onChange={e => setProfileId(e.target.value)}>
                 <option value="0">Select...</option>
                 {
                   allProfileList.map((element, i) => {
@@ -160,14 +190,14 @@ const AddPop = ({allProfileList,allPosts}) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Post:</p>
-              <select name="" style={{ height: '30px' }} id="">
-                <option value="">Select...</option>
+              <select name="" id="" style={{ height: '30px' }} onChange={e => setPosts_id(e.target.value)}>
+                <option value="0">Select...</option>
                 {
-                  allPosts.map((element,i)=>{
-                    return(<option value={element.id}>{element.titleTM}</option>)
+                  allPost.map((element, i) => {
+                    return (<option value={element.id}>{element.titleTM}</option>)
                   })
                 }
-                </select>
+              </select>
 
             </Stack>
           </Col>
@@ -190,7 +220,7 @@ const AddPop = ({allProfileList,allPosts}) => {
           </Col>
         </Row>
         <div className="BannerAddButton">
-          <button onClick={addPopup}>+ Add</button>
+          <button onClick={handleAdd}>+ Add</button>
         </div>
       </Box>
     </Modal>

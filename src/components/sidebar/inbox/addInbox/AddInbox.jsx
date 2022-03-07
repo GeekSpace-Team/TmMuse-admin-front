@@ -27,22 +27,14 @@ const AddInbox = () => {
     const [ title, setTitle ] = useState([]);
     const [ message, setMessage ] = useState([]);
     const [ is_all, setIs_all ] = useState(true); 
-  
-  
-  
     const [toAdd, setToAdd] = useState(false);
-  
-    const handleAdd = () => {
-      setToAdd(!toAdd);
-    }
-  
- 
-  
-    useEffect(() => {
-      const headers = {
+    const handleAdd = () => { setToAdd(!toAdd); }
+    const headers = {
         'Authorization': 'Bearer my-token',
         'My-Custom-Header': 'foobar'
       };
+  
+    useEffect(() => {
       axiosInstanse.get("/get-user-name", { headers })
         .then(response => {
           setAllUser(response.data.body);
@@ -58,25 +50,18 @@ const AddInbox = () => {
       message: message,
       title: title
     }
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    await axiosInstanse.post('/add-inbox', inbox, { headers })
+     axiosInstanse.post('/add-inbox', inbox, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")
         } 
-        alert("success")
+       handleClose();
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
         alert("Adding error:" + ex);
       });
   }
-  
-  
-  
   useEffect(() => {
   
     addInbox();
@@ -123,8 +108,8 @@ const AddInbox = () => {
                             <select name="" style={{ height: '30px' }} value={user_id} id="" onChange={e => setUser_id(e.target.value)}>
                                 <option value="0">Select...</option>
                                 {
-                                allUser.map((element, i) => {
-                                    return (<option value={element.id}>{element.fullname}</option>)
+                                allUser?.map((element, i) => {
+                                    return (<option key={"usere"+element?.id} value={element.id}>{element.fullname}</option>)
                                 })
                                 }
                             </select>

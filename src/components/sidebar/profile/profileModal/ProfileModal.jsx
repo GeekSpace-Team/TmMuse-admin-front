@@ -14,7 +14,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const ProfileModal = () => {
+const ProfileModal = (props) => {
+    const [ allProfile, setAllProfile ] = useState([]);
+    const [allCinema, setAllCinema] = useState([]);
+    const [cinemaId, setCinemaId] = useState(0);
     const navigate = useNavigate();
     const compress = new Compress()
     const [show, setShow] = useState(false);
@@ -34,7 +37,7 @@ const ProfileModal = () => {
     const [orderInList, setorderInList] = useState(0);
     const [status, setstatus] = useState(1);
     const [tmmusecard, settmmusecard] = useState(0);
-    const [owncard, setowncard] = useState(0);
+    const [promotion_status, setowncard] = useState(0);
     const [category, setcategory] = useState(0);
     const [delivery, setdelivery] = useState(false);
     const [avaragecheck, setavaragecheck] = useState(0);
@@ -49,10 +52,10 @@ const ProfileModal = () => {
     const [loading, setLoading] = useState(false);
     const [arrayOfTopSliderImages, setarrayOfTopSliderImages] = useState([]);
     const [arrayOfGalleryLargeImages, setarrayOfGalleryLargeImages] = useState([]);
-    const [serverUrl, setServerUrl] = useState("http://10.192.168.16:5000/");
+    const [serverUrl, setServerUrl] = useState("http://10.192.168.60:5000/");
     const [phone_number, setPhone_number] = useState('');
     const [isAdd, setIsAdd] = useState(false);
-    const [categoryList, setCategoryList] = useState([]);
+    const [categoryList, setCategoryList] = props.category;
     const [isCafe, setIsCafe] = useState(false);
     const [isMovie, setIsMovie] = useState(false);
     const [compressedSliders, setCompressedSliders] = useState([]);
@@ -66,6 +69,7 @@ const ProfileModal = () => {
     const [promoCount, setPromoCount] = useState(0);
     const [isCertificate, setisCertificate] = useState(false);
     const [movieTime, setMovieTime] = useState('');
+    const [ cinema_id, setCinema_id ] = useState(0);
 
 
     const phoneNumberUpdateById = (value, index) => {
@@ -77,7 +81,10 @@ const ProfileModal = () => {
         setphoneNumberList(newPhones);
     }
 
-
+    const headers = {
+        'Authorization': 'Bearer my-token',
+        'My-Custom-Header': 'foobar'
+      };
 
     const handleAdd = () => {
         setIsAdd(!isAdd);
@@ -105,30 +112,63 @@ const ProfileModal = () => {
         setCompressedGallery(compressedGallery);
     }, [compressedGallery])
 
-
-
-    const head = {
-        'Content-Type': 'multipart/form-data',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-    };
-
-    const getCategories =async()=>{
-        await axiosInstanse.get("/get-categories", { head })
-        .then(response => {
-            setCategoryList(response.data.body);
-        })
-        .catch(ex => {
-            console.log(ex);
-        });
+    useEffect(() => {
+        axiosInstanse.get("/get-all-admin-users-cinema",{
+            "cinema_id": 0
+        } ,{ headers })
+          .then(response => {
+            setAllCinema(response.data.body);
+          }).catch((err)=>{
+            console.log(err);
+          })
+      },[])
+    const onFinsih=(id)=>{
+        setLoading(false);
+        // setinsertedProfileId(0);
+        // setinsertedCategoryId(0);
+        setShow(false);
+        // setNameTM('');
+        // setNameRU('');
+        // setshortdescTM('');
+        // setshortdescRU('');
+        // setdescTM('');
+        // setdescRU('');
+        // setinstagram('');
+        // setsite('');
+        // setlocation('');
+        // setaddress('');
+        // setworkhours('');
+        // setfreetime('');
+        // setisVIP('');
+        // setorderInList('');
+        // setstatus('');
+        // settmmusecard('');
+        // setowncard('');
+        // setcategory('');
+        // setdelivery('');
+        // setavaragecheck('');
+        // setkitchenTM('');
+        // setkitchenRU('');
+        // setcash('');
+        // setterminal('');
+        // setrequired_promotion('');
+        // setisActiveCard('');
+        // setinsertedProfileId('');
+        // setinsertedCategoryId('');
+        // setPhone_number('');
+        // setCategoryList('');
+        // setIsCafe('');
+        // setIsMovie('');
+        // setTagsTM('');
+        // setTagsRU('');
+        // setIsWifi('');
+        // setphoneNumberList('');
+        // setPromoCount('');
+        // setisCertificate('');
+        // setMovieTime('');
+        props.getCategory(1);
     }
 
-
-    useEffect(()=>{
-        getCategories();
-    },[])
 
 
     useEffect(() => {
@@ -193,7 +233,7 @@ const ProfileModal = () => {
 
     };
 
-    const onFileUploadTopSliderImages = async () => {
+    const onFileUploadTopSliderImages = async (id) => {
         for (let i = 0; i < arrayOfTopSliderImages.length; i++) {
 
             let formData = new FormData();
@@ -207,7 +247,7 @@ const ProfileModal = () => {
                     'Access-Control-Allow-Credentials': 'true'
                 }
             };
-            await axiosInstanse.post("/add-sliders?profile_id=" + insertedProfileId + "&index=" + i + 1, formData, config).then((data) => {
+             axiosInstanse.post("/add-sliders?profile_id=" + id + "&index=" + i + 1, formData, config).then((data) => {
                 console.log(data.data);
             })
                 .catch(function (error) {
@@ -216,13 +256,13 @@ const ProfileModal = () => {
                 })
         }
 
-        onSliderSmallImageUpload();
+        onSliderSmallImageUpload(id);
 
     };
 
-    const onSliderSmallImageUpload = async () => {
+    const onSliderSmallImageUpload = async (id) => {
 
-        if (insertedProfileId == 0) {
+        if (id == 0) {
             return;
         }
         for (let i = 0; i < compressedSliders.length; i++) {
@@ -235,7 +275,7 @@ const ProfileModal = () => {
                     'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
                 }
             };
-            await axiosInstanse.put("/update-sliders?profile_id=" + insertedProfileId, formData, config)
+             axiosInstanse.put("/update-sliders?profile_id=" + id, formData, config)
                 .then((data) => {
 
                     setLoading(false)
@@ -246,7 +286,13 @@ const ProfileModal = () => {
                 })
         }
 
-        addPhoneNumbers();
+        if(arrayOfGalleryLargeImages.length>0){
+            onFileUploadGalleryLargeImages(id);
+        } else if(smallVrImage != '' && largeVrImage != ''){
+            uploadLargeVrImage(id);
+        } else {
+            addTags(id);
+        }
 
     };
 
@@ -293,7 +339,7 @@ const ProfileModal = () => {
     };
 
 
-    const onFileUploadGalleryLargeImages = async () => {
+    const onFileUploadGalleryLargeImages = async (id) => {
         for (let i = 0; i < arrayOfGalleryLargeImages.length; i++) {
 
             let formData = new FormData();
@@ -307,7 +353,7 @@ const ProfileModal = () => {
                     'Access-Control-Allow-Credentials': 'true'
                 }
             };
-            await axiosInstanse.post("/add-galleries?profile_id=" + insertedProfileId + "&index=" + i + 1, formData, config).then((data) => {
+             axiosInstanse.post("/add-galleries?profile_id=" + id + "&index=" + i + 1, formData, config).then((data) => {
                 console.log(data.data);
             })
                 .catch(function (error) {
@@ -316,13 +362,13 @@ const ProfileModal = () => {
                 })
         }
 
-        onGallerySmallImageUpload();
+        onGallerySmallImageUpload(id);
 
     };
 
-    const onGallerySmallImageUpload = async () => {
+    const onGallerySmallImageUpload = async (id) => {
 
-        if (insertedProfileId == 0) {
+        if (id == 0) {
             return;
         }
         for (let i = 0; i < compressedGallery.length; i++) {
@@ -335,7 +381,7 @@ const ProfileModal = () => {
                     'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
                 }
             };
-            await axiosInstanse.put("/update-galleries?profile_id=" + insertedProfileId, formData, config)
+             axiosInstanse.put("/update-galleries?profile_id=" + id, formData, config)
                 .then((data) => {
 
                 })
@@ -345,59 +391,71 @@ const ProfileModal = () => {
                 })
         }
 
-        if (smallVrImage != '' && largeVrImage != '') {
-            uploadLargeVrImage();
-        } 
+        if(smallVrImage != '' && largeVrImage != ''){
+            uploadLargeVrImage(id);
+        } else {
+            addTags(id);
+        }
 
     };
 
     // End of gallery image upload
 
 
-    const addTags = async () => {
+    const addTags = async (id) => {
 
-        if (insertedProfileId == 0)
+        if (id == 0){
             return;
+        }
         const tagsTmArray = tagsTM.split(',');
         const tagsRuArray = tagsRU.split(',');
-        console.log(insertedProfileId);
+        if(tagsTmArray.length==0){
+            addOwnPromotion(id);
+            return;
+        }
+        console.log(id);
         const config = {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
             }
         };
-        await axiosInstanse.post('/add-tags', {
-            profile_id: insertedProfileId,
+         axiosInstanse.post('/add-tags', {
+            profile_id: id,
             category_id: category,
             tagTM: tagsTmArray,
             tagRU: tagsRuArray
         }, config).then(response => {
             if (!response.data.error) {
-                onFileUploadGalleryLargeImages();
+                if(promotion_status!='' && promotion_status!='0'){
+                    addOwnPromotion(id);
+                } else{
+                    onFinsih(id);
+                }
             }
         }).catch(err => {
             alert("Add tags error: " + err);
+            onFinsih(id);
         });
     }
 
 
-    const uploadLargeVrImage = async () => {
+    const uploadLargeVrImage = async (id) => {
         if (largeVrImage != '') {
             let data = new FormData()
             data.append('file', largeVrImage, "ok.jpg")
-            let url = "/add-vr-large-image?profile_id=" + insertedProfileId;
+            let url = "/add-vr-large-image?profile_id=" + id;
             const headers = {
                 'Authorization': 'Bearer my-token',
                 'My-Custom-Header': 'foobar',
                 'Content-Type': 'multipart/form-data'
             };
-            await axiosInstanse.post(url, data, {
+             axiosInstanse.post(url, data, {
                 headers
             })
                 .then(res => { // then print response status
                     if (!res.data.error) {
-                        uploadSmallVrImage();
+                        uploadSmallVrImage(id);
                     }
                 }).catch(ex => {
                     alert("Image upload error:" + ex);
@@ -408,35 +466,34 @@ const ProfileModal = () => {
     }
 
 
-    const uploadSmallVrImage = async () => {
+    const uploadSmallVrImage = async (id) => {
         if (smallVrImage != '') {
             let data = new FormData()
             data.append('file', smallVrImage, "ok.jpg")
-            let url = "/add-vr-small-image?profile_id=" + insertedProfileId;
+            let url = "/add-vr-small-image?profile_id=" + id;
             const headers = {
                 'Authorization': 'Bearer my-token',
                 'My-Custom-Header': 'foobar',
                 'Content-Type': 'multipart/form-data'
             };
-            await axiosInstanse.put(url, data, {
+             axiosInstanse.put(url, data, {
                 headers
             })
                 .then(res => { // then print response status
                     if (!res.data.error) {
-                        setLoading(false);
+                        addTags(id);
                     }
                 }).catch(ex => {
                     alert("Image upload error:" + ex);
-                    setLoading(false);
-                    setinsertedProfileId(0);
+                    onFinsih();
                 })
         }
     }
 
 
-    const addPhoneNumbers = async () => {
+    const addPhoneNumbers = async (id) => {
         console.log(phoneNumberList);
-        if (insertedProfileId == 0 || phoneNumberList[0]=='')
+        if (id == 0 || phoneNumberList[0]=='')
             return;
         const config = {
             headers: {
@@ -444,40 +501,44 @@ const ProfileModal = () => {
                 'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
             }
         };
-        await axiosInstanse.post('/add-phone-number', {
-            profile_id: insertedProfileId,
+         axiosInstanse.post('/add-phone-number', {
+            profile_id: id,
             phone_numbers: phoneNumberList
         }, config).then(response => {
             if (!response.data.error) {
-                onFileUploadTopSliderImages();
+                onFileUploadTopSliderImages(id);
             }
         }).catch(err => {
             alert("Add phone number error: " + err);
+            onFinsih(id);
         });
     }
 
 
-    const addOwnPromotion = async () => {
-        if (insertedProfileId == 0 || owncard == '' || owncard == 0)
+    const addOwnPromotion = async (id) => {
+        if (id == 0 || promotion_status == '' || promotion_status == 0){
+            onFinsih();
             return;
+        }
         const config = {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
             }
         };
-        await axiosInstanse.post('/add-own-promotion', {
-            profile_id: insertedProfileId,
-            promotion_status: owncard
+         axiosInstanse.post('/add-own-promotion', {
+            profile_id: id,
+            promotion_status: promotion_status
         }, config).then(response => {
             if (!response.data.error) {
-                addTags();
+                onFinsih(id);
             }
         }).catch(err => {
-            alert("Add phone number error: " + err);
+            alert("Add promotion error: " + err);
+            onFinsih(id);
         });
     }
-
+    
 
     const addProfile = async () => {
         let tempSite=site;
@@ -496,10 +557,10 @@ const ProfileModal = () => {
             }
         }
 
-        if (owncard === '') {
+        if (promotion_status === '') {
             setowncard(0);
             setisActiveCard(false);
-        } else if (owncard == 0) {
+        } else if (promotion_status == 0) {
             setisActiveCard(false);
         }
         else {
@@ -507,7 +568,7 @@ const ProfileModal = () => {
         }
 
         setLoading(true);
-        await fetch('http://10.192.168.16:5000/add-profile', {
+         fetch('http://10.192.168.60:5000/add-profile', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -552,8 +613,14 @@ const ProfileModal = () => {
         })
             .then(response => response.json())
             .then(data => {
-                setinsertedProfileId(data.body.profile_id);
-                setinsertedCategoryId(data.body.category_id)
+                // setinsertedProfileId(data.body.profile_id);
+
+                onFileUploadTopSliderImages(data.body.profile_id);
+                addPhoneNumbers(data.body.profile_id);
+
+                setinsertedCategoryId(data.body.category_id);
+                
+                
             })
             .catch(err => {
                 setLoading(false);
@@ -562,22 +629,9 @@ const ProfileModal = () => {
     }
 
 
-    useEffect(() => {
-        if (isAdd) {
-            addProfile();
-        }
-    }, [isAdd]);
+   
 
-    useEffect(() => {
-        if (insertedProfileId == 0)
-            return;
-        if (owncard != '') {
-            addOwnPromotion();
-        } else {
-            onFileUploadTopSliderImages();
-        }
 
-    }, [insertedProfileId]);
 
     return (
         <div>
@@ -648,11 +702,36 @@ const ProfileModal = () => {
                                             <Col lg={12} md={12} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Movie time:
-                                                        <pre>9.1.2022(13:00,22:30)*
-                                                            <br />11.1.2022-12.1.2022(14:00,22:30)*</pre></p>
+                                                        <pre>09/01/2022(13:00,22:30)*
+                                                            <br />11/01/2022-12/01/2022(14:00,22:30)*</pre></p>
                                                     <textarea name="" id="movie" cols="51.9" rows="5" onInput={e => setMovieTime(e.target.value)}></textarea>
                                                 </Stack>
                                             </Col>
+                                            <Col lg={6} md={6} sm={12} xs={12}>
+                                                <Stack direction='column' spacing={0}>
+                                                    <p className='inputTitle'>Address:</p>
+                                                    <input value={address} onInput={e => setaddress(e.target.value)} className='inputModal' type="text" />
+                                                </Stack>
+                                            </Col>
+                                            <Col lg={6} md={6} sm={12} xs={12}>
+                                                <Stack direction='column' spacing={0} marginTop={2.5}>
+                                                <select style={{ height: '30px' }} name="" id="" onChange={e => setCinemaId(e.target.value)}>
+                                                    <option value="0">Select...</option>
+                                                    {
+                                                        allCinema.map((element, i) => {
+                                                        return (<option value={element.id}>{element.username    }</option>)
+                                                        })
+                                                    }
+                                                </select>
+                                                </Stack>
+                                            </Col>
+                                            <Col lg={3} md={3} sm={12} xs={12}>
+                                                <Stack direction='column' spacing={0}>
+                                                    <p className='inputTitle'>Price:</p>
+                                                    <input value={avaragecheck} onInput={e => setavaragecheck(e.target.value)} type="text" />
+                                                </Stack>
+                                            </Col>
+                                           
                                         </Row>
                                         :
                                         <Row>
@@ -729,7 +808,7 @@ const ProfileModal = () => {
                                 <Col lg={2.5} md={3} sm={12} xs={12}>
                                     <Stack direction='column' spacing={0}>
                                         <p className='inputTitle'>Own Card:</p>
-                                        <input value={owncard} onInput={e => setowncard(e.target.value)} type="text" />
+                                        <input value={promotion_status} onInput={e => setowncard(e.target.value)} type="text" />
                                     </Stack>
                                 </Col>
                                 <Col lg={4} md={12} sm={12} xs={12}>
@@ -738,9 +817,9 @@ const ProfileModal = () => {
                                         <select onChange={e => setcategory(e.target.value)} style={{ height: '30px' }} name="" id="category" className="normalSize" >
                                             <option value="0">Select category</option>
                                             {
-                                                categoryList.map((element, i) => {
+                                                categoryList?.map((element, i) => {
                                                     return (
-                                                        <option value={element.id}>{element.name}</option>
+                                                        <option key={"keyyy"+element?.id} value={element.id}>{element.name}</option>
                                                     )
                                                 })
                                             }
@@ -802,9 +881,9 @@ const ProfileModal = () => {
                                 {/* Add phone number is starting here */}
                                 <Row className="AddPhoneNumber">
                                     {
-                                        phoneNumberList.map((element, i) => {
+                                        phoneNumberList?.map((element, i) => {
                                             return (
-                                                <Col lg={4} md={12} sm={12} xs={12}>
+                                                <Col key={"keyyyyyyy"+element.id} lg={4} md={12} sm={12} xs={12}>
                                                     <Stack direction='column' spacing={0}>
                                                         <p className='inputTitle'>Phone number {i + 1}:</p>
                                                         <input type="text" value={element.phoneNumber} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
@@ -879,7 +958,7 @@ const ProfileModal = () => {
                                     </Stack>
                                 </Col>
                                 <Col lg={9} md={9} sm={12} xs={12}></Col>
-                                <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}><button onClick={handleAdd}>Add</button></Col>
+                                <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}><button onClick={()=>addProfile()}>Add</button></Col>
 
 
                             </Row>

@@ -6,7 +6,7 @@ import Fade from '@mui/material/Fade';
 import { IconName, IoMdClose } from "react-icons/io";
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Stack } from '@mui/material';
-
+import { ToastContainer, toast } from 'react-toastify';
 
 const style = {
     position: 'absolute',
@@ -22,10 +22,10 @@ const style = {
   };
 
 
-const DeleteInterestsModal = ({interestid}) => {
+const DeleteInterestsModal = (props) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {props.handleClose()}
 
 
     const headers = { 
@@ -34,16 +34,23 @@ const DeleteInterestsModal = ({interestid}) => {
     };
 
     const deleteInteres=()=>{
-      axiosInstanse.delete('/delete-interest?id='+interestid,{headers})
+      axiosInstanse.delete('/delete-interest?id='+props.interestid,{headers})
       .then(response=>{
         if(response.data.error){
           alert("Error");
         } else{
           if(response.data.body=='DELETED'){
             handleClose();
-            window.location.href = "/interests"
-            
-            
+            props.getData(1);
+            toast.warn('Successfully deleted!', {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
           }
         }
       })
@@ -52,19 +59,8 @@ const DeleteInterestsModal = ({interestid}) => {
       });
     }
   return <div>
-      <img onClick={handleOpen} src="images/Delete.svg" alt="" />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
+      
+        <Fade in={true}>
           <Box sx={style}>
           <Stack direction='row' justifyContent='space-between'>
             <p className='deletetitLe'>Do you want delete?</p>
@@ -76,7 +72,7 @@ const DeleteInterestsModal = ({interestid}) => {
           </Stack>
           </Box>
         </Fade>
-      </Modal>
+        <ToastContainer />
   </div>;
 };
 

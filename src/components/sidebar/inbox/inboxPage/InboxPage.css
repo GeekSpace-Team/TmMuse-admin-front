@@ -105,7 +105,9 @@
 .messageArea {
   background: white;
   height: 1000vh;
-  margin-left: -10px;
+  /* margin-left: -10px; */
+  position: fixed;
+  width: 45%;
 }
 .dateWithTitle p {
   color: #ADB5BD;

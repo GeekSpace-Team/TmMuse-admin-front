@@ -32,7 +32,7 @@ const SidebarDesign = () => {
     let history=useNavigate();
 
     // if(userToken.userToken==null){
-    //     document.location.href='/';
+    //     document.location.href='/login';
     // }
     return (
        <CookiesProvider className="app">

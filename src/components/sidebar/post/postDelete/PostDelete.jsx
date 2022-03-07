@@ -6,65 +6,65 @@ import Fade from '@mui/material/Fade';
 import { IconName, IoMdClose } from "react-icons/io";
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Stack } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
 
 const style = {
-    position: 'absolute',
-    top: '20%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    borderRadius: '8px',
-    bgcolor: 'background.paper',
-    border: 'transparent',
-    boxShadow: 24,
-    p: 4,
+  position: 'absolute',
+  top: '20%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  borderRadius: '8px',
+  bgcolor: 'background.paper',
+  border: 'transparent',
+  boxShadow: 24,
+  p: 4,
+};
+
+const PostDelete = (props) => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {props.handleClose()}
+
+  // console.log(props)
+
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
   };
 
-const PostDelete = ({postId}) => {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
-
-
-    const headers = { 
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-
-    const deletePost=()=>{
-      axiosInstanse.delete('/delete-post?id='+postId,{headers})
-      .then(response=>{
-        if(response.data.error){
+  const deletePost = () => {
+    axiosInstanse.delete('/delete-post?id=' + props.postId, { headers })
+      .then(response => {
+        if (response.data.error) {
           alert("Error");
-        } else{
-          if(response.data.body=='DELETED'){
+        } else {
+          if (response.data.body == 'DELETED') {
             handleClose();
-            window.location.href = "/post"
-            
-            
+            props.getData(1);
+
+            toast.warn('Successfully deleted!', {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
           }
         }
       })
-      .catch(ex=>{
+      .catch(ex => {
         alert(ex);
       });
-    }
+  }
+
+  console.log("delllll")
   return <div>
-         <img onClick={handleOpen} src="images/Delete.svg" alt="" />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
+   
+      <Fade in={true}>
+        <Box sx={style}>
           <Stack direction='row' justifyContent='space-between'>
             <p className='deletetitLe'>Do you want delete?</p>
             <IoMdClose onClick={handleClose} className='close' />
@@ -73,9 +73,9 @@ const PostDelete = ({postId}) => {
             <button onClick={handleClose} id='noButton'>No</button>
             <button id='yesButton' onClick={deletePost}>YES</button>
           </Stack>
-          </Box>
-        </Fade>
-      </Modal>
+        </Box>
+      </Fade>
+      <ToastContainer />
   </div>;
 };
 

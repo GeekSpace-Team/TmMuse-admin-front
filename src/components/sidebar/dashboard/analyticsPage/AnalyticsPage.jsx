@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap'
 import { Row, Col } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { CSVLink, CSVDownload } from "react-csv";
 
 const AnalyticsPage = () => {
   const[analyticList,setAnalyticList]=useState([]);
@@ -13,13 +14,12 @@ const AnalyticsPage = () => {
   const [ start_date, setStart_date ] = useState(null);
   const [ end_date, setEnd_date ] = useState(null);
 
- 
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
 
   useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
     axiosInstanse.get("/get-name-profile", { headers })
       .then(response => {
         setAllProfile(response.data.body);
@@ -42,28 +42,40 @@ const AnalyticsPage = () => {
     getAnalytic();
   },[end_date]);
 
+  
+  useEffect(()=>{
+    getAnalytic();
+  },[profile_id]);
 
-  const headers = { 
-    'Authorization': 'Bearer my-token',
-    'My-Custom-Header': 'foobar'
-  };
   async function getAnalytic(){
     let tempType=null;
+    let tempPid=null;
+    let tempSdate=null;
+    let tempEdate=null;
     if(type!="0"){
       tempType=type;
     }
+    if(profile_id!="0"){
+      tempPid=profile_id;
+    }
+    if(start_date!=""){
+      tempSdate=start_date;
+    }
+    if(end_date!=""){
+      tempEdate=end_date;
+    }
     let analytic = {
-      profile_id: profile_id,
+      profile_id: tempPid,
       type: tempType,
-      start_date: start_date,
-      end_date: end_date,
+      start_date: tempSdate,
+      end_date: tempEdate,
     };
   
-    await axiosInstanse.post('/analytics?',analytic,{headers})
+     axiosInstanse.post('/analytics?',analytic,{headers})
     .then(response=>{
       setAnalyticList(response.data.body);
     })
-    .cath(error=>{
+    .catch(error=>{
 
     });
 
@@ -73,20 +85,12 @@ const AnalyticsPage = () => {
 
   return <div className='content'>
     <div className="titleNameWithArrow">
-      <NavLink to="/dashboard" style={{ textDecoration: 'none', marginTop: '30px' }} >
+      <NavLink to="/" style={{ textDecoration: 'none', marginTop: '30px' }} >
         <img src="images/leftArrow.svg" alt="" style={{ width: '30px' }} />
       </NavLink>
       <p>Analytics Page</p>
     </div>
-    <div className="withLine">
-      <div className="saveContainer">
-        <img src="images/save.svg" alt="" />
-        <p>Save to Excell</p>
-      </div>
-      <div className="lineImg">
-        <img src="images/line.svg" alt="" />
-      </div>
-    </div>
+ 
     <Row style={{ marginLeft: '1%' }}>
 
       <Col lg={3} md={6} sm={12} xs={12} className='analyticSelect'>
@@ -117,6 +121,18 @@ const AnalyticsPage = () => {
       </Col>
 
     </Row>
+    <div className="withLine">
+      <div className="saveContainer">
+        <img src="images/save.svg" alt="" />
+        <CSVLink 
+        data={analyticList}
+        filename={"TmMuse"+new Date()+".csv"}
+        >Save to excel</CSVLink>
+      </div>
+      <div className="lineImg">
+        <img src="images/line.svg" alt="" />
+      </div>
+    </div>
     <Table responsive borderless className='profileTable'>
       <tr>
         <th><center>ID</center></th>

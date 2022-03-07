@@ -21,10 +21,10 @@ const style = {
     p: 4,
   };
 
-const DeleteConstant = ({constantId}) => {
+const DeleteConstant = (props) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {props.handleClose()}
 
 
     const headers = { 
@@ -33,14 +33,14 @@ const DeleteConstant = ({constantId}) => {
     };
 
     const deleteConstant=()=>{
-      axiosInstanse.delete('/delete-constant?id='+constantId,{headers})
+      axiosInstanse.delete('/delete-constant?id='+props.constantId,{headers})
       .then(response=>{
         if(response.data.error){
           alert("Error");
         } else{ 
           if(response.data.body=='DELETED'){
             handleClose();
-            window.location.href = "/constants"
+            props.getData(1);
             
             
           }
@@ -51,19 +51,9 @@ const DeleteConstant = ({constantId}) => {
       });
     }
   return <div>
-         <img onClick={handleOpen} src="images/Delete.svg" alt="" />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
+        
+    
+        <Fade in={true}>
           <Box sx={style}>
           <Stack direction='row' justifyContent='space-between'>
             <p className='deletetitLe'>Do you want delete?</p>
@@ -75,7 +65,6 @@ const DeleteConstant = ({constantId}) => {
           </Stack>
           </Box>
         </Fade>
-      </Modal>
   </div>;
 };
 

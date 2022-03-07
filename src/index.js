@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,Navigate
 } from "react-router-dom";
 import Login from './components/loginPage/LoginPage';
 import SidebarDesign from './components/sidebar/Sidebar/SidebarDesign';
@@ -26,17 +26,18 @@ import Pop from './components/sidebar/pop/Pop';
 import Constants from './components/sidebar/constants/Constants';
 import Interests from './components/sidebar/interests/Interests';
 import TmMuseCard from './components/sidebar/tmMuseCard/TmMuseCard';
-
+import { isLogin } from "./utils/isLogin";
+import history from "./utils/history";
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter history={history}>
   <Routes>
     <Route exact path="/login" element={<Login/>}/>
-    <Route path='/' element={<SidebarDesign/>}>
+    <Route path='/' element={isLogin()?<SidebarDesign/>:<Navigate to="/login" replace />}>
       <Route index element={<Dashboard/>}/>
       <Route path="analyticsPage" element={<AnalyticsPage/>}/>
-      <Route path="profile" element={<Profile/>} />
+      <Route path="profile" element={isLogin()?<Profile/>:<Navigate to="/login" replace />} />
       <Route path="banner" element={<Banner/>} />
-      <Route path="category" element={<Category/>} />
+      <Route path="category" element={isLogin()?<Category/>:<Navigate to="/login" replace />} />
       <Route path="ads" element={<Ads/>} />
       <Route path="inbox" element={<Inbox/>} />
       <Route path="post" element={<Post/>} />

@@ -21,7 +21,7 @@ const style = {
 };
 
 
-const AddPromoCode = () => {
+const AddPromoCode = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,6 +35,11 @@ const AddPromoCode = () => {
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
   }
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
+  
 
   const [toAdd, setToAdd] = useState(false);
 
@@ -43,10 +48,6 @@ const AddPromoCode = () => {
   }
 
   useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
     axiosInstanse.get("/get-name-profile", { headers })
       .then(response => {
         setAllProfile(response.data.body);
@@ -54,10 +55,6 @@ const AddPromoCode = () => {
   },[])
 
   useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
     axiosInstanse.get("/get-user-name", { headers })
       .then(response => {
         setAllUser(response.data.body);
@@ -73,16 +70,15 @@ const AddPromoCode = () => {
     profile_id: profile_id,
     user_id: user_id
   }
-  const headers = {
-    'Authorization': 'Bearer my-token',
-    'My-Custom-Header': 'foobar'
-  };
-  await axiosInstanse.post('/add-promo-code', promo, { headers })
+   axiosInstanse.post('/add-promo-code', promo, { headers })
     .then(response => {
       if (response.data.error) {
         alert("Something is went wrong!")
       } 
-      alert("success")
+      handleClose();
+      setPromo_code('');
+      props.getPromo(1);
+
       setToAdd(false);
     }).catch(ex => {
       setToAdd(false);

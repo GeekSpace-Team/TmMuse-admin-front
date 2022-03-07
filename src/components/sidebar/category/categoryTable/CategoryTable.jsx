@@ -5,6 +5,7 @@ import './CategoryTable.css'
 import { useAsync } from 'react-async'
 import Loading from '../../../loading/Loading'
 import { axiosInstanse } from '../../../utils/axiosInstanse'
+import Empty from '../../../empty/Empty'
 
 
 const CategoryTable = () => {
@@ -48,7 +49,7 @@ const CategoryTable = () => {
         <div>
 
 
-            {categoryList.length == 0 ? <Loading /> :
+            {categoryList.length == 0 ? <Empty /> :
                 <Table responsive borderless className='categoryTable'>
                     <tr>
                         <th>ID</th>

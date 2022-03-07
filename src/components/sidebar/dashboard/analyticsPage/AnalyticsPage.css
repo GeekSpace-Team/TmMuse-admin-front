@@ -34,11 +34,10 @@
 }
 .lineImg img {
   margin-left: 86%;
-  margin-top: -60px;
+  margin-top: -35px;
 }
 .withLine {
-  margin-top: -70px;
-  margin-bottom: -35px;
+  margin-bottom: -20px;
 }
 input[type="date"]{
   width: 230px;

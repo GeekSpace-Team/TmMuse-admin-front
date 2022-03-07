@@ -6,7 +6,7 @@ import Fade from '@mui/material/Fade';
 import { IoMdClose } from "react-icons/io";
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Stack } from '@mui/material';
-
+import { ToastContainer, toast } from 'react-toastify';
 
 const style = {
     position: 'absolute',
@@ -21,10 +21,10 @@ const style = {
     p: 4,
   };
 
-const DeleteCertificate = ({certificateId}) => {
+const DeleteCertificate = (props) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {props.handleClose()}
 
 
     const headers = { 
@@ -33,16 +33,23 @@ const DeleteCertificate = ({certificateId}) => {
     };
 
     const deleteCertificate=()=>{
-      axiosInstanse.delete('/delete-certificate?id='+certificateId,{headers})
+      axiosInstanse.delete('/delete-certificate?id='+props.certificateId,{headers})
       .then(response=>{
         if(response.data.error){
           alert("Error");
         } else{
           if(response.data.body=='DELETED'){
             handleClose();
-            window.location.href = "/sertificate"
-            
-            
+            props.getData(1);            
+            toast.warn('Successfully deleted!', {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
           }
         }
       })
@@ -51,19 +58,7 @@ const DeleteCertificate = ({certificateId}) => {
       });
     }
   return <div>
-         <img onClick={handleOpen} src="images/Delete.svg" alt="" />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
+        <Fade in={true}>
           <Box sx={style}>
           <Stack direction='row' justifyContent='space-between'>
             <p className='deletetitLe'>Do you want delete?</p>
@@ -75,7 +70,7 @@ const DeleteCertificate = ({certificateId}) => {
           </Stack>
           </Box>
         </Fade>
-      </Modal>
+        <ToastContainer />
   </div>;
 };
 

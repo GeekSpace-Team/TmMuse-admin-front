@@ -16,8 +16,10 @@
   cursor: pointer;
   box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
   border-radius: 8px;
-  width: 100%;
+  width: 94%;
   margin-top: -30px;
+  position: relative;
+  margin-left: 10px;
 }
 
 .dashboardTitle p {
@@ -30,6 +32,7 @@
 }
 .countContainer {
   margin-left: 4%;
+  position: relative;
 }
 .bigCount {
   color: #31456a;
@@ -54,6 +57,9 @@
   margin-left: 170px;
   color: #ad2d1e;
   margin-top: -60px;
+  position: absolute;
+  right: 15px;
+  bottom: 5px;
 }
 
 #upArrow {
@@ -92,7 +98,7 @@ progress[value]::-webkit-progress-bar {
   justify-content: space-between;
   height: 80px;
   align-items: center;
-  margin-left: 2%;
+  margin-left: 10px;
 }
 .countWithName {
   margin-top: 15px;

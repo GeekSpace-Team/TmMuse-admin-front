@@ -31,18 +31,18 @@ const Dashboard = () => {
     const [ profilesCount, setProfilesCount ] = useState(0);
     const [ postsCount, setPostsCount ] = useState(0);
     const [ card_usersCount, setCard_usersCount ] = useState(0);
-    const [ viewToday, setViewToday ] = useState();
-    const [ viewYesterday, setViewYesterday ] = useState();
-    const [ adsToday, setAdsToday ] = useState();
+    const [ viewToday, setViewToday ] = useState(0);
+    const [ viewYesterday, setViewYesterday ] = useState(0);
+    const [ adsToday, setAdsToday ] = useState(0);
     const [ adsYesterday, setAdsYesterday ] = useState(0);
-    const [ visitorsToday, setVisitorsToday ] = useState();
+    const [ visitorsToday, setVisitorsToday ] = useState(0);
     const [ visitorsYesterday, setVisitorsYesterday ] = useState(0);
-    const [ postToday, setPostToday ] = useState();
-    const [ postYesterday, setPostYesterday ] = useState();
-    const [ sliderToday, setSliderToday ] = useState();
-    const [ sliderYesterday, setSliderYesterday ] = useState();
-    const [ popToday, setPopToday ] = useState();
-    const [ popYesterday, setPopYesterday ] = useState();
+    const [ postToday, setPostToday ] = useState(0);
+    const [ postYesterday, setPostYesterday ] = useState(0);
+    const [ sliderToday, setSliderToday ] = useState(0);
+    const [ sliderYesterday, setSliderYesterday ] = useState(0);
+    const [ popToday, setPopToday ] = useState(0);
+    const [ popYesterday, setPopYesterday ] = useState(0);
     const [ popSum, setPopSum ] = useState(0);
     const [ profileSum, setProfileSum ] = useState(0);
     const [ adsSum, setAdsSum ] = useState(0);
@@ -139,7 +139,7 @@ const Dashboard = () => {
                 setPopToday(response.data.body.popup_view);
                 setPopYesterday(response.data.body.popup_view_yesterday);
             })
-            .cath(error=>{
+            .catch(error=>{
 
             });
 
@@ -185,16 +185,17 @@ const Dashboard = () => {
                        </NavLink>
                    </Col>
                    <Col lg={3} md={6} xs={12} sm={12}>
-                       <div className="dashboardContainer">
+                   <NavLink to='/analyticsPage' style={{textDecoration: 'none'}}>
+                       <div  className="dashboardContainer">
                            <div className="dashboardTitle">
                                <p>Ads view</p>
                            </div>
-                           <div className="countContainer">
+                           <div  className="countContainer">
                                <p className='bigCount'>{adsToday}</p>
                                <p className='smallCount'>{adsYesterday}</p>
                                {
                                    adsToday > adsYesterday?
-                                   <div className="upArrowContainer" style={{backgroundColor:'rgba(6, 139, 146, 0.2)', color: '#068B92'}}>
+                                   <div  className="upArrowContainer" style={{backgroundColor:'rgba(6, 139, 146, 0.2)', color: '#068B92'}}>
                                     <HiOutlineArrowNarrowUp  id='upArrow' />
                                </div>
                                :
@@ -208,8 +209,10 @@ const Dashboard = () => {
                                 <BorderLinearProgress id='second' variant="determinate" value={adsSum} />
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} xs={12} sm={12}>
+                   <NavLink to='/analyticsPage' style={{textDecoration: 'none'}}>
                        <div className="dashboardContainer">
                            <div className="dashboardTitle">
                                <p>App visitors</p>
@@ -233,8 +236,10 @@ const Dashboard = () => {
                                 <BorderLinearProgress id='third' variant="determinate" value={visitorsSum} />
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} xs={12} sm={12}>
+                   <NavLink to='/analyticsPage' style={{textDecoration: 'none'}}>
                        <div className="dashboardContainer">
                            <div className="dashboardTitle">
                                <p>Post view</p>
@@ -258,12 +263,14 @@ const Dashboard = () => {
                                 <BorderLinearProgress id='fourth' variant="determinate" value={postSum} />
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    
                </Row>
 
                <Row>
                <Col lg={3} md={6} xs={12} sm={12}>
+               <NavLink to='/analyticsPage' style={{textDecoration: 'none'}}>
                        <div className="dashboardContainer" id='secondCol'>
                            <div className="dashboardTitle">
                                <p>Slider view</p>
@@ -288,8 +295,10 @@ const Dashboard = () => {
                                 <BorderLinearProgress id='fifth' variant="determinate" value={sliderSum} />
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} xs={12} sm={12}>
+                   <NavLink to='/analyticsPage' style={{textDecoration: 'none'}}>
                        <div className="dashboardContainer" id='secondCol'>
                            <div className="dashboardTitle">
                                <p>Pop-up view</p>
@@ -313,6 +322,7 @@ const Dashboard = () => {
                                 <BorderLinearProgress  variant="determinate" value={popSum} />
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} xs={12} sm={12}></Col>
                    <Col lg={3} md={6} xs={12} sm={12}></Col>
@@ -325,6 +335,7 @@ const Dashboard = () => {
                </div>
                <Row>
                    <Col lg={3} md={6} sm={12} xs={12}>
+                   <NavLink to='/users' style={{textDecoration: 'none'}}>
                        <div className="informationContainer" style={{background: ' rgba(6, 139, 146, 0.2)', borderRadius:'8px'}}>
                            <div className="ImageContainer" style={{marginLeft: '7%'}}>
                             <img src="images/Users.svg" style={{width: '40px'}} alt="" />  
@@ -334,8 +345,10 @@ const Dashboard = () => {
                                <p style={{color: '#068B92', marginLeft: '17px'}}>Users</p>
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} sm={12} xs={12}>
+                   <NavLink to='/profile' style={{textDecoration: 'none'}}>
                        <div className="informationContainer" style={{background: ' rgba(217, 95, 24, 0.2)', borderRadius:'8px'}}>
                            <div className="ImageContainer" style={{marginLeft: '7%'}}>
                             <img src="images/Profiles.svg" style={{width: '32px'}} alt="" />  
@@ -345,8 +358,10 @@ const Dashboard = () => {
                                <p style={{color: '#D95F18', marginLeft: '8px'}}>Profiles</p>
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} sm={12} xs={12}>
+                   <NavLink to='/post' style={{textDecoration: 'none'}}>
                        <div className="informationContainer" style={{background: ' rgba(173, 45, 30, 0.2)', borderRadius:'8px'}}>
                            <div className="ImageContainer" style={{marginLeft: '7%'}}>
                             <img src="images/TmMuseCard.svg" style={{width: '32px'}} alt="" />  
@@ -356,8 +371,10 @@ const Dashboard = () => {
                                <p style={{color: '##AD2D1E', marginLeft: '19px'}}>Posts</p>
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                    <Col lg={3} md={6} sm={12} xs={12}>
+                   <NavLink to='/tmMuseCard' style={{textDecoration: 'none'}}>
                        <div className="informationContainer" style={{background: ' rgba(52, 78, 209, 0.2)', borderRadius:'8px'}}>
                            <div className="ImageContainer" style={{marginLeft: '7%'}}>
                             <img src="images/Post.svg" style={{width: '32px'}} alt="" />  
@@ -367,6 +384,7 @@ const Dashboard = () => {
                                <p style={{color: '#344ED1'}}>TmMuse cards</p>
                            </div>
                        </div>
+                       </NavLink>
                    </Col>
                </Row>
             </div>

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import { axiosInstanse } from "../../../utils/axiosInstanse";
@@ -22,78 +21,66 @@ const style = {
   p: 4,
 };
 
-
-
-const AddAds = () => {
+const AddAds = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [nameTM, setNameTM] = useState('');
   const [nameRU, setNameRU] = useState('');
-  const [siteLink, setSiteLink] = useState('');
   const [comment_of_admin, setComment_of_admin] = useState('');
-  const [isMain, setIsMain] = useState(false);
-  const [profile_id, setProfileID] = useState(0);
+  const [site_url, setSite_url] = useState('');
+  const [is_main, setIs_main] = useState(false);
+  const [profileId, setProfileId] = useState(0);
   const [selectedFile, setSelectedFile] = useState('');
-
-  const [isAdd, setIsAdd] = useState(false);
+  const [toAdd, setToAdd] = useState(false);
 
   const handleAdd = () => {
-    setIsAdd(!isAdd);
+    setToAdd(!toAdd);
   }
-
-
   const [INSERTED_ID, setINSERTED_ID] = useState(0);
-
   const [allProfileList, setAllProfile] = useState([]);
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
 
   useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
     axiosInstanse.get("/get-name-profile", { headers })
       .then(response => {
         setAllProfile(response.data.body);
       })
-  },[])
+  }, [])
 
-
-
-  // File upload section
-  function handleInsertedId(id) {
-    setINSERTED_ID(id);
-  }
+  // function handleInsertedId(id) {
+  //   setINSERTED_ID(id);
+  // }
   const handleInputChange = (event) => {
     setSelectedFile(event.target.files[0])
   }
 
 
 
-
-
-
-  const uploadImage = async () => {
-    if (INSERTED_ID == 0)
+  const uploadImage = async (id) => {
+    if (id == 0)
       return;
     let data = new FormData()
     data.append('file', selectedFile, "ok.jpg")
-    let url = "/update-ads-image?id=" + INSERTED_ID;
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar',
-      'Content-Type': 'multipart/form-data'
-    };
-    await axiosInstanse.put(url, data, {
+    let url = "/update-ads-image?id=" + id;
+   
+     axiosInstanse.put(url, data, {
       headers
     })
       .then(res => { // then print response status
         console.warn(res);
-        alert("Success");
-        setINSERTED_ID(0);
+        handleClose();
+        setNameTM("");
+        setNameRU("");
+        setComment_of_admin("");
+        setSite_url("");
+        props.getAds(1);
       }).catch(ex => {
-        alert("Image upload error:"+ex);
+        alert("Image upload error:" + ex);
         setINSERTED_ID(0);
       })
 
@@ -101,9 +88,9 @@ const AddAds = () => {
 
 
   async function addAds() {
-    if (!isAdd)
+    if (!toAdd)
       return;
-    if (profile_id != 0 && siteLink != "") {
+    if (profileId != 0 && site_url != "") {
       alert("Please clear site link fill!")
       return;
     }
@@ -113,40 +100,39 @@ const AddAds = () => {
     }
     const ads = {
       nameTM: nameTM,
-      nameRU:nameRU,
+      nameRU: nameRU,
       comment_of_admin: comment_of_admin,
-      is_main: isMain,
-      site_url: siteLink,
-      profile_id: profile_id
+      is_main: is_main,
+      site_url: site_url,
+      profile_id: profileId,
+
     };
     const headers = {
       'Authorization': 'Bearer my-token',
       'My-Custom-Header': 'foobar'
     };
-    await axiosInstanse.post('/add-ads', ads, { headers })
+     axiosInstanse.post('/add-ads', ads, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")
         } else {
-          setINSERTED_ID(response.data.body.INSERTED_ID);
+          uploadImage(response.data.body.INSERTED_ID)
         }
-        setIsAdd(false);
+        setToAdd(false);
       }).catch(ex => {
-        setIsAdd(false);
-        alert("Adding error:"+ex);
+        setToAdd(false);
+        alert("Adding error:" + ex);
       });
   }
+
 
   useEffect(() => {
 
     addAds();
-  }, [isAdd]);
+  }, [toAdd]);
 
-  useEffect(() => {
-    if (INSERTED_ID == 0)
-      return;
-    uploadImage();
-  }, [INSERTED_ID]);
+
+  
   return <div>
     <button className='Addbuttons' style={{marginRight:"25px"}} onClick={handleOpen}>+ Add ads</button>
     <Modal
@@ -170,7 +156,7 @@ const AddAds = () => {
               <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
             <p className='inputTitle'>Profile:</p>
-            <select name="" id="" style={{height: '30px'}} onChange={e => setProfileID(e.target.value)}>
+            <select name="" id="" style={{height: '30px'}} onChange={e => setProfileId(e.target.value)}>
               <option value="0">Select...</option>
               {
                 allProfileList.map((element, i) => {
@@ -195,13 +181,13 @@ const AddAds = () => {
               <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={2}>
             <p className='inputTitle'>Site link:</p>
-            <input type="text" value={siteLink} onInput={e => setSiteLink(e.target.value)} />
+            <input type="text" value={site_url} onInput={e => setSite_url(e.target.value)} />
               </Stack>
               </Col>
               <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={2}>
             <p className='inputTitle'>Is Main?:</p>
-            <select name="" id="" style={{height: '30px'}} onChange={e => setIsMain(e.target.value)}>
+            <select name="" id="" style={{height: '30px'}} onChange={e => setIs_main(e.target.value)}>
               <option value="false">No</option>
               <option value="true">Yes</option>
             </select>

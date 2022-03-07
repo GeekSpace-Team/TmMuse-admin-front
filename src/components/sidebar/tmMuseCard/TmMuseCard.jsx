@@ -4,13 +4,27 @@ import Stack from '@mui/material/Stack';
 import { Col, Row } from 'react-bootstrap';
 import './tmMuseCard.css'
 import AddTmCard from './addTmCard/AddTmCard';
+import { axiosInstanse } from '../../utils/axiosInstanse';
 
 
 const TmMuseCard = () => {
-  const[isUpdate,setUpdate]=useState(false);
-  const handleAddButton=()=>{
-    setUpdate(!isUpdate);
-  }
+  const [cardList, setCardList] = useState([]);
+  const [pageCount, setPageCount] = useState([]);
+
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
+  async function getCard(page) {
+     axiosInstanse.get('/get-card?page=' + page, { headers })
+      .then(response => {
+        setCardList(response.data.body.cards);
+        setPageCount(response.data.body.page_count);
+      })
+      .cath(error => {
+
+      });
+    }
   return (
     <div className='content'>
         <Row style={{paddingTop: '30px'}}>
@@ -19,15 +33,14 @@ const TmMuseCard = () => {
             </Col>
             <Col lg={6} md={1} xs={1} sm={1}></Col>
             <Col lg={3} md={5} xs={5} sm={5}>
-                <AddTmCard funcAdd={handleAddButton}/>
+                <AddTmCard getCard={getCard} />
             </Col>
         </Row>
-        {
-          isUpdate?<TmMuseTable/>:<TmMuseTable/>
-        }
+        <TmMuseTable getCard={getCard} cardList={[cardList, setCardList]} pageCount={[pageCount, setPageCount]} />
+        
       
     </div>
   )
 }
 
-export default TmMuseCard
+export default TmMuseCard;

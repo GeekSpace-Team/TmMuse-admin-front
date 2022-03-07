@@ -6,6 +6,7 @@ import { axiosInstanse } from '../../utils/axiosInstanse'
 import { useState,useEffect,useMemo } from 'react'
 import Pagination from '@mui/material/Pagination';
 import Loading from '../../loading/Loading'
+import Empty from '../../empty/Empty';
 
 
 
@@ -45,7 +46,7 @@ const Users = () => {
             <Stack direction='row' className='TagsTitleAndButton' justifyContent='space-between'>
                 <p className='titleNames'>Users</p>
             </Stack>
-            {userList.length==0?<Loading/>:
+            {userList.length==0?<Empty/>:
             <Table responsive borderless className='profileTable'>
             <tr>
                 <th><center>ID</center></th>
@@ -82,7 +83,7 @@ const Users = () => {
                 pageClassName={'page-item'}
                 pageLinkClassName={'page-link'}
                 activeClassName={'active'} 
-              style={{marginTop: '20px', marginLeft: '30%'}} />
+              style={{marginTop: '20px', justifyContent:'center', display:"flex"}} />
 }
         </div>
     )

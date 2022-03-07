@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Col, Row } from 'react-bootstrap';
-
+// import { getPost } from '../postTable/PostTable';
 
 
 const style = {
@@ -21,22 +21,20 @@ const style = {
   p: 4,
 };
 
-const AddPost = () => {
+const AddPost = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
+  const handleClose = () => setOpen(false); 
   const [nameTM, setNameTM] = useState('');
   const [nameRU, setNameRU] = useState('');
   const [descTM, setDescTM] = useState('');
   const [descRU, setDescRU] = useState('');
   const [promotion, setPromotion] = useState(0);
   const [commentOfAdmin, setCommentOfADmin] = useState('');
-  const [siteLink, setSiteLink] = useState('');
   const [status, setStatus] = useState(false);
-  const [profileId, setProfileId] = useState(0);
   const [selectedFile, setSelectedFile] = useState('');
-
+  const allProfileList = props.allProfile;
+  const [profileId, setProfileId] = useState(0);
   const [toAdd, setToAdd] = useState(false);
 
   const handleAdd = () => {
@@ -44,19 +42,11 @@ const AddPost = () => {
   }
 
   const [INSERTED_ID, setINSERTED_ID] = useState(0);
-
-  const [allProfileList, setAllProfile] = useState([]);
-
-  useEffect(() => {
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    axiosInstanse.get("/get-name-profile", { headers })
-      .then(response => {
-        setAllProfile(response.data.body);
-      })
-  },[])
+  
+  const headers = {
+    'Authorization': 'Bearer my-token',
+    'My-Custom-Header': 'foobar'
+  };
 
   function handleInsertedId(id) {
     setINSERTED_ID(id);
@@ -64,42 +54,39 @@ const AddPost = () => {
   const handleInputChange = (event) => {
     setSelectedFile(event.target.files[0])
   }
-
-
-
   const uploadImage = async () => {
     if (INSERTED_ID == 0)
       return;
     let data = new FormData()
     data.append('file', selectedFile, "ok.jpg")
     let url = "/update-post-image?id=" + INSERTED_ID;
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar',
-      'Content-Type': 'multipart/form-data'
-    };
-    await axiosInstanse.put(url, data, {
-      headers
-    })
+     axiosInstanse.put(url, data, {headers})
       .then(res => { // then print response status
         console.warn(res);
-        alert("Success");
+        // alert("Success");
         setINSERTED_ID(0);
+        // function chagyr
+        handleClose();
+        setNameTM("");
+        setNameRU("");
+        setDescTM("");
+        setDescRU("");
+        setPromotion(""); 
+        setCommentOfADmin("");
+        props.getPost(1);
       }).catch(ex => {
         alert("Image upload error:" + ex);
         setINSERTED_ID(0);
       })
 
   }
-
-
   async function addPost() {
     if (!toAdd)
       return;
-    if (profileId != 0 && siteLink != "") {
-      alert("Please clear site link fill!")
-      return;
-    }
+    // if (profileId != 0 && siteLink != "") {
+    //   alert("Please clear site link fill!")
+    //   return;
+    // }
     if (nameTM == '' || nameRU == '' || selectedFile == '') {
       alert("Please enter required informations!")
       return;
@@ -109,18 +96,14 @@ const AddPost = () => {
       titleRU: nameRU,
       comment_of_admin: commentOfAdmin,
       status: status,
-      site_url: siteLink,
       profile_id: profileId,
       descriptionTM: descTM,
       descriptionRU: descRU,
       promotion: promotion
 
     };
-    const headers = {
-      'Authorization': 'Bearer my-token',
-      'My-Custom-Header': 'foobar'
-    };
-    await axiosInstanse.post('/add-posts', post, { headers })
+  
+     axiosInstanse.post('/add-posts', post, { headers })
       .then(response => {
         if (response.data.error) {
           alert("Something is went wrong!")
@@ -133,8 +116,6 @@ const AddPost = () => {
         alert("Adding error:" + ex);
       });
   }
-
-
 
   useEffect(() => {
 
@@ -220,15 +201,10 @@ const AddPost = () => {
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Status:</p>
               <select name="" style={{ height: '30px' }} id="" onChange={e => setStatus(e.target.value)}>
+                <option value={true}>Status...</option>\
                 <option value={true}>ACTIVE</option>
                 <option value={false}>PASSIVE</option>
               </select>
-            </Stack>
-          </Col>
-          <Col lg={6} md={6} xs={12} sm={12}>
-            <Stack direction='column' spacing={0} marginTop={1.5}>
-              <p className='inputTitle'>Site link:</p>
-              <input type="text" value={siteLink} onInput={e => setSiteLink(e.target.value)} />
             </Stack>
           </Col>
         </Row>
