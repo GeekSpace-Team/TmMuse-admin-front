@@ -7,6 +7,7 @@ import ReplyModal from '../replyModal/ReplyModal';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import Empty from '../../../empty/Empty';
 import Loading from '../../../loading/Loading';
+import { Modal } from '@mui/material';
 
 
 const InboxPage = () => {
@@ -19,6 +20,12 @@ const InboxPage = () => {
   const [inboxId, setInboxId] = useState([0]);
   const [username,setUsername]=useState('');
   const [ phone_number, setPhone_number ] = useState('');   
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [ title, setTitle ] = useState('');
+  const [ message, setMessage ] = useState('');
 
   const handleInboxClick = (element) => {
     setInboxTitle(element.title);
@@ -116,7 +123,13 @@ const InboxPage = () => {
               <p style={{ color: '#31456A', marginLeft: '20px', fontSize: '13px' }}>{phone_number}</p>
             </Col>
             <div className="sentButtonInbox">
-              <ReplyModal inboxid={inboxId} />
+              {/* <ReplyModal /> */}
+              <div>
+          
+        
+ <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
+             
+    </div>
             </div>
           </Stack>
           </div>

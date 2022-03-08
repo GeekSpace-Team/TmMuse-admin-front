@@ -31,9 +31,7 @@ const ReplyModal = (props) => {
     }
   return (
     <div>
-        
- <button onClick={handleOpen}><img src="images/send.svg" onClick={handleOpen} style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
-            <Modal
+         <Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
@@ -61,14 +59,17 @@ const ReplyModal = (props) => {
                         <Col lg={3} md={12} xs={6} sm={6}>
                             <Stack marginLeft={3} direction='row' spacing={2} marginTop={3}>
                                 <div className="sentButtonInbox">
-                                    <button onClick={() => ReplySend}><img src="images/send.svg" style={{ marginRight: '10px', height: '17px' }} alt="" /> Send</button>
+                                    <button onClick={() => ReplySend()}><img src="images/send.svg" style={{ marginRight: '10px', height: '17px' }} alt="" /> Send</button>
                                 </div>
                             </Stack>
                         </Col>
 
                     </Row>
                 </Box>
-            </Modal>      
+            </Modal>    
+        
+ <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
+             
     </div>
   )
 }
