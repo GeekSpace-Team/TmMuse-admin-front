@@ -63,7 +63,7 @@ const ProfileTable = (props) => {
                 <th><center>Image</center></th>
                 <th><center>Category</center></th>
                 <th><center>VIP status</center></th>
-                <th><center>Status</center></th>
+                <th><center>status</center></th>
                 <th><center>View count</center></th>
                 <th><center>Like</center></th>
                 <th><center>Dislike</center></th>
