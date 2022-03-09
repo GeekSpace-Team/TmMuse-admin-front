@@ -123,11 +123,11 @@ const InboxPage = () => {
               <p style={{ color: '#31456A', marginLeft: '20px', fontSize: '13px' }}>{phone_number}</p>
             </Col>
             <div className="sentButtonInbox">
-              {/* <ReplyModal /> */}
+              <ReplyModal inboxId={inboxId} getInbox={getInbox}/>
               <div>
           
         
- <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
+ 
              
     </div>
             </div>

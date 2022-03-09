@@ -33,7 +33,7 @@ const EditProfileModal = (props) => {
     console.log("data", props.data);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => { props.handleClose() }
+    const handleClose = () => {props.handleClose()}
     const navigate = useNavigate();
     const compress = new Compress()
     const [show, setShow] = useState(false);
@@ -75,8 +75,8 @@ const EditProfileModal = (props) => {
     const [isMovie, setIsMovie] = useState(false);
     const [compressedSliders, setCompressedSliders] = useState([]);
     const [compressedGallery, setCompressedGallery] = useState([]);
-    const [tagsTM, setTagsTM] = useState(props.data?.tags);
-    const [tagsRU, setTagsRU] = useState(props.data?.tags);
+    const [tagsTM, setTagsTM] = useState();
+    const [tagsRU, setTagsRU] = useState();
     const [WiFi, setIsWifi] = useState(props.data.WiFi);
     const [phoneNumberList, setphoneNumberList] = useState([""]);
     const [largeVrImage, setLargeVrImage] = useState('');
@@ -93,6 +93,18 @@ const EditProfileModal = (props) => {
     const [cinema_id, setCinema_id] = useState(props.data.cinema_id);
     const [tm_muse_card, setTm_muse_card] = useState(props.data.tm_muse_card);
 
+
+    useEffect(()=>{
+        console.log("tags ru",props.data?.tags)
+        let tagTm = "";
+        let tagRu = "";
+        props.data?.tags?.map((tag)=>{
+            tagTm +=tag.tagTM + ",";
+            tagRu +=tag.tagRU + ",";
+        });
+        setTagsTM(tagTm);
+        setTagsRU(tagRu);
+    },[props.data?.tags])
     let newPhones=[""];
     
     for(let k=0;k<props.data.phone_numbers.length;k++){
@@ -141,7 +153,7 @@ const EditProfileModal = (props) => {
                 console.log(data.data);
             })
                 .catch(function (error) {
-                    alert("Add slider large error: " + error.message);
+                    // alert("Add slider large error: " + error.message);
                     setLoading(false);
                 })
         }
@@ -184,7 +196,7 @@ const EditProfileModal = (props) => {
                 }
             }
         }).catch(err => {
-            alert("Add tags error: " + err);
+            // alert("Add tags error: " + err);
             onFinsih(id);
         });
     }
@@ -273,13 +285,14 @@ const EditProfileModal = (props) => {
         setLoading(false);
         // setinsertedProfileId(0);
         // setinsertedCategoryId(0);
-        setShow(false);
+        handleClose();
+        props.getData(1);
     }
 
 
 
     const onSliderSmallImageUpload = async (id) => {
-        alert(compressedSliders.length);
+        // alert(compressedSliders.length);
         if (id == 0) {
             return;
         }
@@ -342,7 +355,7 @@ const EditProfileModal = (props) => {
                 }
             }
         }).catch(err => {
-            alert("Add phone number error: " + err);
+            // alert("Add phone number error: " + err);
             onFinsih(id);
         });
     }
@@ -527,26 +540,26 @@ const EditProfileModal = (props) => {
             free_time: free_time,
             required_promotion: required_promotion,
             promotion_status: promotion_status,
-            site: true
+            site: site
 
         }, { headers }).then((data) => {
             console.log("result", id);
             if (phoneNumberList.length > 0 && phoneNumberList[0] != '') {
-                alert("phone");
+                // alert("phone");
                 addPhoneNumbers(id);
             }
             else if (arrayOfTopSliderImages.length > 0) {
-                alert("2 if");
+                // alert("2 if");
                 onFileUploadTopSliderImages(id);
             }
             else if (arrayOfGalleryLargeImages.length > 0) {
-                alert("3 if");
+                // alert("3 if");
                 onFileUploadGalleryLargeImages(id);
             } else if (smallVrImage != '' && largeVrImage != '') {
-                alert("4 if");
+                // alert("4 if");
                 uploadLargeVrImage(id);
             } else {
-                alert("5 if");
+                // alert("5 if");
                 addTags(id);
             }
             //   if(phoneNumberList.length===null){
@@ -622,7 +635,7 @@ const EditProfileModal = (props) => {
                                                 <p className='inputTitle'>Movie time:
                                                     <pre>09/01/2022(13:00,22:30)*
                                                         <br />11/01/2022-12/01/2022(14:00,22:30)*</pre></p>
-                                                <textarea name="" id="movie" cols="51.9" rows="5" onChange={(e) => setMovieTime(e.target.value)} defaultValue={props.data.site}></textarea>
+                                                <textarea name="" id="movie" cols="51.9" rows="5" onChange={(e) => setsite(e.target.value)} defaultValue={props.data.site}></textarea>
                                             </Stack>
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
@@ -853,24 +866,21 @@ const EditProfileModal = (props) => {
                                 </Stack>
                             </Col>
 
-                            {tagsTM?.map((tagTM) => {
-                                console.log(tagTM)
-                                return <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
-                                    <Stack direction='column' spacing={0}>
-                                        <p className='inputTitle'>Tags TM:</p>
-                                        <input type="text" onChange={e => setTagsTM(e.target.value)} value={tagTM?.tagTM} />
-                                    </Stack>
-                                </Col>
-                            })}
-                            {tagsRU?.map((tagsRU) => {
-                                console.log(tagsRU)
-                                return <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
-                                    <Stack direction='column' spacing={0}>
-                                        <p className='inputTitle'>Tags RU:</p>
-                                        <input type="text" onChange={e => setTagsRU(e.target.value)} value={tagsRU?.tagRU} />
-                                    </Stack>
-                                </Col>
-                            })}
+                            
+                            <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
+                                <Stack direction='column' spacing={0}>
+                                    <p className='inputTitle'>Tags TM:</p>
+                                    <input type="text" onChange={e => setTagsTM(e.target.value)} defaultValue={tagsTM} />
+                                </Stack>
+                            </Col>
+                           
+                          
+                            <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
+                            <Stack direction='column' spacing={0}>
+                                <p className='inputTitle'>Tags RU:</p>
+                                <input type="text" onChange={e => setTagsRU(e.target.value)} defaultValue={tagsRU} />
+                            </Stack>
+                            </Col>
                             <Col lg={3} md={3} sm={12} xs={12}>
                                 <Stack direction='column' spacing={0}>
                                     <p className='inputTitle'>Promo count:</p>
