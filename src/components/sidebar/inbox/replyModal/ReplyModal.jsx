@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import { Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
-import { axiosInstanse } from '../../../utils/axiosInstanse';
 
 const style = {
     position: 'absolute',
@@ -18,38 +17,20 @@ const style = {
     p: 4,
 };
 
-const ReplyModal = ({inboxId,getInbox}) => {
+const ReplyModal = (props) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [ title, setTitle ] = useState('');
     const [ message, setMessage ] = useState('');
 
-    const header = { 
-        'Authorization': 'Bearer my-token',
-        'My-Custom-Header': 'foobar'
-      }
-    const ReplySend = () => {
-        axiosInstanse.post('/add-answered-message',{
-            title: title,
-            message: message,
-            inbox_id: inboxId
-        },header)
-        .then(response=>{
-            if(!response.data.error){
-                setTitle('')
-                setMessage('')
-                handleClose();
-                getInbox();
-            }
-        })
-        .catch(err=>{
-            alert(err)
-        })
+
+    const ReplySend = (element) => {
+        setTitle(element.title);
+        setMessage(element.message);
     }
   return (
     <div>
-        <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
          <Modal
                 open={open}
                 onClose={handleClose}
@@ -58,20 +39,20 @@ const ReplyModal = ({inboxId,getInbox}) => {
             >
                 <Box sx={style}>
                     <Stack direction='row' justifyContent='space-between'>
-                        <p className='bannerModalTitle'>Reply message</p>
+                        <p className='bannerModalTitle'>Reply message {props.inboxid}</p>
                         <IoMdClose className='Xicon' onClick={handleClose} />
                     </Stack>
                     <Row>
                         <Col lg={12} md={12} xs={12} sm={12}>
                             <Stack direction='column' spacing={-2}>
                                 <p style={{ color: '#31456A', fontSize: '15px' }}>Title:</p>
-                                <input type="text" value={title} onChange={e=>setTitle(e.target.value)}/>
+                                <input type="text">{title}</input>
                             </Stack>
                         </Col>
                         <Col lg={12} md={12} xs={12} sm={12}>
                             <Stack direction='column' marginTop={2} spacing={-2}>
                                 <p style={{ color: '#31456A', fontSize: '16px' }}>Message:</p>
-                                <textarea name="" id="" cols="30" rows="10" value={message} onChange={e=>setMessage(e.target.value)}/>
+                                <textarea name="" id="" cols="30" rows="10">{message}</textarea>
                             </Stack>
                         </Col>
                         <Col lg={9}></Col>
@@ -87,7 +68,7 @@ const ReplyModal = ({inboxId,getInbox}) => {
                 </Box>
             </Modal>    
         
-
+ <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
              
     </div>
   )
