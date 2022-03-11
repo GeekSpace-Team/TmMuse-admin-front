@@ -16,6 +16,7 @@ import Constants from '../constants/Constants';
 import Interests from '../interests/Interests';
 import AnalyticsPage from '../dashboard/analyticsPage/AnalyticsPage';
 import TmMuseCard from '../tmMuseCard/TmMuseCard';
+import Cinema from '../cinema/Cinema';
 
 
 
@@ -77,6 +78,9 @@ const Index = () => {
     }
     if (GetCurrentRoute() == '/tmMuseCard') {
         page = <TmMuseCard/>
+    }
+    if (GetCurrentRoute() == '/cinema') {
+        page = <Cinema/>
     }
     
     return (
