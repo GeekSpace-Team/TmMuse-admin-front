@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showError, showSuccess } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -78,11 +80,12 @@ const AddPromoCode = (props) => {
       handleClose();
       setPromo_code('');
       props.getPromo(1);
-
+      showSuccess("Successfully added!!!");
       setToAdd(false);
     }).catch(ex => {
       setToAdd(false);
-      alert("Adding error:" + ex);
+      // alert("Adding error:" + ex);
+      showError("Adding error:" + ex);
     });
 }
 
@@ -155,6 +158,7 @@ useEffect(() => {
         </div>
       </Box>
     </Modal>
+    <ToastContainer/>
   </div>;
 };
 

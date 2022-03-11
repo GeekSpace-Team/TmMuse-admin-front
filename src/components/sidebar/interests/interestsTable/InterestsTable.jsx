@@ -4,6 +4,7 @@ import DeleteInterestsModal from '../deleteInterestsModal/DeleteInterestsModal';
 import UpdateInterestsModal from '../updateInterestsModal/UpdateInterestsModal';
 import Pagination from '@mui/material/Pagination';
 import { Backdrop, Modal } from '@mui/material';
+import Empty from '../../../empty/Empty';
 
 
 
@@ -11,6 +12,7 @@ const InterestsTable = (props) => {
     const [page, setPage] = props.page;
     const [pageCount, setPageCount] = props.pageCount;
     const [interestList, setIntertestList] = props.interestList;
+    const [isEmpty, setIsEmpty] = props.isEmpty;
 
     const [open, setOpen] = React.useState(false);
     const [element,setElement] = useState();
@@ -51,7 +53,8 @@ const InterestsTable = (props) => {
                     >
                     <DeleteInterestsModal handleClose={handleClose1} getData={props.getInterests} interestid={elementId} />
                 </Modal>
-        <Table responsive borderless className='profileTable'>
+                {(interestList.length==0 && !isEmpty)?<Empty/>
+                :<Table responsive borderless className='profileTable'>
             <tr>
                 <th><center>ID</center></th>
                 <th><center>Title</center></th>
@@ -74,6 +77,7 @@ const InterestsTable = (props) => {
             }
 
         </Table>
+}
         { interestList.length == 0? null 
       :
       <Pagination count={pageCount}

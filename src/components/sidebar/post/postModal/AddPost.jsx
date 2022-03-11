@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Col, Row } from 'react-bootstrap';
 // import { getPost } from '../postTable/PostTable';
+import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
 
 
 const style = {
@@ -73,9 +75,11 @@ const AddPost = (props) => {
         setDescRU("");
         setPromotion(""); 
         setCommentOfADmin("");
+        showSuccess('Successfully added!!!');
         props.getPost(1);
       }).catch(ex => {
-        alert("Image upload error:" + ex);
+        // alert("Image upload error:" + ex);
+        showError("Image upload error:" + ex);
         setINSERTED_ID(0);
       })
 
@@ -88,7 +92,8 @@ const AddPost = (props) => {
     //   return;
     // }
     if (nameTM == '' || nameRU == '' || selectedFile == '') {
-      alert("Please enter required informations!")
+      // alert("Please enter required informations!")
+      showWarning("Please enter required informations!");
       return;
     }
     const post = {
@@ -106,14 +111,16 @@ const AddPost = (props) => {
      axiosInstanse.post('/add-posts', post, { headers })
       .then(response => {
         if (response.data.error) {
-          alert("Something is went wrong!")
+          // alert("Something is went wrong!")
+          showWarning("Something is went wrong!");
         } else {
           setINSERTED_ID(response.data.body.INSERTED_ID);
         }
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showWarning("Adding error:" + ex);
       });
   }
 
@@ -213,6 +220,7 @@ const AddPost = (props) => {
         </div>
       </Box>
     </Modal>
+    <ToastContainer />
   </div>;
 };
 

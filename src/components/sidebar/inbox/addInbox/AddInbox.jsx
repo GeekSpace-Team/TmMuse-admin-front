@@ -5,7 +5,8 @@ import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
-
+import { ToastContainer, toast } from 'react-toastify';
+import { showError, showWarning } from '../../../toast/toast';
 
 const style = {
     position: 'absolute',
@@ -53,13 +54,15 @@ const AddInbox = () => {
      axiosInstanse.post('/add-inbox', inbox, { headers })
       .then(response => {
         if (response.data.error) {
-          alert("Something is went wrong!")
+        //   alert("Something is went wrong!")
+          showWarning("Something is went wrong!!!");
         } 
        handleClose();
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
   useEffect(() => {
@@ -131,6 +134,7 @@ const AddInbox = () => {
                     </Row>
                 </Box>
             </Modal>
+            <ToastContainer />
         </div>
     )
 }

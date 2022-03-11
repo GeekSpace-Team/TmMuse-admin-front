@@ -5,6 +5,8 @@ import { Col, Row } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import { IoMdClose } from 'react-icons/io';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 const style = {
@@ -57,7 +59,8 @@ const AddTmCard = (props) => {
     if (!toAdd)
       return;
     if (fullname == '') {
-      alert("Please enter required informations!")
+      // alert("Please enter required informations!")
+      showWarning("Please enter required informations!");
       return;
     }
 
@@ -84,7 +87,8 @@ const AddTmCard = (props) => {
     await axiosInstanse.post('/add-card', card, { headers })
       .then(response => {
         if (response.data.error) {
-          alert("Something is went wrong!")
+          // alert("Something is went wrong!")
+          showWarning("Something is went wrong!");
         }
         handleClose();
         setPhone_number('');
@@ -93,9 +97,11 @@ const AddTmCard = (props) => {
         setFullname('');
         props.getCard(1);
         setToAdd(false);
+        showSuccess('Successfully added!!!');
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
 
@@ -179,7 +185,7 @@ const AddTmCard = (props) => {
           </Row>
         </Box>
       </Modal>
-
+      <ToastContainer/>
     </div>
   )
 }

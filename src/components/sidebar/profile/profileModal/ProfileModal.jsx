@@ -10,12 +10,15 @@ import { axiosInstanse } from "../../../utils/axiosInstanse";
 import { useEffect } from 'react';
 import Compress from 'compress.js'
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess } from '../../../toast/toast';
+
 
 
 
 
 const ProfileModal = (props) => {
-    const [ allProfile, setAllProfile ] = useState([]);
+    const [allProfile, setAllProfile] = useState([]);
     const [allCinema, setAllCinema] = useState([]);
     const [cinemaId, setCinemaId] = useState(0);
     const navigate = useNavigate();
@@ -69,7 +72,8 @@ const ProfileModal = (props) => {
     const [promoCount, setPromoCount] = useState(0);
     const [isCertificate, setisCertificate] = useState(false);
     const [movieTime, setMovieTime] = useState('');
-    const [ cinema_id, setCinema_id ] = useState(0);
+    const [cinema_id, setCinema_id] = useState(0);
+    const [own_promotion, setOwn_promotion] = useState(0);
 
 
     const phoneNumberUpdateById = (value, index) => {
@@ -84,7 +88,7 @@ const ProfileModal = (props) => {
     const headers = {
         'Authorization': 'Bearer my-token',
         'My-Custom-Header': 'foobar'
-      };
+    };
 
     const handleAdd = () => {
         setIsAdd(!isAdd);
@@ -113,20 +117,20 @@ const ProfileModal = (props) => {
     }, [compressedGallery])
 
     useEffect(() => {
-        axiosInstanse.get("/get-all-admin-users-cinema",{
+        axiosInstanse.get("/get-all-admin-users-cinema", {
             "cinema_id": 0
-        } ,{ headers })
-          .then(response => {
-            setAllCinema(response.data.body);
-          }).catch((err)=>{
-            console.log(err);
-          })
-      },[])
-    const onFinsih=(id)=>{
+        }, { headers })
+            .then(response => {
+                setAllCinema(response.data.body);
+            }).catch((err) => {
+                console.log(err);
+            })
+    }, [])
+    const onFinsih = (id) => {
         setLoading(false);
+        setShow(false)
         // setinsertedProfileId(0);
         // setinsertedCategoryId(0);
-        setShow(false);
         // setNameTM('');
         // setNameRU('');
         // setshortdescTM('');
@@ -167,6 +171,7 @@ const ProfileModal = (props) => {
         // setisCertificate('');
         // setMovieTime('');
         props.getCategory(1);
+        showSuccess('Successufully added')
     }
 
 
@@ -233,68 +238,44 @@ const ProfileModal = (props) => {
 
     };
 
-    const onFileUploadTopSliderImages = async (id) => {
+    const onFileUploadTopSliderImages = (id) => {
+        let formData = new FormData();
+
         for (let i = 0; i < arrayOfTopSliderImages.length; i++) {
+            formData.append(`file1`, arrayOfTopSliderImages[i], "ok.jpg");
+            formData.append(`file2`, compressedSliders[i], "ok.jpg");
+        }
 
-            let formData = new FormData();
-            formData.append(`file`, arrayOfTopSliderImages[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': 'true'
-                }
-            };
-             axiosInstanse.post("/add-sliders?profile_id=" + id + "&index=" + i + 1, formData, config).then((data) => {
-                console.log(data.data);
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        };
+        axiosInstanse.post("/add-sliders?profile_id=" + id, formData, config).then((data) => {
+            console.log(data.data);
+            if(arrayOfGalleryLargeImages.length>0)
+                onFileUploadGalleryLargeImages(id);
+            else if(largeVrImage!='' && smallVrImage!=''){
+                uploadLargeVrImage();
+            } else {
+                addTags(id);
+            }
+        })
+            .catch(function (error) {
+                showError('Add slider large error: ' + error.message);
+                setLoading(false);
             })
-                .catch(function (error) {
-                    alert("Add slider large error: " + error.message);
-                    setLoading(false);
-                })
-        }
 
-        onSliderSmallImageUpload(id);
+
 
     };
 
-    const onSliderSmallImageUpload = async (id) => {
 
-        if (id == 0) {
-            return;
-        }
-        for (let i = 0; i < compressedSliders.length; i++) {
-            let formData = new FormData();
-            formData.append(`file`, compressedSliders[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
-                }
-            };
-             axiosInstanse.put("/update-sliders?profile_id=" + id, formData, config)
-                .then((data) => {
-
-                    setLoading(false)
-                })
-                .catch(function (error) {
-                    alert("Add slider small error: " + error.message);
-                    setLoading(false);
-                })
-        }
-
-        if(arrayOfGalleryLargeImages.length>0){
-            onFileUploadGalleryLargeImages(id);
-        } else if(smallVrImage != '' && largeVrImage != ''){
-            uploadLargeVrImage(id);
-        } else {
-            addTags(id);
-        }
-
-    };
 
 
     // End of slider image add  
@@ -339,78 +320,54 @@ const ProfileModal = (props) => {
     };
 
 
-    const onFileUploadGalleryLargeImages = async (id) => {
+    const onFileUploadGalleryLargeImages = (id) => {
+
+        let formData = new FormData();
         for (let i = 0; i < arrayOfGalleryLargeImages.length; i++) {
+            formData.append(`file1`, arrayOfGalleryLargeImages[i], "ok.jpg");
+            formData.append(`file2`, compressedGallery[i], "ok.jpg");
+        }
 
-            let formData = new FormData();
-            formData.append(`file`, arrayOfGalleryLargeImages[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': 'true'
-                }
-            };
-             axiosInstanse.post("/add-galleries?profile_id=" + id + "&index=" + i + 1, formData, config).then((data) => {
-                console.log(data.data);
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        };
+        axiosInstanse.post("/add-galleries?profile_id=" + id, formData, config).then((data) => {
+            console.log(data.data);
+            if(largeVrImage!='' && smallVrImage!=''){
+                uploadLargeVrImage();
+            } else {
+                addTags(id);
+            }
+        })
+            .catch(function (error) {
+                // alert("Add gallery large error: " + error.message);
+                showError("Add gallery large error: " + error.message);
+                setLoading(false);
             })
-                .catch(function (error) {
-                    alert("Add gallery large error: " + error.message);
-                    setLoading(false);
-                })
-        }
 
-        onGallerySmallImageUpload(id);
+
 
     };
 
-    const onGallerySmallImageUpload = async (id) => {
 
-        if (id == 0) {
-            return;
-        }
-        for (let i = 0; i < compressedGallery.length; i++) {
-            let formData = new FormData();
-            formData.append(`file`, compressedGallery[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
-                }
-            };
-             axiosInstanse.put("/update-galleries?profile_id=" + id, formData, config)
-                .then((data) => {
-
-                })
-                .catch(function (error) {
-                    alert("Add gallery small error: " + error.message);
-                    setLoading(false);
-                })
-        }
-
-        if(smallVrImage != '' && largeVrImage != ''){
-            uploadLargeVrImage(id);
-        } else {
-            addTags(id);
-        }
-
-    };
 
     // End of gallery image upload
 
 
     const addTags = async (id) => {
-
-        if (id == 0){
+        if (id == 0) {
             return;
         }
         const tagsTmArray = tagsTM.split(',');
         const tagsRuArray = tagsRU.split(',');
-        if(tagsTmArray.length==0){
-            addOwnPromotion(id);
+        if (tagsTmArray.length == 0 || tagsTmArray[0].trim()=='') {
+            onFinsih(id);
             return;
         }
         console.log(id);
@@ -420,27 +377,25 @@ const ProfileModal = (props) => {
                 'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
             }
         };
-         axiosInstanse.post('/add-tags', {
+        axiosInstanse.post('/add-tags', {
             profile_id: id,
             category_id: category,
             tagTM: tagsTmArray,
             tagRU: tagsRuArray
         }, config).then(response => {
             if (!response.data.error) {
-                if(promotion_status!='' && promotion_status!='0'){
-                    addOwnPromotion(id);
-                } else{
                     onFinsih(id);
-                }
+                
             }
         }).catch(err => {
-            alert("Add tags error: " + err);
+            // alert("Add tags error: " + err);
+            showError("Add tags error: " + err);
             onFinsih(id);
         });
     }
 
 
-    const uploadLargeVrImage = async (id) => {
+    const uploadLargeVrImage = (id) => {
         if (largeVrImage != '') {
             let data = new FormData()
             data.append('file', largeVrImage, "ok.jpg")
@@ -450,15 +405,17 @@ const ProfileModal = (props) => {
                 'My-Custom-Header': 'foobar',
                 'Content-Type': 'multipart/form-data'
             };
-             axiosInstanse.post(url, data, {
+            axiosInstanse.post(url, data, {
                 headers
             })
                 .then(res => { // then print response status
                     if (!res.data.error) {
                         uploadSmallVrImage(id);
+                        addTags(id);
                     }
                 }).catch(ex => {
-                    alert("Image upload error:" + ex);
+                    // alert("Image upload error:" + ex);
+                    showError("Image upload error:" + ex);
                     setLoading(false);
                     setinsertedProfileId(0);
                 })
@@ -466,7 +423,7 @@ const ProfileModal = (props) => {
     }
 
 
-    const uploadSmallVrImage = async (id) => {
+    const uploadSmallVrImage = (id) => {
         if (smallVrImage != '') {
             let data = new FormData()
             data.append('file', smallVrImage, "ok.jpg")
@@ -476,7 +433,7 @@ const ProfileModal = (props) => {
                 'My-Custom-Header': 'foobar',
                 'Content-Type': 'multipart/form-data'
             };
-             axiosInstanse.put(url, data, {
+            axiosInstanse.put(url, data, {
                 headers
             })
                 .then(res => { // then print response status
@@ -484,24 +441,27 @@ const ProfileModal = (props) => {
                         addTags(id);
                     }
                 }).catch(ex => {
-                    alert("Image upload error:" + ex);
+                    // alert("Image upload error:" + ex);
+                    showError("Image upload error:" + ex);
                     onFinsih();
                 })
         }
     }
 
 
-    const addPhoneNumbers = async (id) => {
+    const addPhoneNumbers = (id) => {
         console.log(phoneNumberList);
-        if (id == 0 || phoneNumberList[0]=='')
+        if (id == 0 || phoneNumberList[0] == ''){
+            onFileUploadTopSliderImages(id);
             return;
+        }
         const config = {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
             }
         };
-         axiosInstanse.post('/add-phone-number', {
+        axiosInstanse.post('/add-phone-number', {
             profile_id: id,
             phone_numbers: phoneNumberList
         }, config).then(response => {
@@ -509,41 +469,20 @@ const ProfileModal = (props) => {
                 onFileUploadTopSliderImages(id);
             }
         }).catch(err => {
-            alert("Add phone number error: " + err);
+            // alert("Add phone number error: " + err);
+            showError("Add phone number error: " + err);
             onFinsih(id);
         });
     }
 
 
-    const addOwnPromotion = async (id) => {
-        if (id == 0 || promotion_status == '' || promotion_status == 0){
-            onFinsih();
-            return;
-        }
-        const config = {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
-            }
-        };
-         axiosInstanse.post('/add-own-promotion', {
-            profile_id: id,
-            promotion_status: promotion_status
-        }, config).then(response => {
-            if (!response.data.error) {
-                onFinsih(id);
-            }
-        }).catch(err => {
-            alert("Add promotion error: " + err);
-            onFinsih(id);
-        });
-    }
-    
+  
 
-    const addProfile = async () => {
-        let tempSite=site;
-        if(category == 2){
-            tempSite=movieTime;
+
+    const addProfile = () => {
+        let tempSite = site;
+        if (category == 2) {
+            tempSite = movieTime;
         }
         let vip = 0;
         let isPromo = false;
@@ -568,7 +507,7 @@ const ProfileModal = (props) => {
         }
 
         setLoading(true);
-         fetch('http://10.192.168.60:5000/add-profile', {
+        fetch('http://10.192.168.60:5000/add-profile', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -608,6 +547,7 @@ const ProfileModal = (props) => {
                 order_in_list: orderInList,
                 free_time: freetime,
                 required_promotion: required_promotion,
+                own_promotion: own_promotion,
                 cinema_id: 0
             })
         })
@@ -615,21 +555,22 @@ const ProfileModal = (props) => {
             .then(data => {
                 // setinsertedProfileId(data.body.profile_id);
 
-                onFileUploadTopSliderImages(data.body.profile_id);
+                
                 addPhoneNumbers(data.body.profile_id);
 
                 setinsertedCategoryId(data.body.category_id);
-                
-                
+
+
             })
             .catch(err => {
                 setLoading(false);
-                alert("Add profile error: " + err);
+                // alert("Add profile error: " + err);
+                showError("Add profile error: " + err);
             })
     }
 
 
-   
+
 
 
 
@@ -715,14 +656,14 @@ const ProfileModal = (props) => {
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0} marginTop={2.5}>
-                                                <select style={{ height: '30px' }} name="" id="" onChange={e => setCinemaId(e.target.value)}>
-                                                    <option value="0">Select...</option>
-                                                    {
-                                                        allCinema.map((element, i) => {
-                                                        return (<option value={element.id}>{element.username    }</option>)
-                                                        })
-                                                    }
-                                                </select>
+                                                    <select style={{ height: '30px' }} name="" id="" onChange={e => setCinemaId(e.target.value)}>
+                                                        <option value="0">Select...</option>
+                                                        {
+                                                            allCinema.map((element, i) => {
+                                                                return (<option value={element.id}>{element.username}</option>)
+                                                            })
+                                                        }
+                                                    </select>
                                                 </Stack>
                                             </Col>
                                             <Col lg={3} md={3} sm={12} xs={12}>
@@ -731,7 +672,7 @@ const ProfileModal = (props) => {
                                                     <input value={avaragecheck} onInput={e => setavaragecheck(e.target.value)} type="text" />
                                                 </Stack>
                                             </Col>
-                                           
+
                                         </Row>
                                         :
                                         <Row>
@@ -808,7 +749,7 @@ const ProfileModal = (props) => {
                                 <Col lg={2.5} md={3} sm={12} xs={12}>
                                     <Stack direction='column' spacing={0}>
                                         <p className='inputTitle'>Own Card:</p>
-                                        <input value={promotion_status} onInput={e => setowncard(e.target.value)} type="text" />
+                                        <input value={own_promotion} onInput={e => setOwn_promotion(e.target.value)} type="text" />
                                     </Stack>
                                 </Col>
                                 <Col lg={4} md={12} sm={12} xs={12}>
@@ -819,7 +760,7 @@ const ProfileModal = (props) => {
                                             {
                                                 categoryList?.map((element, i) => {
                                                     return (
-                                                        <option key={"keyyy"+element?.id} value={element.id}>{element.name}</option>
+                                                        <option key={"keyyy" + element?.id} value={element.id}>{element.name}</option>
                                                     )
                                                 })
                                             }
@@ -883,7 +824,7 @@ const ProfileModal = (props) => {
                                     {
                                         phoneNumberList?.map((element, i) => {
                                             return (
-                                                <Col key={"keyyyyyyy"+element.id} lg={4} md={12} sm={12} xs={12}>
+                                                <Col key={"keyyyyyyy" + element.id} lg={4} md={12} sm={12} xs={12}>
                                                     <Stack direction='column' spacing={0}>
                                                         <p className='inputTitle'>Phone number {i + 1}:</p>
                                                         <input type="text" value={element.phoneNumber} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
@@ -958,7 +899,7 @@ const ProfileModal = (props) => {
                                     </Stack>
                                 </Col>
                                 <Col lg={9} md={9} sm={12} xs={12}></Col>
-                                <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}><button onClick={()=>addProfile()}>Add</button></Col>
+                                <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}><button onClick={() => addProfile()}>Add</button></Col>
 
 
                             </Row>
@@ -986,7 +927,7 @@ const ProfileModal = (props) => {
                 </Modal.Body>
 
             </Modal>
-
+            <ToastContainer />
         </div >
     )
 }

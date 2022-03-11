@@ -28,6 +28,7 @@ import Interests from './components/sidebar/interests/Interests';
 import TmMuseCard from './components/sidebar/tmMuseCard/TmMuseCard';
 import { isLogin } from "./utils/isLogin";
 import history from "./utils/history";
+import Cinema from './components/sidebar/cinema/Cinema';
 ReactDOM.render(
   <BrowserRouter history={history}>
   <Routes>
@@ -49,6 +50,8 @@ ReactDOM.render(
       <Route path="constants" element={<Constants/>} />
       <Route path="interests" element={<Interests/>} />
       <Route path="tmMuseCard" element={<TmMuseCard/>} />
+      <Route path="cinema" element={<Cinema/>} />
+
     </Route>
   </Routes>
 </BrowserRouter>,

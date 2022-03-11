@@ -4,7 +4,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
-
+import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
 
 
 const style = {
@@ -69,7 +70,8 @@ const UpdatePost = (props) => {
         props.handleClose()
         props.getData(1);
       }).catch(ex => {
-        alert("Image upload error:" + ex);
+        // alert("Image upload error:" + ex);
+        showError("Image upload error:" + ex);
       })
 
   }
@@ -90,6 +92,7 @@ const UpdatePost = (props) => {
       if(selectedFile===null){
         props.handleClose()
         props.getData(1);
+        showSuccess("Successfully updated!!!")
       }else{
         uploadImage(props.data.id)
       }
@@ -179,6 +182,7 @@ const UpdatePost = (props) => {
           <button onClick={()=>UpdateMyPost(props.data.id)}>Update</button>
         </div>
       </Box>
+      <ToastContainer />
   </div>;
 };
 

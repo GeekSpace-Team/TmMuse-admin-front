@@ -6,6 +6,8 @@ import { IoMdClose } from 'react-icons/io';
 import axios from 'axios'
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 const style = {
@@ -85,9 +87,10 @@ const AddPop = (props) => {
         setDescTm('');
         setDescRu('');
         props.getPopup(1);
-
+        showSuccess('Successfully added!!!');
       }).catch(ex => {
-        alert("Image upload error:" + ex);
+        // alert("Image upload error:" + ex);
+        showError("Image upload error:" + ex);
       })
   }
 
@@ -96,11 +99,13 @@ const AddPop = (props) => {
     if (!toAdd)
       return;
     if (profileId != 0 && siteLink != "") {
-      alert("Please clear site link fill!")
+      // alert("Please clear site link fill!")
+      showWarning("Please clear site link fill!");
       return;
     }
     if (titleTm == '' || titleRu == '' ) {
-      alert("Please enter required informations!")
+      // alert("Please enter required informations!")
+      showWarning("Please enter required informations!");
       return;
     }
     const popup = {
@@ -127,7 +132,8 @@ const AddPop = (props) => {
         console.log("respons",response.data)
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
 
@@ -224,6 +230,7 @@ const AddPop = (props) => {
         </div>
       </Box>
     </Modal>
+    <ToastContainer/>
   </div>;
 };
 

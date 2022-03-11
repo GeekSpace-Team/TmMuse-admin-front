@@ -147,6 +147,11 @@ const SidebarDesign = () => {
                                     <HiOutlineCreditCard/><label>TmMuse Card</label><FiChevronRight className='ms-auto'/>
                                 </Stack>
                             </NavLink>
+                            <NavLink to="/cinema" style={{ textDecoration: 'none' }} >
+                                <Stack direction='horizontal' className={GetCurrentRoute()=='/cinema'?activeItem:passiveItem} gap={3}>
+                                    <HiOutlineCreditCard/><label>Cinema</label><FiChevronRight className='ms-auto'/>
+                                </Stack>
+                            </NavLink>
                           
 
                           

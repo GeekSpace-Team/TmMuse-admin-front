@@ -92,7 +92,7 @@ const Post = () => {
                 </select> */}
 
 
-    <PostTable getPost={getPost} postList={[postList, setPostList]} pageCount={[pageCount, setPageCount]} isEmpty={[isEmpty, setIsEmpty]} pageCount={[pageCount, setPageCount]} />
+    <PostTable getPost={getPost} postList={[postList, setPostList]} pageCount={[pageCount, setPageCount]} isEmpty={[isEmpty, setIsEmpty]} />
   </div>;
 };
 

@@ -5,6 +5,8 @@ import { Col, Row } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import { IoMdClose } from 'react-icons/io';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showSuccess } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -61,6 +63,7 @@ const UpdateTmCard = (props) => {
       props.handleClose()
       handleSelectStatus();
       props.getData(1)
+      showSuccess("Successfully updated!!!");
     }).catch((err)=>{
       console.log(err);
     })
@@ -126,7 +129,7 @@ const UpdateTmCard = (props) => {
             </Col>
           </Row>
         </Box>
-
+        <ToastContainer/>
     </div>
   )
 }

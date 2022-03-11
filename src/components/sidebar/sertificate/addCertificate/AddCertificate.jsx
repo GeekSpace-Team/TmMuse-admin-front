@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Col, Row } from 'react-bootstrap';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 
@@ -77,17 +79,19 @@ const AddCertificate = (props) => {
      axiosInstanse.post('/add-certificate', certificates, { headers })
       .then(response => {
         if (response.data.error) {
-          alert("Something is went wrong!")
+          // alert("Something is went wrong!")
+          showWarning("Something is went wrong!");
         }
         handleClose();
         setAmount("");
         setUser_id("");
         props.getCertificate(1);
-
+        showSuccess("Successfully added!!!");
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
   useEffect(() => {
@@ -157,6 +161,7 @@ const AddCertificate = (props) => {
         </div>
       </Box>
     </Modal>
+    <ToastContainer />
   </div>;
 };
 

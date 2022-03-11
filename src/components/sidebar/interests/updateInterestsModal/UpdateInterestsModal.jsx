@@ -6,6 +6,7 @@ import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess } from '../../../toast/toast';
 
 
 const style = {
@@ -97,8 +98,10 @@ const UpdateInterestsModal = (props) => {
         setItemRU('');
         props.handleClose()
         props.getData(1)
+        showSuccess('Successfully updated!!!');
       }).catch(err=>{
-        alert(err);
+        // alert(err);
+        showError(err);
       })
   }
    

@@ -5,6 +5,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 const style = {
@@ -45,7 +47,8 @@ async function addConstant() {
   if (!toAdd)
     return;
     if (titleTM == '' || titleRU == '' || contentTM == '' || contentRU == '' ) {
-      alert("Please enter required informations!")
+      // alert("Please enter required informations!")
+      showWarning("Please enter required informations!");
       return;
     }
 
@@ -81,9 +84,11 @@ async function addConstant() {
         handleClose();
         props.getConstant(1);
         setToAdd(false);
+        showSuccess("Successfully added!!!");
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
 
@@ -163,6 +168,7 @@ async function addConstant() {
         </Row>
       </Box>
     </Modal>
+    <ToastContainer/>
   </div>;
 };
 

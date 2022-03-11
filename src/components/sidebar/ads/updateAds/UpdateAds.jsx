@@ -5,6 +5,8 @@ import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showError, showSuccess } from '../../../toast/toast';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 
@@ -65,8 +67,10 @@ const UpdateAds = (props) => {
         console.warn(res);
         props.handleClose()
         props.getData(1);
+        showSuccess("Successfully updated!!!");
       }).catch(ex => {
-        alert("Image upload error:" + ex);
+        // alert("Image upload error:" + ex);
+        showError("Image upload error:" + ex);
       })
 
   }
@@ -85,6 +89,7 @@ const UpdateAds = (props) => {
       if(selectedFile===null){
         props.handleClose()
         props.getData(1);
+        showSuccess("Successfully updated!!!");
       }else{
         uploadImage(props.data.id)
       }
@@ -168,6 +173,7 @@ const UpdateAds = (props) => {
           <button  onClick={()=>UpdateMyAds(props.data.id)}>Update</button>
         </div>
       </Box>
+      <ToastContainer />
   </div>;
 };
 

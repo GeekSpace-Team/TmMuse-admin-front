@@ -6,6 +6,8 @@ import Fade from '@mui/material/Fade';
 import { IconName, IoMdClose } from "react-icons/io";
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Stack } from '@mui/material';
+import { showError, showSuccess } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 const style = {
@@ -36,18 +38,19 @@ const DeleteConstant = (props) => {
       axiosInstanse.delete('/delete-constant?id='+props.constantId,{headers})
       .then(response=>{
         if(response.data.error){
-          alert("Error");
+          // alert("Error");
+          showError("Error");
         } else{ 
           if(response.data.body=='DELETED'){
             handleClose();
             props.getData(1);
-            
-            
+            showSuccess("Successfully deleted!!!");            
           }
         }
       })
       .catch(ex=>{
-        alert(ex);
+        // alert(ex);
+        showError(ex);
       });
     }
   return <div>
@@ -65,6 +68,7 @@ const DeleteConstant = (props) => {
           </Stack>
           </Box>
         </Fade>
+        <ToastContainer/>
   </div>;
 };
 

@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { IoMdClose } from 'react-icons/io';
 import './EditProfileModal.css'
+import { ToastContainer, toast } from 'react-toastify';
+import { showError } from '../../../../toast/toast';
 
 
 
@@ -25,7 +27,7 @@ const style = {
     boxShadow: 24,
     overflow: 'scroll',
     p: 4,
-    display:'block',
+    display: 'block',
 };
 
 
@@ -36,7 +38,6 @@ const EditProfileModal = (props) => {
     const handleClose = () => { props.handleClose() }
     const navigate = useNavigate();
     const compress = new Compress()
-    const [show, setShow] = useState(false);
     const [nameTM, setNameTM] = useState(props.data.nameTM);
     const [nameRU, setNameRU] = useState(props.data.nameRU);
     const [short_descTM, setshortdescTM] = useState(props.data.short_descTM);
@@ -53,7 +54,7 @@ const EditProfileModal = (props) => {
     const [order_in_list, setorderInList] = useState(props.data.order_in_list);
     const [status, setstatus] = useState(props.data.status);
     const [promotion_status, setowncard] = useState(props.data.promotion_status);
-    const [category, setcategory] = useState(props.data.category);
+    const [category, setcategory] = useState(props.data.category_id);
     const [delivery, setdelivery] = useState(props.data.delivery);
     const [average_check, setavaragecheck] = useState(props.data.average_check);
     const [cousineTM, setCousineTM] = useState(props.data.cousineTM);
@@ -75,8 +76,8 @@ const EditProfileModal = (props) => {
     const [isMovie, setIsMovie] = useState(false);
     const [compressedSliders, setCompressedSliders] = useState([]);
     const [compressedGallery, setCompressedGallery] = useState([]);
-    const [tagsTM, setTagsTM] = useState(props.data?.tags);
-    const [tagsRU, setTagsRU] = useState(props.data?.tags);
+    const [tagsTM, setTagsTM] = useState('');
+    const [tagsRU, setTagsRU] = useState('');
     const [WiFi, setIsWifi] = useState(props.data.WiFi);
     const [phoneNumberList, setphoneNumberList] = useState([""]);
     const [largeVrImage, setLargeVrImage] = useState('');
@@ -92,14 +93,42 @@ const EditProfileModal = (props) => {
     const [promo_count, setPromo_count] = useState(props.data.promo_count);
     const [cinema_id, setCinema_id] = useState(props.data.cinema_id);
     const [tm_muse_card, setTm_muse_card] = useState(props.data.tm_muse_card);
+    const [own_promotion, setOwn_promotion] = useState(props.data.own_promotion);
 
-    let newPhones=[""];
-    
-    for(let k=0;k<props.data.phone_numbers.length;k++){
-        newPhones.push(props.data.phone_numbers[k].phone_number)
+    let newPhones = [];
+    let tempTagTM='';
+    let tempTagRU='';
+    if(typeof props.data.phone_numbers !== 'undefined' && props.data.phone_numbers!=null){
+        for(let j=0;j<props.data?.tags.length;j++){
+            tempTagTM+=props.data.tags[j].tagTM;
+            tempTagRU+=props.data.tags[j].tagRU;
+            if(j<props.data?.tags.length-1){
+                tempTagTM+=",";
+                tempTagRU+=",";
+            }
+        }
     }
-    // setphoneNumberList(newPhones);
-    
+
+    if(typeof props.data.phone_numbers !== 'undefined' && props.data.phone_numbers!=null){
+        for (let k = 0; k < props.data.phone_numbers.length; k++) {
+            newPhones.push(props.data.phone_numbers[k].phone_number)
+        }
+    }
+
+    useEffect(()=>{
+        setphoneNumberList(newPhones);
+        setTagsTM(tempTagTM);
+        setTagsRU(tempTagRU);
+    },[])
+
+    const onFinsih = (id) => {
+        setLoading(false);
+        // setinsertedProfileId(0);
+        // setinsertedCategoryId(0);
+        handleClose();
+        props.getData(props.page);
+    }
+
 
     const headers = {
         'Authorization': 'Bearer my-token',
@@ -124,29 +153,50 @@ const EditProfileModal = (props) => {
         setphoneNumberList(newPhones);
     }
 
-    const onFileUploadTopSliderImages = async (id) => {
+    const onFileUploadTopSliderImages = (id) => {
+        if(arrayOfTopSliderImages.length==0){
+            if(arrayOfGalleryLargeImages.length>0)
+                onFileUploadGalleryLargeImages(id);
+            else if(largeVrImage!='' && smallVrImage!=''){
+                uploadLargeVrImage();
+            } else {
+                addTags(id);
+            }
+            return;
+        }
+        let formData = new FormData();
+
         for (let i = 0; i < arrayOfTopSliderImages.length; i++) {
-            let formData = new FormData();
-            formData.append(`file`, arrayOfTopSliderImages[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': 'true'
-                }
-            };
-            axiosInstanse.post("/add-sliders?profile_id=" + id + "&index=" + i + 1, formData, config).then((data) => {
-                console.log(data.data);
-            })
-                .catch(function (error) {
-                    alert("Add slider large error: " + error.message);
-                    setLoading(false);
-                })
+            formData.append(`file1`, arrayOfTopSliderImages[i], "ok.jpg");
+            formData.append(`file2`, compressedSliders[i], "ok.jpg");
         }
 
-        onSliderSmallImageUpload(id);
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        };
+        axiosInstanse.post("/add-sliders?profile_id=" + id, formData, config).then((data) => {
+            console.log(data.data);
+            if(arrayOfGalleryLargeImages.length>0)
+                onFileUploadGalleryLargeImages(id);
+            else if(largeVrImage!='' && smallVrImage!=''){
+                uploadLargeVrImage();
+            } else {
+                addTags(id);
+            }
+        })
+            .catch(function (error) {
+                showError('Add slider large error: ' + error.message);
+                setLoading(false);
+            })
+
+
 
     };
 
@@ -159,8 +209,8 @@ const EditProfileModal = (props) => {
         }
         const tagsTmArray = tagsTM.split(',');
         const tagsRuArray = tagsRU.split(',');
-        if (tagsTmArray.length == 0) {
-            addOwnPromotion(id);
+        if (tagsTmArray.length == 0 || tagsTmArray[0].trim()=='') {
+            onFinsih(id);
             return;
         }
         console.log(id);
@@ -177,14 +227,13 @@ const EditProfileModal = (props) => {
             tagRU: tagsRuArray
         }, config).then(response => {
             if (!response.data.error) {
-                if (promotion_status != '' && promotion_status != '0') {
-                    addOwnPromotion(id);
-                } else {
+                
                     onFinsih(id);
-                }
+                
             }
         }).catch(err => {
-            alert("Add tags error: " + err);
+            // alert("Add tags error: " + err);
+            showError("Add tags error: " + err);
             onFinsih(id);
         });
     }
@@ -269,56 +318,19 @@ const EditProfileModal = (props) => {
         setLargeVrImage(event.target.files[0]);
     }
 
-    const onFinsih = (id) => {
-        setLoading(false);
-        // setinsertedProfileId(0);
-        // setinsertedCategoryId(0);
-        setShow(false);
-    }
+   
 
 
 
-    const onSliderSmallImageUpload = async (id) => {
-        alert(compressedSliders.length);
-        if (id == 0) {
-            return;
-        }
-        for (let i = 0; i < compressedSliders.length; i++) {
-            let formData = new FormData();
-            formData.append(`file`, compressedSliders[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
-                }
-            };
-            axiosInstanse.put("/update-sliders?profile_id=" + id, formData, config)
-                .then((data) => {
-
-                    setLoading(false)
-                })
-                .catch(function (error) {
-                    alert("Add slider small error: " + error.message);
-                    setLoading(false);
-                })
-        }
-
-        if (arrayOfGalleryLargeImages.length > 0) {
-            onFileUploadGalleryLargeImages(id);
-        } else if (smallVrImage != '' && largeVrImage != '') {
-            uploadLargeVrImage(id);
-        } else {
-            addTags(id);
-        }
-
-    };
+    
 
 
     const addPhoneNumbers = async (id) => {
         console.log(phoneNumberList);
-        if (id == 0 || phoneNumberList[0] == '')
+        if (id == 0 || phoneNumberList[0] == ''){
+            onFileUploadTopSliderImages(id);
             return;
+        }
         const config = {
             headers: {
                 'Accept': 'application/json',
@@ -330,7 +342,6 @@ const EditProfileModal = (props) => {
             phone_numbers: phoneNumberList
         }, config).then(response => {
             if (!response.data.error) {
-
                 if (arrayOfTopSliderImages.length > 0)
                     onFileUploadTopSliderImages(id);
                 else if (arrayOfGalleryLargeImages.length > 0) {
@@ -342,99 +353,63 @@ const EditProfileModal = (props) => {
                 }
             }
         }).catch(err => {
-            alert("Add phone number error: " + err);
+            // alert("Add phone number error: " + err)
+            showError("Add phone number error: " + err);
             onFinsih(id);
         });
     }
 
 
 
-    const onFileUploadGalleryLargeImages = async (id) => {
+    
+    const onFileUploadGalleryLargeImages = (id) => {
+        if(arrayOfGalleryLargeImages.length==0){
+            if(largeVrImage!='' && smallVrImage!=''){
+                uploadLargeVrImage();
+            } else {
+                addTags(id);
+            }
+            return;
+        }
+        let formData = new FormData();
         for (let i = 0; i < arrayOfGalleryLargeImages.length; i++) {
-
-            let formData = new FormData();
-            formData.append(`file`, arrayOfGalleryLargeImages[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': 'true'
-                }
-            };
-            axiosInstanse.post("/add-galleries?profile_id=" + id + "&index=" + i + 1, formData, config).then((data) => {
-                console.log(data.data);
-            })
-                .catch(function (error) {
-                    alert("Add gallery large error: " + error.message);
-                    setLoading(false);
-                })
+            formData.append(`file1`, arrayOfGalleryLargeImages[i], "ok.jpg");
+            formData.append(`file2`, compressedGallery[i], "ok.jpg");
         }
 
-        onGallerySmallImageUpload(id);
-
-    };
-
-
-    const onGallerySmallImageUpload = async (id) => {
-
-        if (id == 0) {
-            return;
-        }
-        for (let i = 0; i < compressedGallery.length; i++) {
-            let formData = new FormData();
-            formData.append(`file`, compressedGallery[i], "ok.jpg");
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
-                }
-            };
-            axiosInstanse.put("/update-galleries?profile_id=" + id, formData, config)
-                .then((data) => {
-
-                })
-                .catch(function (error) {
-                    alert("Add gallery small error: " + error.message);
-                    setLoading(false);
-                })
-        }
-
-        if (smallVrImage != '' && largeVrImage != '') {
-            uploadLargeVrImage(id);
-        } else {
-            addTags(id);
-        }
-
-    };
-
-
-    const addOwnPromotion = async (id) => {
-        if (id == 0 || promotion_status == '' || promotion_status == 0){
-            onFinsih();
-            return;
-        }
         const config = {
             headers: {
+                'Content-Type': 'multipart/form-data',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer jfyewfhejkgkjwgeewj'
+                'Authorization': 'Bearer jfyewfhejkgkjwgeewj',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
             }
         };
-         axiosInstanse.post('/add-own-promotion', {
-            profile_id: id,
-            promotion_status: promotion_status
-        }, config).then(response => {
-            if (!response.data.error) {
-                onFinsih(id);
+        axiosInstanse.post("/add-galleries?profile_id=" + id, formData, config).then((data) => {
+            console.log(data.data);
+            if(largeVrImage!='' && smallVrImage!=''){
+                uploadLargeVrImage();
+            } else {
+                addTags(id);
             }
-        }).catch(err => {
-            alert("Add promotion error: " + err);
-            onFinsih(id);
-        });
-    }
-    
+        })
+            .catch(function (error) {
+                // alert("Add gallery large error: " + error.message);
+                showError("Add gallery large error: " + error.message);
+                setLoading(false);
+            })
+
+
+
+    };
+
+
+   
+
+
+  
+
 
     const uploadLargeVrImage = async (id) => {
         if (largeVrImage != '') {
@@ -449,7 +424,8 @@ const EditProfileModal = (props) => {
                         uploadSmallVrImage(id);
                     }
                 }).catch(ex => {
-                    alert("Image upload error:" + ex);
+                    // alert("Image upload error:" + ex);
+                    showError("Image upload error: " + ex);
                     setLoading(false);
                     setinsertedProfileId(0);
                 })
@@ -471,7 +447,8 @@ const EditProfileModal = (props) => {
                         addTags(id);
                     }
                 }).catch(ex => {
-                    alert("Image upload error:" + ex);
+                    // alert("Image upload error:" + ex);
+                    showError("Image upload error: " + ex);
                     onFinsih();
                 })
         }
@@ -527,26 +504,26 @@ const EditProfileModal = (props) => {
             free_time: free_time,
             required_promotion: required_promotion,
             promotion_status: promotion_status,
-            site: true
+            own_promotion: own_promotion,
+            site: site
 
         }, { headers }).then((data) => {
             console.log("result", id);
             if (phoneNumberList.length > 0 && phoneNumberList[0] != '') {
-                alert("phone");
                 addPhoneNumbers(id);
             }
             else if (arrayOfTopSliderImages.length > 0) {
-                alert("2 if");
+                // alert("2 if");
                 onFileUploadTopSliderImages(id);
             }
             else if (arrayOfGalleryLargeImages.length > 0) {
-                alert("3 if");
+                // alert("3 if");
                 onFileUploadGalleryLargeImages(id);
             } else if (smallVrImage != '' && largeVrImage != '') {
-                alert("4 if");
+                // alert("4 if");
                 uploadLargeVrImage(id);
             } else {
-                alert("5 if");
+                // alert("5 if");
                 addTags(id);
             }
             //   if(phoneNumberList.length===null){
@@ -622,7 +599,7 @@ const EditProfileModal = (props) => {
                                                 <p className='inputTitle'>Movie time:
                                                     <pre>09/01/2022(13:00,22:30)*
                                                         <br />11/01/2022-12/01/2022(14:00,22:30)*</pre></p>
-                                                <textarea name="" id="movie" cols="51.9" rows="5" onChange={(e) => setMovieTime(e.target.value)} defaultValue={props.data.site}></textarea>
+                                                <textarea name="" id="movie" cols="51.9" rows="5" onChange={(e) => setsite(e.target.value)} defaultValue={site}></textarea>
                                             </Stack>
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
@@ -634,7 +611,7 @@ const EditProfileModal = (props) => {
                                         <Col lg={3} md={3} sm={12} xs={12}>
                                             <Stack direction='column' spacing={0}>
                                                 <p className='inputTitle'>Price:</p>
-                                                <input onChange={(e) => setavaragecheck(e.target.value)} defaultValue={props.data.average_check} type="text" />
+                                                <input onChange={(e) => setavaragecheck(e.target.value)} defaultValue={props.data.average_check} value={average_check} type="text" />
                                             </Stack>
                                         </Col>
 
@@ -672,7 +649,7 @@ const EditProfileModal = (props) => {
                                                 <input onChange={(e) => setfreetime(e.target.value)} defaultValue={props.data.free_time} className='inputModal' type="text" />
                                             </Stack>
                                         </Col>
-                                       
+
                                     </Row>
 
 
@@ -715,13 +692,13 @@ const EditProfileModal = (props) => {
                             <Col lg={2.5} md={3} sm={12} xs={12}>
                                 <Stack direction='column' spacing={0}>
                                     <p className='inputTitle'>Own Card:</p>
-                                    <input value={promotion_status} onInput={e => setowncard(e.target.value)} type="text" />
+                                    <input value={own_promotion} onInput={e => setOwn_promotion(e.target.value)} type="text" />
                                 </Stack>
                             </Col>
                             <Col lg={4} md={12} sm={12} xs={12}>
                                 <Stack direction='column' spacing={0}>
                                     <p className='inputTitle'>Category:</p>
-                                    <select defaultValue={props.data.category_id} onChange={e => setcategory(e.target.value)} style={{ height: '30px' }} name="" id="category" className="normalSize" >
+                                    <select value={category} onChange={e => setcategory(e.target.value)} style={{ height: '30px' }} name="" id="category" className="normalSize" >
                                         <option value="0">Select category</option>
                                         {
                                             categoryList?.map((element, i) => {
@@ -806,25 +783,25 @@ const EditProfileModal = (props) => {
                             </Row> */}
                             {/* Add phone number is starting here */}
                             <Row className="AddPhoneNumber">
-                                    {
-                                        phoneNumberList?.map((element, i) => {
-                                            return (
-                                                <Col key={"keyyyyyyy"+element.id} lg={4} md={12} sm={12} xs={12}>
-                                                    <Stack direction='column' spacing={0}>
-                                                        <p className='inputTitle'>Phone number {i + 1}:</p>
-                                                        <input type="text" value={element.phoneNumber} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
-                                                    </Stack>
-                                                </Col>
-                                            )
-                                        })
-                                    }
-                                    <Col lg={4} md={12} sm={12} xs={12}>
-                                        <Stack direction='column' spacing={0} marginLeft={-14} marginTop={-1}>
-                                            <p className='addPhoneNumber' onClick={addPhoneNumber}> +Add phone number:</p>
-                                        </Stack>
-                                    </Col>
-                                </Row>
-                                {/* Add phone number is ending here */}
+                                {
+                                    phoneNumberList?.map((element, i) => {
+                                        return (
+                                            <Col key={"keyyyyyyy" + element.id} lg={4} md={12} sm={12} xs={12}>
+                                                <Stack direction='column' spacing={0}>
+                                                    <p className='inputTitle'>Phone number {i + 1}:</p>
+                                                    <input type="text" value={element} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
+                                                </Stack>
+                                            </Col>
+                                        )
+                                    })
+                                }
+                                <Col lg={4} md={12} sm={12} xs={12}>
+                                    <Stack direction='column' spacing={0} marginLeft={-14} marginTop={-1}>
+                                        <p className='addPhoneNumber' onClick={addPhoneNumber}> +Add phone number:</p>
+                                    </Stack>
+                                </Col>
+                            </Row>
+                            {/* Add phone number is ending here */}
 
                             <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
                                 <Stack direction='column' spacing={0}>
@@ -853,24 +830,18 @@ const EditProfileModal = (props) => {
                                 </Stack>
                             </Col>
 
-                            {tagsTM?.map((tagTM) => {
-                                console.log(tagTM)
-                                return <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
+                            <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
                                     <Stack direction='column' spacing={0}>
                                         <p className='inputTitle'>Tags TM:</p>
-                                        <input type="text" onChange={e => setTagsTM(e.target.value)} value={tagTM?.tagTM} />
+                                        <input type="text" onChange={e => setTagsTM(e.target.value)} value={tagsTM} />
                                     </Stack>
                                 </Col>
-                            })}
-                            {tagsRU?.map((tagsRU) => {
-                                console.log(tagsRU)
-                                return <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
+                           <Col lg={6} md={6} sm={12} xs={12} className='fullSizeInput'>
                                     <Stack direction='column' spacing={0}>
                                         <p className='inputTitle'>Tags RU:</p>
-                                        <input type="text" onChange={e => setTagsRU(e.target.value)} value={tagsRU?.tagRU} />
+                                        <input type="text" onChange={e => setTagsRU(e.target.value)} value={tagsRU} />
                                     </Stack>
                                 </Col>
-                            })}
                             <Col lg={3} md={3} sm={12} xs={12}>
                                 <Stack direction='column' spacing={0}>
                                     <p className='inputTitle'>Promo count:</p>
@@ -900,7 +871,7 @@ const EditProfileModal = (props) => {
                 </Row>
                 {/* </form> */}
             </Box>
-
+            <ToastContainer />
         </div >
     )
 }

@@ -8,6 +8,7 @@ import './AddInterestsModal.css'
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Col, Row } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
 
 
 const style = {
@@ -59,10 +60,11 @@ const AddInterestsModal = (props) => {
         handleClose();
         setItemRU('');
         setType('');
-        
+        showSuccess("Successfully added!!!");
         props.getInterests(1);
       }).catch(err=>{
-        alert(err);
+        // alert(err);
+        showError(err);
       })
   }
    
@@ -71,15 +73,7 @@ const AddInterestsModal = (props) => {
     let tms=itemTM.split(',');
     let rus=itemRU.split(',');
     if (titleTM == '' || titleRU == '' || tms.length==0 || rus.length==0 || tms.length!=rus.length) {
-      toast.warn('Please enter required informations!', {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
+     showWarning('Please enter required informations!');
       return;
     }
     const interests = {
@@ -89,19 +83,12 @@ const AddInterestsModal = (props) => {
      axiosInstanse.post('/add-interests', interests, interesItems, { headers })
       .then(response => {
         if (response.data.error) {
-          toast.warn('Something is went wrong!', {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
+          showWarning('Something is went wrong!');
         }
         addInterestItems(response.data.body.INSERTED_ID);
       }).catch(ex => {
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
 

@@ -10,6 +10,7 @@ const Interests = () => {
     const [page, setPage] = React.useState(1);
     const [pageCount, setPageCount] = useState([]);
     const [interestList, setIntertestList] = useState([]);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     const headers = {
         'Authorization': 'Bearer my-token',
@@ -33,7 +34,7 @@ const Interests = () => {
                 <p className='titleNames'>Interests</p>
                 <AddInterestsModal getInterests={getInterests}/>
             </Stack>
-            <InterestsTable getInterests={getInterests} page={[page, setPage]} interestList={[interestList, setIntertestList]} pageCount={[pageCount, setPageCount]}/>
+            <InterestsTable getInterests={getInterests} isEmpty={[isEmpty, setIsEmpty]} page={[page, setPage]} interestList={[interestList, setIntertestList]} pageCount={[pageCount, setPageCount]}/>
         </div>
     )
 }

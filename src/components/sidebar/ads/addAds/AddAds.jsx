@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import { axiosInstanse } from "../../../utils/axiosInstanse";
 import { Col, Row } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
 
 
 
@@ -79,8 +81,10 @@ const AddAds = (props) => {
         setComment_of_admin("");
         setSite_url("");
         props.getAds(1);
+        showSuccess("Successfully added!!!");
       }).catch(ex => {
-        alert("Image upload error:" + ex);
+        // alert("Image upload error:" + ex);
+        showError("Image upload error:" + ex);
         setINSERTED_ID(0);
       })
 
@@ -91,11 +95,13 @@ const AddAds = (props) => {
     if (!toAdd)
       return;
     if (profileId != 0 && site_url != "") {
-      alert("Please clear site link fill!")
+      // alert("Please clear site link fill!")
+      showWarning("Please clear site link fill!");
       return;
     }
     if (nameTM == '' || nameRU == '' || selectedFile == '') {
-      alert("Please enter required informations!")
+      // alert("Please enter required informations!")
+      showWarning("Please enter required informations!");
       return;
     }
     const ads = {
@@ -121,7 +127,8 @@ const AddAds = (props) => {
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
 
@@ -211,6 +218,7 @@ const AddAds = (props) => {
         </div>
       </Box>
     </Modal>
+    <ToastContainer />
   </div>;
 };
 

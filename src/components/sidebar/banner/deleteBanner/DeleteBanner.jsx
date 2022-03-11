@@ -8,6 +8,7 @@ import { axiosInstanse } from '../../../utils/axiosInstanse';
 import './delete.css'
 import { ToastContainer, toast } from 'react-toastify';
 import { Stack } from '@mui/material';
+import { showError, showSuccess } from '../../../toast/toast';
 
 
 const style = {
@@ -43,22 +44,12 @@ const DeleteBanner = (props) => {
           if (response.data.body == 'DELETED') {
             handleClose();
             props.getData(1);
-            toast.warn('Successfully deleted!', {
-              position: "top-center",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              });
-      
-
+            showSuccess('Successfully deleted!!!')
           }
         }
       })
       .catch(ex => {
-        alert(ex);
+        showError(ex);
       });
   }
   return <div>

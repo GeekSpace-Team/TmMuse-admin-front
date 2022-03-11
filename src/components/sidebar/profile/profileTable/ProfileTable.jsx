@@ -40,7 +40,7 @@ const ProfileTable = (props) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 >
-                    <EditProfileModal handleClose={handleClose} category={props.category} getData={props.getProfile}   data={element} />
+                    <EditProfileModal handleClose={handleClose} category={props.category} page={page} getData={props.getProfile}   data={element} />
                 </Modal>
                 <Modal
                     aria-labelledby="transition-modal-title"

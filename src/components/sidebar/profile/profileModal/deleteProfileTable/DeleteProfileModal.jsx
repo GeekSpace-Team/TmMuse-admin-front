@@ -7,6 +7,7 @@ import { IconName, IoMdClose } from "react-icons/io";
 import { axiosInstanse } from '../../../../utils/axiosInstanse';
 import { Stack } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess } from '../../../../toast/toast';
 
 const style = {
     position: 'absolute',
@@ -36,26 +37,17 @@ const DeleteProfileModal = (props) => {
       axiosInstanse.delete('/delete-profile?profile_id='+props.profile_id,{headers})
       .then(response=>{
         if(response.data.error){
-          alert("Error");
+          showError("Error");
         } else{
           if(response.data.body=='DELETED'){
             handleClose();
             props.getData(1);
-            toast.warn('Successfully deleted!', {
-              position: "top-center",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              });
-            
+            showSuccess('Successfully deleted!!!');
           }
         }
       })
       .catch(ex=>{
-        alert(ex);
+        showError(ex);
       });
     }
   return <div>

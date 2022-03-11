@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showSuccess } from '../../../toast/toast';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -71,6 +73,7 @@ const UpdatePromoCode = (props) => {
       console.log(data.data.body);
       props.handleClose()
       props.getData(1)
+      showSuccess('Successfully updated!!!');
     }).catch((err)=>{
       console.log(err);
     })
@@ -130,6 +133,7 @@ const UpdatePromoCode = (props) => {
           <button onClick={()=>UpdateMyPromoCode(props.data.id)}>Update</button>
         </div>
       </Box>
+      <ToastContainer/>
   </div>;
 };
 

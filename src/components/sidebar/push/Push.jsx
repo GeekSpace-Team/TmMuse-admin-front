@@ -7,11 +7,11 @@ import { axiosInstanse } from '../../utils/axiosInstanse'
 import { useEffect } from 'react';
 import SnackBarApp from '../../snackbar/SnackBarApp';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { dark } from '@mui/material/styles/createPalette';
+import { showError, showSuccess } from '../../toast/toast';
 
 
-            
+
 
 const Push = () => {
     const [titleTM, setTitleTM] = useState('');
@@ -24,6 +24,10 @@ const Push = () => {
     const [isSend, setIsSend] = useState(false);
     const [allUser, setAllUser] = useState([]);
     const [user_id, setUser_id] = useState(0);
+    const [categoryList, setCategoryList] = useState([]);
+    const [category, setcategory] = useState(0);
+    const [allProfile, setAllProfile] = useState([]);
+    const allProfileList = allProfile;
 
 
     const headers = {
@@ -31,7 +35,7 @@ const Push = () => {
         'My-Custom-Header': 'foobar'
     };
     const sendNotification = async () => {
-        if (isAll && url == '?') {
+        if (isAll && profileId == '0' && category=='0') {
             axiosInstanse.post('/push-to-topic', {
                 title: titleTM + " / " + titleRU,
                 body: bodyTM + "\n" + bodyRU,
@@ -40,33 +44,36 @@ const Push = () => {
                 headers
             })
                 .then(response => {
-                    toast.success('🦄 Success!', {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        });
+                    showSuccess('🦄 Success!')
                 })
                 .catch(ex => {
-                    alert(ex)
+                    // alert(ex)
+                    showError(ex+"");
                 })
-        } else if (isAll && url != '?') {
-             axiosInstanse.post('/push-to-topic', {
+        } else if (isAll && (profileId != '0' || category!='0')) {
+            let body = {
                 title: titleTM + " / " + titleRU,
                 body: bodyTM + "\n" + bodyRU,
                 topic: "string",
-                url: url
-            }, {
+                profile_id: profileId
+            };
+            if(category!='0'){
+                body = {
+                    title: titleTM + " / " + titleRU,
+                    body: bodyTM + "\n" + bodyRU,
+                    topic: "string",
+                    categor_id: category
+                };
+            }
+            axiosInstanse.post('/push-to-topic', body, {
                 headers
             })
                 .then(response => {
-                    <SnackBarApp/>
+                    <SnackBarApp />
                 })
                 .catch(ex => {
-                    alert(ex)
+                    // alert(ex)
+                    showError(ex+"");
                 })
         } else {
             let token = profileId;
@@ -81,10 +88,11 @@ const Push = () => {
                 headers
             })
                 .then(response => {
-                    alert("Sent to one user")
+                    showSuccess("Sent to one user")
                 })
                 .catch(ex => {
-                    alert(ex)
+                    // alert(ex)
+                    showError(ex+"");
                 })
         }
 
@@ -92,12 +100,50 @@ const Push = () => {
 
 
     }
+
     useEffect(() => {
-        axiosInstanse.get("/get-user-name", { headers })
+        axiosInstanse.get("/get-name-profile", { headers })
           .then(response => {
-            setAllUser(response.data.body);
+            setAllProfile(response.data.body);
           })
       }, [])
+    
+      useEffect(() => {
+        getProfile()
+      }, [])
+
+      async function getProfile() {
+        axiosInstanse.get("/get-name-profile", { headers })
+          .then(response => {
+            setAllProfile(response.data.body);
+            console.log(response.data.body)
+          }).catch((err) => {
+            console.log(err);
+          })
+      }
+
+      const getCategories =async()=>{
+        axiosInstanse.get("/get-categories", { headers })
+       .then(response => {
+           setCategoryList(response.data.body);
+           console.log(response.data.body);
+       })
+       .catch(ex => {
+           console.log(ex);
+       });
+   }
+
+   useEffect(()=>{
+       getCategories();
+   },[])
+
+
+    useEffect(() => {
+        axiosInstanse.get("/get-user-name", { headers })
+            .then(response => {
+                setAllUser(response.data.body);
+            })
+    }, [])
     useEffect(() => {
         if (!isSend)
             return;
@@ -108,12 +154,24 @@ const Push = () => {
         setIsSend(true);
     }
 
+    useEffect(()=>{
+        if(profileId!="0"){
+            setcategory("0")
+        }
+    },[profileId]);
 
-    
+    useEffect(()=>{
+        if(category!="0"){
+            setProfileId("0")
+        }
+    },[category]);
+
+
+
 
     return (
         <div className='content'>
-            
+
             <p style={{ color: '#31456A', fontWeight: 'bold', fontSize: '30px', paddingLeft: '40px', paddingTop: '30px' }}>Push notification</p>
             <div style={{ background: 'white', width: '92%', height: 'auto', marginLeft: '40px', marginTop: '30px' }}>
                 <div style={{ width: '91%', marginLeft: '40px', paddingTop: '30px' }}>
@@ -144,15 +202,34 @@ const Push = () => {
                                     value={bodyRU} onInput={e => setBodyRU(e.target.value)}></textarea>
                             </Stack>
                         </Col>
-                        <Col lg={12} md={12} xs={12} sm={12}>
+                        <Col lg={6} md={6} xs={12} sm={12}>
                             <Stack direction='column' spacing={-2} marginTop={3}>
-                                <p style={{ color: '#31456A', fontSize: '15px' }}>URL (eg:?profile_id=1&category_id=2):</p>
-                                <input type="text"
-                                    value={url} onInput={e => setUrl(e.target.value)}></input>
+                                <select name="" id="" style={{ height: '30px' }} value={profileId} onChange={e => setProfileId(e.target.value)}>
+                                    <option value="0">Select profile</option>
+                                    {
+                                        allProfileList.map((element, i) => {
+                                            return (<option value={element.id}>{element.nameTM}</option>)
+                                        })
+                                    }
+                                </select>
                             </Stack>
                         </Col>
-                        <Col lg={12} md={12} xs={12} sm={12} marginTop={3}>
-                            <input type="checkbox" checked={isAll}
+                        <Col lg={6} md={6} xs={12} sm={12}>
+                            <Stack direction='column' spacing={-2} marginTop={3}>
+                                <select onChange={e => setcategory(e.target.value)} value={category} style={{ height: '30px', width: '100%   ' }} name="" id="category" className="normalSize" >
+                                    <option value="0">Select category</option>
+                                    {
+                                        categoryList?.map((element, i) => {
+                                            return (
+                                                <option key={"categoryProfile" + element.id} value={element.id}>{element.name}</option>
+                                            )
+                                        })
+                                    }
+                                </select>
+                            </Stack>
+                        </Col>
+                        <Col lg={12} md={12} xs={12} sm={12} marginTop={7}>
+                            <input type="checkbox" style={{marginTop:'30px'}} checked={isAll}
                                 value={isAll} onChange={e => setIsAll(!isAll)} /><label>Send to all users</label>
 
 
@@ -160,8 +237,8 @@ const Push = () => {
                         {
                             !isAll ?
                                 <Col lg={12} md={12} xs={12} sm={12} marginTop={3}>
-                                    <select name="" style={{ height: '30px', width:'330px' }} id="" onChange={e => setUser_id(e.target.value)}>
-                                        <option value="0">Select...</option>
+                                    <select name="" style={{ height: '30px', marginTop:"10px", width: '49%' }} id="" onChange={e => setUser_id(e.target.value)}>
+                                        <option value="0">Select user</option>
                                         {
                                             allUser?.map((element, i) => {
                                                 return (<option value={element.id}>{element.fullname}</option>)
@@ -172,7 +249,7 @@ const Push = () => {
                                 :
                                 null
                         }
-                        <Col lg={9} md={12} xs={12} sm={12}></Col>
+                        <Col lg={9} md={12} xs={12} sm={12}></Col>  
                         <Col lg={3} md={12} xs={6} sm={6}>
                             <Stack direction='row' marginLeft={11} spacing={2}>
                                 <div className="sentButtonInbox">
@@ -191,7 +268,6 @@ const Push = () => {
                     <br />
                 </div>
             </div>
-
             <ToastContainer />
         </div>
     )

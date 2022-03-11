@@ -7,6 +7,7 @@ import { IconName, IoMdClose } from "react-icons/io";
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { Stack } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess } from '../../../toast/toast';
 
 const style = {
     position: 'absolute',
@@ -37,25 +38,19 @@ const DeleteInterestsModal = (props) => {
       axiosInstanse.delete('/delete-interest?id='+props.interestid,{headers})
       .then(response=>{
         if(response.data.error){
-          alert("Error");
+          // alert("Error");
+          showError("Error");
         } else{
           if(response.data.body=='DELETED'){
             handleClose();
             props.getData(1);
-            toast.warn('Successfully deleted!', {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              });
+            showSuccess("Successfully deleted!!!");
           }
         }
       })
       .catch(ex=>{
-        alert(ex);
+        // alert(ex);
+        showError(ex);
       });
     }
   return <div>

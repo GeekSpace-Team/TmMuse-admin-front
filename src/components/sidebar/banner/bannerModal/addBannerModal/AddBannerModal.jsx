@@ -6,6 +6,8 @@ import './AddBannerModal.css'
 import { IoMdClose } from 'react-icons/io';
 import { axiosInstanse } from '../../../../utils/axiosInstanse';
 import { Col, Row } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import { showError, showSuccess, showWarning } from '../../../../toast/toast';
 
 
 
@@ -75,8 +77,10 @@ const AddBannerModal = (props) => {
         setPofile_id('');
         props.getBanner(1);
         setINSERTED_ID(0);
+        showSuccess("Successfully added!!!")
       }).catch(ex => {
-        alert("Image upload error:" + ex);
+        // alert("Image upload error:" + ex);
+        showError("Image upload error: " + ex);
         setINSERTED_ID(0);
       })
   }
@@ -85,11 +89,13 @@ const AddBannerModal = (props) => {
     if (!toAdd)
       return;
     if (profile_id != 0 && siteLink != "") {
-      alert("Please clear site link fill!")
+      // alert("Please clear site link fill!")
+      showWarning("Please clear site link fill!");
       return;
     }
     if (selectedFile == '') {
-      alert("Please enter required informations!")
+      // alert("Please enter required informations!")
+      showWarning("Please enter required informations!");
       return;
     }
 
@@ -104,14 +110,16 @@ const AddBannerModal = (props) => {
      axiosInstanse.post('/add-banner', banner, { headers })
       .then(response => {
         if (response.data.error) {
-          alert("Something is went wrong!")
+          // alert("Something is went wrong!")
+          showWarning("Something is went wrong!");
         } else {
           setINSERTED_ID(response.data.body.INSERTED_ID);
         }
         setToAdd(false);
       }).catch(ex => {
         setToAdd(false);
-        alert("Adding error:" + ex);
+        // alert("Adding error:" + ex);
+        showError("Adding error:" + ex);
       });
   }
 
@@ -187,6 +195,7 @@ const AddBannerModal = (props) => {
           </div>
         </Box>
       </Modal>
+      <ToastContainer />
     </div>
   )
 }

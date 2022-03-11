@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { ToastContainer } from 'react-toastify';
+import { showSuccess } from '../../../toast/toast';
 
 
 const style = {
@@ -50,6 +52,7 @@ const UpCons = (props) => {
       console.log(data.data.body);
       props.handleClose()
       props.getData(1)
+      showSuccess("Successfully updated!!!");
     }).catch((err)=>{
       console.log(err);
     })
@@ -117,6 +120,7 @@ const UpCons = (props) => {
           </Col>
         </Row>
       </Box>
+      <ToastContainer/>
   </div>;
 };
 
