@@ -37,10 +37,7 @@ const Cinema = () => {
       }
 
       
-  useEffect(() => {
 
-    cinemaUp();
-  }, []);
 
     return (
         <div className='content'>
