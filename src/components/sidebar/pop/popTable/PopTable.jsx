@@ -66,7 +66,7 @@ const PopTable = (props) => {
             return(<tr>
                 <td><center>{element.id}</center></td>
                 <td><center><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }}/></center></td>
-                <td><center>{element.descriptionTM}</center></td>
+                <td><center>{element.comment_of_admin.substring(0,100)}{element.comment_of_admin.length>100 ? <span>...</span> : null}</center></td>
                 <td><center>{element.profile_id==0?element.site_url:element.profile_id}</center></td>
                 <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
                 <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>

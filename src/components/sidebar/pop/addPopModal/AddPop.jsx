@@ -221,6 +221,12 @@ const AddPop = (props) => {
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
+              <p className='inputTitle'>Comment of Admin:</p>
+              <input type="text" value={comment_of_admin} onInput={e => setComment_of_admin(e.target.value)} />
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} xs={12} sm={12}>
+            <Stack direction='column' spacing={0}>
               <p className='cantAdd'> Can't add site link and Prfile together! Only the profile will  be accepted if you enter both!</p>
             </Stack>
           </Col>

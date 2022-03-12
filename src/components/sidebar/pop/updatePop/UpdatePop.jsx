@@ -71,7 +71,7 @@ const UpdatePop = (props) => {
    
     let data = new FormData()
     data.append('file', selectedFile, "ok.jpg")
-    let url = "/update-popup-image?id=" + id;
+    let url = "/add-popup-image?id=" + id;
      axiosInstanse.put(url, data, {headers})
       .then(res => { // then print response status
         console.warn(res);
@@ -96,7 +96,8 @@ const UpdatePop = (props) => {
         descriptionTM: descriptionTM,
         descriptionRU: descriptionRU,
         comment_of_admin: comment_of_admin,
-        site_url: site_url
+        site_url: site_url,
+        posts_id:posts_id
 
       },{headers}).then((data)=>{
       console.log(data.data.body);
@@ -134,7 +135,7 @@ const UpdatePop = (props) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Pop-up image:</p>
-              <input className='custom-file-input' type="file" />
+              <input className='custom-file-input' type="file" onChange={handleInputChange}/>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
@@ -179,6 +180,12 @@ const UpdatePop = (props) => {
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Description ru:</p>
               <textarea name="" id="" cols="20" rows="4" onChange={(e)=>setDescriptionRU(e.target.value)} defaultValue={props.data.descriptionRU}></textarea>
+            </Stack>
+          </Col>
+          <Col lg={6} md={6} xs={12} sm={12}>
+            <Stack direction='column' spacing={0}>
+              <p className='inputTitle'>Comment of Admin:</p>
+              <input type="text" onChange={(e)=>setComment_of_admin(e.target.value)} defaultValue={props.data.comment_of_admin}/>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
