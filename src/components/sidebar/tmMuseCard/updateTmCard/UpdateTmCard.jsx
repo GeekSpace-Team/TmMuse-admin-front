@@ -40,13 +40,12 @@ const UpdateTmCard = (props) => {
     'Authorization': 'Bearer my-token',
     'My-Custom-Header': 'foobar'
   };
-  const handleSelectIsSms = (e) => {
-    if (e.target.value == 1) {
-      setIs_sms(true);
-    } else {
-      setIs_sms(false);
-    }
 
+  const handleSelectGender = (e) => {
+    setGender(e.target.value);
+  }
+  const handleSelectIsSms = (e) => {
+    setIs_sms(e.target.value);
   }
   const UpdateMyCard = (id)=>{
     axiosInstanse.put("/update-card?id="+id,{
@@ -61,7 +60,6 @@ const UpdateTmCard = (props) => {
     },{headers}).then((data)=>{
       console.log(data.data.body);
       props.handleClose()
-      handleSelectStatus();
       props.getData(1)
       showSuccess("Successfully updated!!!");
     }).catch((err)=>{
@@ -87,9 +85,10 @@ const UpdateTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' spacing={-2}>
                 <p>Gender:</p>
-                <select name="" id="" style={{height: '30px'}}>
-                  <option value="">Man</option>
-                  <option value="">Woman</option>
+                <select name="" id="" style={{height: '30px'}} value={gender} onChange={e => handleSelectGender(e)}>
+                  <option value="0">Gender</option>
+                  <option value="1">Man</option>
+                  <option value="2">Woman</option>
                 </select>
               </Stack>
             </Col>
@@ -105,8 +104,10 @@ const UpdateTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Date of birth:</p>
-                <input onChange={(e)=>setDate_of_birth(e.target.value)} defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  onInput={e =>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} />
+                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  />
+                {/* onInput={e =>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} */}
               </Stack>
+              {/* defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  */}
             </Col>
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
@@ -117,10 +118,10 @@ const UpdateTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Notify type:</p>
-                <select name="" id="" style={{ height: '30px' }} onChange={e => handleSelectIsSms(e)}>
-                  <option value="1">Inbox</option>
-                  <option value="2">Email</option>
-                </select>
+                <select name="" onChange={e => handleSelectIsSms(e)} value={is_sms} style={{ height: '30px' }} id="">
+                <option key={"status1"} value={true}>Inbox</option>:
+                <option key={"status12"} value={false}>Email</option>
+              </select>
               </Stack>
             </Col>
             <Col lg={9} md={9} xs={9} sm={9}></Col>

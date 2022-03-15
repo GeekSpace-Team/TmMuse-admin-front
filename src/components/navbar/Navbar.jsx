@@ -6,7 +6,14 @@ import { NavLink } from 'react-router-dom';
 
 
 const Navbar = () => {
-
+  if(localStorage.getItem("tkn")==null || typeof localStorage.getItem("tkn")==='undefined' || localStorage.getItem("tkn")==''){
+    window.location.href="/login";
+  }
+  const logout=()=>{
+    localStorage.setItem("tkn","");
+    localStorage.setItem("TmMuseProfile","");
+    window.location.href="/login";
+  }
   return (
     <div className="header">
       <Row>
@@ -17,9 +24,8 @@ const Navbar = () => {
               <FiSearch />
               <input placeholder="Search..." type='text' autoFocus />
             </Stack>
-            <NavLink to='/login' className="ms-auto" style={{textDecoration: 'none'}}>
-              <FiLogOut   />
-              </NavLink>
+           
+              <FiLogOut className="ms-auto" onClick={logout}/>
             <FiBell />
 
             <div className="userIcon">

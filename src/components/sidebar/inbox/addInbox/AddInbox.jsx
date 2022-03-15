@@ -19,7 +19,7 @@ const style = {
     p: 4,
 };
 
-const AddInbox = () => {
+const AddInbox = (props) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -59,6 +59,10 @@ const AddInbox = () => {
         } 
        handleClose();
         setToAdd(false);
+        props.getInbox(1);
+        setTitle('');
+        setMessage('');
+        
       }).catch(ex => {
         setToAdd(false);
         // alert("Adding error:" + ex);

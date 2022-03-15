@@ -29,12 +29,15 @@ const UpdatePost = (props) => {
   const [titleRU,setTitleRU ] = useState(props.data.titleRU);
   const [promotion,setPromotion ] = useState(props.data.promotion);
   const [profile_id,setProfile_id ] = useState(props.data.profile_id);
+  const [status,setStatus ] = useState(props.data.status);
   const [descriptionTM,setDescriptionTM] = useState(props.data.descriptionTM);
   const [descriptionRU,setDescriptionRU ] = useState(props.data.descriptionRU);
   const [comment_of_admin,setComment_of_admin ] = useState(props.data.comment_of_admin);
   const [INSERTED_ID, setINSERTED_ID] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const handleSelectStatus = (e) => {
+    setStatus(e.target.value);
+  }
 
 
   const headers = {
@@ -85,7 +88,7 @@ const UpdatePost = (props) => {
       descriptionTM: descriptionTM,
       descriptionRU: descriptionRU,
       comment_of_admin: comment_of_admin,
-      status: true
+      status: status
     
     },{headers}).then((data)=>{
       console.log("result",data.data.body);
@@ -174,7 +177,10 @@ const UpdatePost = (props) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Status:</p>
-              <select name="" style={{ height: '30px' }} id=""><option value="">Active</option><option value="">Passive</option></select>
+              <select name="" onChange={e => handleSelectStatus(e)} value={status} style={{ height: '30px' }} id="">
+                <option key={"status1"} value={true}>Active</option>:
+                <option key={"status12"} value={false}>Passive</option>
+              </select>
             </Stack>
           </Col>
         </Row>

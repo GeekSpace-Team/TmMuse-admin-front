@@ -10,7 +10,18 @@ import Loading from '../../../loading/Loading';
 import { Modal } from '@mui/material';
 
 
-const InboxPage = () => {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 700,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
+const InboxPage = (props) => {
   const [inboxList, setInboxList] = useState([]);
   const [answeredMessage, setAnsweredMessage] = useState([]);
   const [page, setPage] = useState(1);
@@ -79,7 +90,7 @@ const InboxPage = () => {
             </div>
           </Col>
           <Col lg={12}>
-            <AddInbox />
+            <AddInbox getInbox={getInbox}/>
           </Col>
           {inboxList?.map((element, i) => {
             return (
@@ -123,11 +134,14 @@ const InboxPage = () => {
               <p style={{ color: '#31456A', marginLeft: '20px', fontSize: '13px' }}>{phone_number}</p>
             </Col>
             <div className="sentButtonInbox">
-              {/* <ReplyModal /> */}
+              {
+                phone_number!='+993 6* ** ** **'?<ReplyModal getInbox={getInbox} inboxId={inboxId}/>:null
+              }
+              
               <div>
-          
+              
+
         
- <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
              
     </div>
             </div>

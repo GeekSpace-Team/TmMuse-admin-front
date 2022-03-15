@@ -39,6 +39,8 @@ const EditProfileModal = (props) => {
     const navigate = useNavigate();
     const compress = new Compress()
     const [nameTM, setNameTM] = useState(props.data.nameTM);
+    const [allCinema, setAllCinema] = useState(props.data.allCinema);
+    const [cinemaId, setCinemaId] = useState(props.data.cinemaId);
     const [nameRU, setNameRU] = useState(props.data.nameRU);
     const [short_descTM, setshortdescTM] = useState(props.data.short_descTM);
     const [short_descRU, setshortdescRU] = useState(props.data.short_descRU);
@@ -222,7 +224,7 @@ const EditProfileModal = (props) => {
         };
         axiosInstanse.post('/add-tags', {
             profile_id: id,
-            category_id: category,
+            category_id: category_id,
             tagTM: tagsTmArray,
             tagRU: tagsRuArray
         }, config).then(response => {
@@ -405,7 +407,16 @@ const EditProfileModal = (props) => {
     };
 
 
-   
+    useEffect(() => {
+        axiosInstanse.get("/get-all-admin-users-cinema", {
+            "cinema_id": 0
+        }, { headers })
+            .then(response => {
+                setAllCinema(response.data.body);
+            }).catch((err) => {
+                console.log(err);
+            })
+    }, [])
 
 
   
@@ -456,18 +467,18 @@ const EditProfileModal = (props) => {
 
 
     useEffect(() => {
-        if (category == 4) {
+        if (category_id == 4) {
             setIsCafe(true);
         } else {
             setIsCafe(false);
         }
 
-        if (category == 2) {
+        if (category_id == 2) {
             setIsMovie(true);
         } else {
             setIsMovie(false);
         }
-    }, [category])
+    }, [category_id])
 
     const UpdateProfile = (id) => {
         axiosInstanse.put("/update-profile?id=" + id, {
@@ -608,6 +619,18 @@ const EditProfileModal = (props) => {
                                                 <input onChange={(e) => setaddress(e.target.value)} defaultValue={props.data.address} className='inputModal' type="text" />
                                             </Stack>
                                         </Col>
+                                        <Col lg={6} md={6} sm={12} xs={12}>
+                                                <Stack direction='column' spacing={0} marginTop={2.5}>
+                                                    <select style={{ height: '30px' }} name="" id="" value={cinema_id} onChange={e => setCinema_id(e.target.value)}>
+                                                        <option value="0">Select...</option>
+                                                        {
+                                                            allCinema?.map((element, i) => {
+                                                                return (<option value={element.id}>{element.username}</option>)
+                                                            })
+                                                        }
+                                                    </select>
+                                                </Stack>
+                                            </Col>
                                         <Col lg={3} md={3} sm={12} xs={12}>
                                             <Stack direction='column' spacing={0}>
                                                 <p className='inputTitle'>Price:</p>
@@ -698,7 +721,7 @@ const EditProfileModal = (props) => {
                             <Col lg={4} md={12} sm={12} xs={12}>
                                 <Stack direction='column' spacing={0}>
                                     <p className='inputTitle'>Category:</p>
-                                    <select value={category} onChange={e => setcategory(e.target.value)} style={{ height: '30px' }} name="" id="category" className="normalSize" >
+                                    <select defaultValue={category_id} onChange={e => setCategory_id(e.target.value)} style={{ height: '30px' }} name="" id="category" className="normalSize" >
                                         <option value="0">Select category</option>
                                         {
                                             categoryList?.map((element, i) => {

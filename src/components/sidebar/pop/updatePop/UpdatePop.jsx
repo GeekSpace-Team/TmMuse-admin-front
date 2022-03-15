@@ -154,7 +154,7 @@ const UpdatePop = (props) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0}>
               <p className='inputTitle'>Site link:</p>
-              <input type="text" defaultValue={props.data.site_url}/>
+              <input type="text" onChange={(e)=>setSite_url(e.target.value)} defaultValue={props.data.site_url}/>
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>

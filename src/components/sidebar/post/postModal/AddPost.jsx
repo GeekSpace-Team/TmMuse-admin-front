@@ -33,12 +33,14 @@ const AddPost = (props) => {
   const [descRU, setDescRU] = useState('');
   const [promotion, setPromotion] = useState(0);
   const [commentOfAdmin, setCommentOfADmin] = useState('');
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
   const allProfileList = props.allProfile;
   const [profileId, setProfileId] = useState(0);
   const [toAdd, setToAdd] = useState(false);
-
+  const handleSelectStatus = (e) => {
+    setStatus(e.target.value);
+  }
   const handleAdd = () => {
     setToAdd(!toAdd);
   }
@@ -207,10 +209,10 @@ const AddPost = (props) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' spacing={0} marginTop={1.5}>
               <p className='inputTitle'>Status:</p>
-              <select name="" style={{ height: '30px' }} id="" onChange={e => setStatus(e.target.value)}>
-                <option value={true}>Status...</option>\
-                <option value={true}>ACTIVE</option>
-                <option value={false}>PASSIVE</option>
+              <select name="" onChange = { e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
+                <option value="false">Status</option>
+                <option value="true">Active</option>
+                <option value="false">Passive</option>
               </select>
             </Stack>
           </Col>

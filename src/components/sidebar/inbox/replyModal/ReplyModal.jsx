@@ -5,6 +5,8 @@ import Stack from '@mui/material/Stack';
 import { IoMdClose } from 'react-icons/io';
 import { Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
+import { axiosInstanse } from '../../../utils/axiosInstanse';
+import { showError, showSuccess } from '../../../toast/toast';
 
 const style = {
     position: 'absolute',
@@ -17,7 +19,7 @@ const style = {
     p: 4,
 };
 
-const ReplyModal = (props) => {
+const ReplyModal = ({inboxId,getInbox}) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -25,12 +27,31 @@ const ReplyModal = (props) => {
     const [ message, setMessage ] = useState('');
 
 
-    const ReplySend = (element) => {
-        setTitle(element.title);
-        setMessage(element.message);
+    const ReplySend = () => {
+        axiosInstanse.post('/add-answered-message',{
+            title:title,
+            message:message,
+            inbox_id:inboxId
+        })
+        .then(response=>{
+            if(!response.data.error){
+                showSuccess("Successfully sent!");
+                setTitle("");
+                setMessage("");
+                handleClose();
+                getInbox();
+            } else {
+                showError("Something went wrong!")
+            }
+        })
+        .catch(err=>{
+            showError(err+"");
+        })
     }
   return (
     <div>
+ <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
+
          <Modal
                 open={open}
                 onClose={handleClose}
@@ -39,20 +60,20 @@ const ReplyModal = (props) => {
             >
                 <Box sx={style}>
                     <Stack direction='row' justifyContent='space-between'>
-                        <p className='bannerModalTitle'>Reply message {props.inboxid}</p>
+                        <p className='bannerModalTitle'>Reply message</p>
                         <IoMdClose className='Xicon' onClick={handleClose} />
                     </Stack>
                     <Row>
                         <Col lg={12} md={12} xs={12} sm={12}>
                             <Stack direction='column' spacing={-2}>
                                 <p style={{ color: '#31456A', fontSize: '15px' }}>Title:</p>
-                                <input type="text">{title}</input>
+                                <input type="text" value={title} onChange={e=>setTitle(e.target.value)}></input>
                             </Stack>
                         </Col>
                         <Col lg={12} md={12} xs={12} sm={12}>
                             <Stack direction='column' marginTop={2} spacing={-2}>
                                 <p style={{ color: '#31456A', fontSize: '16px' }}>Message:</p>
-                                <textarea name="" id="" cols="30" rows="10">{message}</textarea>
+                                <textarea name="" id="" cols="30" rows="10"  value={message} onChange={e=>setMessage(e.target.value)}></textarea>
                             </Stack>
                         </Col>
                         <Col lg={9}></Col>
@@ -68,7 +89,7 @@ const ReplyModal = (props) => {
                 </Box>
             </Modal>    
         
- <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button>
+ {/* <button onClick={handleOpen}><img src="images/send.svg"  style={{marginRight:'10px', height: '17px'}} alt="" /> Reply</button> */}
              
     </div>
   )

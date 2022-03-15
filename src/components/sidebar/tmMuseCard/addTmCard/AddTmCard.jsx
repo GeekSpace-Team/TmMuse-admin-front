@@ -28,10 +28,10 @@ const AddTmCard = (props) => {
 
 
   const [date_of_birth, setDate_of_birth] = useState('');
-  const [gender, setGender] = useState('1');
+  const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
-  const [is_sms, setIs_sms] = useState(true);
-  const [status, setStatus] = useState(0);
+  const [is_sms, setIs_sms] = useState('');
+  const [status, setStatus] = useState('');
   const [fullname, setFullname] = useState('');
   const [phone_number, setPhone_number] = useState('');
 
@@ -42,14 +42,13 @@ const AddTmCard = (props) => {
   const handleSelectGender = (e) => {
     setGender(e.target.value);
   }
-  const handleSelectIsSms = (e) => {
-    if (e.target.value == 1) {
-      setIs_sms(true);
-    } else {
-      setIs_sms(false);
-    }
 
+
+  const handleSelectIsSms = (e) => {
+    setIs_sms(e.target.value);
   }
+
+  
 
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
@@ -84,7 +83,7 @@ const AddTmCard = (props) => {
       'Authorization': 'Bearer my-token',
       'My-Custom-Header': 'foobar'
     };
-    await axiosInstanse.post('/add-card', card, { headers })
+     axiosInstanse.post('/add-card', card, { headers })
       .then(response => {
         if (response.data.error) {
           // alert("Something is went wrong!")
@@ -136,6 +135,7 @@ const AddTmCard = (props) => {
               <Stack direction='column' spacing={-2}>
                 <p>Gender:</p>
                 <select name="" id="" style={{ height: '30px' }} onChange={e => handleSelectGender(e)}>
+                  <option value="0">Gender</option>
                   <option value="1">Man</option>
                   <option value="2">Woman</option>
                 </select>
@@ -144,11 +144,11 @@ const AddTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Status:</p>
-                <select name="" onChange={e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
-                  <option value="0">Status...</option>
-                  <option value="1">Active</option>
-                  <option value="2">Passive</option>
-                </select>
+                <select name="" onChange = { e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
+                <option value="0">Status</option>
+                <option value="1">Active</option>
+                <option value="2">Passive</option>
+              </select>
               </Stack>
             </Col>
             <Col lg={6} md={8} xs={12} sm={12}>
@@ -166,10 +166,10 @@ const AddTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Notify type:</p>
-                <select name="" id="" style={{ height: '30px' }} onChange={e => handleSelectIsSms(e)}>
-                  <option value="1">Inbox</option>
-                  <option value="2">Email</option>
-                </select>
+                <select name="" onChange = { e => handleSelectIsSms(e)} style={{ height: '30px' }} id="">
+                <option value="true">Inbox</option>
+                <option value="false">Email</option>
+              </select>
               </Stack>
             </Col>
             <Col lg={6} md={8} xs={12} sm={12}>

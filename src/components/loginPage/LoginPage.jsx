@@ -50,13 +50,9 @@ const LoginPage = () => {
                 if(data.body!=null && !data.error){
                     if(data.body.token!==""){
                         console.log("login data",data.body)
-                        localStorage.setItem("TmMuseProfile",JSON.stringify(data.body))
-                        // Write token and userId to cookie storage go to next page
-                        // let expires=new Date();
-                        // expires.setTime(expires.getTime()+(10*1000))
-                        // setCookie('userToken',data.body.token,{path:'/',expires})
-                        // setCookie('userType',data.body.type,{path:'/',expires})
-                        history("/");
+                        localStorage.setItem("TmMuseProfile",JSON.stringify(data.body));
+                        localStorage.setItem("tkn",data.body.token);
+                        window.location.href="/";
                     }
                 } else {
                     alert("Username or password is wrong!");

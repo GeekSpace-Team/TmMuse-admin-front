@@ -121,6 +121,7 @@ const Push = () => {
             console.log(err);
           })
       }
+      
 
       const getCategories =async()=>{
         axiosInstanse.get("/get-categories", { headers })
@@ -228,7 +229,13 @@ const Push = () => {
                                 </select>
                             </Stack>
                         </Col>
-                        <Col lg={12} md={12} xs={12} sm={12} marginTop={7}>
+                        <Col lg={6} md={6} xs={12} sm={12} marginTop={7}>
+                            <input type="checkbox" style={{marginTop:'30px'}} checked={isAll}
+                                value={isAll} onChange={e => setIsAll(!isAll)} /><label>Send to all users</label>
+
+
+                        </Col>
+                        <Col lg={6} md={6} xs={12} sm={12} marginTop={7}>
                             <input type="checkbox" style={{marginTop:'30px'}} checked={isAll}
                                 value={isAll} onChange={e => setIsAll(!isAll)} /><label>Send to all users</label>
 
@@ -249,6 +256,7 @@ const Push = () => {
                                 :
                                 null
                         }
+                        
                         <Col lg={9} md={12} xs={12} sm={12}></Col>  
                         <Col lg={3} md={12} xs={6} sm={6}>
                             <Stack direction='row' marginLeft={11} spacing={2}>
