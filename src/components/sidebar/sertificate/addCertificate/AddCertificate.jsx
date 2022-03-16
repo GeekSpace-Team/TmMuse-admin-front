@@ -151,7 +151,7 @@ const AddCertificate = (props) => {
               <select name="" onChange={e => handleSelectStatus(e)} style={{ height: '30px' }} id="">
                 <option value="0">Status...</option>
                 <option value="1">Active</option>
-                <option value="2">Passive</option>
+                <option value="0">Passive</option>
               </select>
             </Stack>
           </Col>
