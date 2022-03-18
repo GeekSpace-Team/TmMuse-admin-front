@@ -34,6 +34,8 @@ const AddTmCard = (props) => {
   const [status, setStatus] = useState('');
   const [fullname, setFullname] = useState('');
   const [phone_number, setPhone_number] = useState('');
+  const [ card_id, setCard_id ] = useState('');
+  const [ expired, setExpired ] = useState('');
 
   const [toAdd, setToAdd] = useState(false);
   const handleAdd = () => {
@@ -72,6 +74,8 @@ const AddTmCard = (props) => {
       email: email,
       is_sms: is_sms,
       status: status,
+      card_id: card_id,
+      expired: expired,
       fullname: fullname,
       phone_number: phone_number
     }
@@ -159,8 +163,20 @@ const AddTmCard = (props) => {
             </Col>
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
+                <p>Expired time:</p>
+                <input type="date" style={{ width: '100%' }} onInput={e => { let date = e.target.value.slice(8, 10) + "/" + e.target.value.slice(5, 7) + "/" + e.target.value.slice(0, 4); setExpired(date) }} />
+              </Stack>
+            </Col>
+            <Col lg={6} md={8} xs={12} sm={12}>
+              <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Phone number:</p>
                 <input type="text" value={phone_number} onInput={e => setPhone_number(e.target.value)} />
+              </Stack>
+            </Col>
+            <Col lg={6} md={8} xs={12} sm={12}>
+              <Stack direction='column' marginTop={2} spacing={-2}>
+                <p>Card Id:</p>
+                <input type="text" value={card_id} onInput={e => setCard_id(e.target.value)} />
               </Stack>
             </Col>
             <Col lg={6} md={8} xs={12} sm={12}>

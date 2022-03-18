@@ -6,7 +6,7 @@ import { IoMdClose } from 'react-icons/io';
 import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { ToastContainer, toast } from 'react-toastify';
-import { showError, showWarning } from '../../../toast/toast';
+import { showError, showSuccess, showWarning } from '../../../toast/toast';
 
 const style = {
     position: 'absolute',
@@ -28,7 +28,9 @@ const AddInbox = (props) => {
     const [ title, setTitle ] = useState([]);
     const [ message, setMessage ] = useState([]);
     const [ is_all, setIs_all ] = useState(true); 
+    const [ is_Card, setIsCard ] = useState(false); 
     const [toAdd, setToAdd] = useState(false);
+    const [ allUserCards, setAllUserCards ] = useState([]);
     const handleAdd = () => { setToAdd(!toAdd); }
     const headers = {
         'Authorization': 'Bearer my-token',
@@ -41,9 +43,10 @@ const AddInbox = (props) => {
           setAllUser(response.data.body);
         })
     },[])
+
+
+
     async function addInbox() {
-      if (!toAdd)
-        return;
   
     const inbox = {
       user_id: user_id,
@@ -53,27 +56,57 @@ const AddInbox = (props) => {
     }
      axiosInstanse.post('/add-inbox', inbox, { headers })
       .then(response => {
-        if (response.data.error) {
-        //   alert("Something is went wrong!")
-          showWarning("Something is went wrong!!!");
-        } 
-       handleClose();
-        setToAdd(false);
-        props.getInbox(1);
-        setTitle('');
-        setMessage('');
+        if(response.data.error){
+            showError("Something went wrong!");
+        } else {
+            handleClose();
+            props.getInbox(1);
+            setTitle('');
+            setMessage('');
+            showSuccess("Successfully sent!")
+        }
         
       }).catch(ex => {
-        setToAdd(false);
         // alert("Adding error:" + ex);
         showError("Adding error:" + ex);
       });
   }
-  useEffect(() => {
-  
-    addInbox();
-  }, [toAdd]);
 
+
+  const addCardUserInbox=()=>{
+    axiosInstanse.post("/add-card-user-inbox", {title:title, message: message},{ headers })
+    .then(response => {
+        if(response.data.error){
+            showError("Something went wrong!");
+        } else {
+            handleClose();
+            props.getInbox(1);
+            setTitle('');
+            setMessage('');
+            showSuccess("Successfully sent to card users!")
+        }
+    })
+    .catch(err=>{
+        showError(err+" while sending to card users");
+    })
+  }
+  const handleClick=()=>{
+    if(is_all){
+        addInbox();
+      } else if(is_Card){
+        addCardUserInbox();
+      }
+  }
+
+
+  useEffect(()=>{
+    setIs_all(!is_Card);
+  },[is_Card]);
+
+  useEffect(()=>{
+      if(is_all)
+        setIsCard(!is_all);
+  },[is_all]);
     return (
         <div>
             <label onClick={handleOpen} className="addButton">Add new message</label>
@@ -107,8 +140,14 @@ const AddInbox = (props) => {
                                 <label>Send to all users</label>
                             </Stack>
                         </Col>
+                        <Col lg={12} md={6} xs={6} sm={6}>
+                            <Stack direction='row' marginTop={3} spacing={2}>
+                                <input style={{ marginTop: '5px' }} type='checkbox' checked={is_Card} value={is_Card} onChange={e=>setIsCard(!is_Card)}/>
+                                <label>Send to tmmuse card users</label>
+                            </Stack>
+                        </Col>
                             {
-                            !is_all?
+                            !is_all && !is_Card?
                         <Col lg={6} md={6} xs={12} sm={12}>
                             <Stack direction='column' marginTop={2} spacing={0}>
                             <p className='inputTitle'>User:</p>
@@ -129,7 +168,7 @@ const AddInbox = (props) => {
                             <Col lg={3} md={12} xs={6} sm={6}>
                             <Stack direction='row' spacing={2}>
                                 <div className="sentButtonInbox">
-                                    <button  onClick={handleAdd}><img src="images/send.svg" style={{ marginRight: '10px', height: '17px' }} alt="" /> Send</button>
+                                    <button  onClick={()=>handleClick()}><img src="images/send.svg" style={{ marginRight: '10px', height: '17px' }} alt="" /> Send</button>
                                 </div>
                             </Stack>
                         </Col>

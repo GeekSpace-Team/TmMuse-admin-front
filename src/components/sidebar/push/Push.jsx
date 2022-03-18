@@ -16,16 +16,19 @@ import { showError, showSuccess } from '../../toast/toast';
 const Push = () => {
     const [titleTM, setTitleTM] = useState('');
     const [titleRU, setTitleRU] = useState('');
+    const [ title, setTitle ] = useState('');
+    const [ body, setBody ] = useState('');
     const [bodyTM, setBodyTM] = useState('');
     const [bodyRU, setBodyRU] = useState('');
     const [url, setUrl] = useState('?');
     const [isAll, setIsAll] = useState(true);
+    const [ is_Card, setIsCard ] = useState(false);
     const [profileId, setProfileId] = useState('');
     const [isSend, setIsSend] = useState(false);
     const [allUser, setAllUser] = useState([]);
-    const [user_id, setUser_id] = useState(0);
+    const [user_id, setUser_id] = useState('');
     const [categoryList, setCategoryList] = useState([]);
-    const [category, setcategory] = useState(0);
+    const [category, setcategory] = useState('');
     const [allProfile, setAllProfile] = useState([]);
     const allProfileList = allProfile;
 
@@ -34,8 +37,32 @@ const Push = () => {
         'Authorization': 'Bearer my-token',
         'My-Custom-Header': 'foobar'
     };
+
+    const addCardUserPush=()=>{
+        axiosInstanse.post("/push-to-card-user", {title:title, body: body},{ headers })
+        .then(response => {
+            if(response.data==null){
+                setTitleTM('');
+                setTitleRU('');
+                setBodyTM('');
+                setBodyRU('');
+                setIsSend(false);
+                showSuccess("Successfully sent to card users!");
+            }
+        })
+        .catch(err=>{
+            showError(err+" while sending to card users");
+        })
+      }
+
     const sendNotification = async () => {
-        if (isAll && profileId == '0' && category=='0') {
+
+        if(is_Card){
+            addCardUserPush();
+            return;
+        }
+
+        if (isAll && profileId == '' && category=='') {
             axiosInstanse.post('/push-to-topic', {
                 title: titleTM + " / " + titleRU,
                 body: bodyTM + "\n" + bodyRU,
@@ -44,40 +71,40 @@ const Push = () => {
                 headers
             })
                 .then(response => {
-                    showSuccess('🦄 Success!')
+                    if(response.data==null){
+                        showSuccess('🦄 Success!')
+                    }
                 })
                 .catch(ex => {
                     // alert(ex)
-                    showError(ex+"");
+                    showError(ex+" 1");
                 })
-        } else if (isAll && (profileId != '0' || category!='0')) {
+        } else if (isAll && (profileId != '' || category!='')) {
             let body = {
-                title: titleTM + " / " + titleRU,
-                body: bodyTM + "\n" + bodyRU,
-                topic: "string",
-                profile_id: profileId
-            };
-            if(category!='0'){
-                body = {
                     title: titleTM + " / " + titleRU,
                     body: bodyTM + "\n" + bodyRU,
-                    topic: "string",
-                    categor_id: category
+                    profile_id: profileId+"",
+                    category_id: category+""
                 };
-            }
-            axiosInstanse.post('/push-to-topic', body, {
+            axiosInstanse.post('/push-data', body, {
                 headers
             })
                 .then(response => {
-                    <SnackBarApp />
+                    if(response.data==null){
+                        showSuccess('Successfully sent!')
+                        setTitleTM('');
+                        setTitleRU('');
+                        setBodyTM('');
+                        setBodyRU('');
+                    }
                 })
                 .catch(ex => {
                     // alert(ex)
-                    showError(ex+"");
+                    showError(ex+" 2");
                 })
         } else {
-            let token = profileId;
-            if (profileId == '') {
+            let token = user_id;
+            if (user_id == null) {
                 token = "f4qJNAbnSHOlZV24SpFaoK:APA91bHA_rmvTQzrmylJFiK362NyccjkFsWDNTKwgPNOjZVZoA355xGP-41_TzBhjRuD0PJJitiej-2J8GsdEzfHo0A-cp2sfzsDzBc336lUacJvERTXG_0s8XjDUh0ay1JkLZMULJqz";
             }
             axiosInstanse.post('/push-to-token', {
@@ -88,13 +115,17 @@ const Push = () => {
                 headers
             })
                 .then(response => {
-                    showSuccess("Sent to one user")
+                    if(response.data==null){
+                        showSuccess("Sent to one user")
+                    }
                 })
                 .catch(ex => {
                     // alert(ex)
-                    showError(ex+"");
+                    showError(ex+" 3");
                 })
         }
+
+     
 
         setIsSend(false);
 
@@ -156,19 +187,32 @@ const Push = () => {
     }
 
     useEffect(()=>{
-        if(profileId!="0"){
-            setcategory("0")
+        if(profileId!=""){
+            setcategory("")
         }
     },[profileId]);
 
     useEffect(()=>{
-        if(category!="0"){
-            setProfileId("0")
+        if(category!=""){
+            setProfileId("")
         }
     },[category]);
 
-
-
+    const handleClickCard=()=>{
+        if(isAll){
+            handleClick();
+          } else if(is_Card){
+            addCardUserPush();
+          }
+      }
+    useEffect(()=>{
+        setIsAll(!is_Card);
+      },[is_Card]);
+    
+      useEffect(()=>{
+          if(isAll)
+            setIsCard(!isAll);
+      },[isAll]);
 
     return (
         <div className='content'>
@@ -206,7 +250,7 @@ const Push = () => {
                         <Col lg={6} md={6} xs={12} sm={12}>
                             <Stack direction='column' spacing={-2} marginTop={3}>
                                 <select name="" id="" style={{ height: '30px' }} value={profileId} onChange={e => setProfileId(e.target.value)}>
-                                    <option value="0">Select profile</option>
+                                    <option value="">Select profile</option>
                                     {
                                         allProfileList.map((element, i) => {
                                             return (<option value={element.id}>{element.nameTM}</option>)
@@ -218,7 +262,7 @@ const Push = () => {
                         <Col lg={6} md={6} xs={12} sm={12}>
                             <Stack direction='column' spacing={-2} marginTop={3}>
                                 <select onChange={e => setcategory(e.target.value)} value={category} style={{ height: '30px', width: '100%   ' }} name="" id="category" className="normalSize" >
-                                    <option value="0">Select category</option>
+                                    <option value="">Select category</option>
                                     {
                                         categoryList?.map((element, i) => {
                                             return (
@@ -235,20 +279,20 @@ const Push = () => {
 
 
                         </Col>
-                        <Col lg={6} md={6} xs={12} sm={12} marginTop={7}>
-                            <input type="checkbox" style={{marginTop:'30px'}} checked={isAll}
-                                value={isAll} onChange={e => setIsAll(!isAll)} /><label>Send to all users</label>
-
-
+                        <Col lg={12} md={6} xs={6} sm={6}>
+                            <Stack direction='row' marginTop={3} spacing={2}>
+                                <input style={{ marginTop: '5px' }} type='checkbox' checked={is_Card} value={is_Card} onChange={e=>setIsCard(!is_Card)}/>
+                                <label>Send to tmmuse card users</label>
+                            </Stack>
                         </Col>
                         {
-                            !isAll ?
+                            !isAll  && !is_Card?
                                 <Col lg={12} md={12} xs={12} sm={12} marginTop={3}>
-                                    <select name="" style={{ height: '30px', marginTop:"10px", width: '49%' }} id="" onChange={e => setUser_id(e.target.value)}>
+                                    <select name="" style={{ height: '30px', marginTop:"10px", width: '49%' }} id="" value={user_id} onChange={e => setUser_id(e.target.value)}>
                                         <option value="0">Select user</option>
                                         {
                                             allUser?.map((element, i) => {
-                                                return (<option value={element.id}>{element.fullname}</option>)
+                                                return (<option value={element.notif_token}>{element.fullname}</option>)
                                             })
                                         }
                                     </select>

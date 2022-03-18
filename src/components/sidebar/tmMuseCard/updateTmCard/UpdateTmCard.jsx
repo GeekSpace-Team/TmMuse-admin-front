@@ -33,6 +33,8 @@ const UpdateTmCard = (props) => {
   const [ phone_number, setPhone_number ] = useState(props.data.phone_number);
   const [ fullname, setFullname ] = useState(props.data.fullname);
   const [status, setStatus ] = useState(props.data.status);
+  const [ card_id, setCard_id ] = useState(props.data.card_id);
+  const [ expired, setExpired ] = useState(props.data.expired);
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
   }
@@ -54,6 +56,8 @@ const UpdateTmCard = (props) => {
       email: email,
       is_sms: is_sms,
       phone_number: phone_number,
+      card_id: card_id,
+      expired: expired,
       fullname: fullname,
       status: status
     
@@ -104,7 +108,15 @@ const UpdateTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Date of birth:</p>
-                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  />
+                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} value={props.data?.date_of_birth} type="date" style={{width: '100%'}}  />
+                {/* onInput={e =>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} */}
+              </Stack>
+              {/* defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  */}
+            </Col>
+            <Col lg={6} md={8} xs={12} sm={12}>
+              <Stack direction='column' marginTop={2} spacing={-2}>
+                <p>Expired time:</p>
+                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setExpired(date)}} value={props.data.expired} type="date" style={{width: '100%'}}  />
                 {/* onInput={e =>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} */}
               </Stack>
               {/* defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  */}
@@ -115,6 +127,12 @@ const UpdateTmCard = (props) => {
                 <label style={{border:'1px solid black', height:'30px'}}>{props.data.phone_number}</label>
               </Stack>
             </Col>
+            <Col lg={6} md={6} xs={12} sm={12}>
+            <Stack direction='column' spacing={0} marginTop={1.5}>
+              <p className='inputTitle'>Card Id:</p>
+              <input type="text" onChange={(e)=>setCard_id(e.target.value)} defaultValue={props.data.card_id} />
+            </Stack>
+          </Col>
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Notify type:</p>
