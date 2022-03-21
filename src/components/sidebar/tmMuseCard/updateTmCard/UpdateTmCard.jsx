@@ -23,10 +23,21 @@ const style = {
 
 
 const UpdateTmCard = (props) => {
+  let d = new Date(props.data.date_of_birth);
+  let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+  let mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d);
+  let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+  let myDateOfBirth = `${da}/${mo}/${ye}`;
+
+  let d1 = new Date(props.data.expired);
+  let ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d1);
+  let mo1 = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d1);
+  let da1 = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d1);
+  let myExpired = `${da1}/${mo1}/${ye1}`;
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () =>{props.handleClose()}
-  const [ date_of_birth, setDate_of_birth ] = useState(props.data.date_of_birth);
+  const [ date_of_birth, setDate_of_birth ] = useState(myDateOfBirth);
   const [ gender, setGender ] = useState(props.data.gender);
   const [ email, setEmail ] = useState(props.data.email);
   const [ is_sms, setIs_sms ] = useState(props.data.is_sms);
@@ -34,7 +45,7 @@ const UpdateTmCard = (props) => {
   const [ fullname, setFullname ] = useState(props.data.fullname);
   const [status, setStatus ] = useState(props.data.status);
   const [ card_id, setCard_id ] = useState(props.data.card_id);
-  const [ expired, setExpired ] = useState(props.data.expired);
+  const [ expired, setExpired ] = useState(myExpired);
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
   }
@@ -108,7 +119,7 @@ const UpdateTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Date of birth:</p>
-                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} value={props.data?.date_of_birth} type="date" style={{width: '100%'}}  />
+                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  />
                 {/* onInput={e =>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} */}
               </Stack>
               {/* defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  */}
@@ -116,7 +127,7 @@ const UpdateTmCard = (props) => {
             <Col lg={6} md={8} xs={12} sm={12}>
               <Stack direction='column' marginTop={2} spacing={-2}>
                 <p>Expired time:</p>
-                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setExpired(date)}} value={props.data.expired} type="date" style={{width: '100%'}}  />
+                <input onChange={(e)=>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setExpired(date)}} defaultValue={props.data.expired} type="date" style={{width: '100%'}}  />
                 {/* onInput={e =>{let date=e.target.value.slice(8,10)+"/"+e.target.value.slice(5,7)+"/"+e.target.value.slice(0,4); setDate_of_birth(date)}} */}
               </Stack>
               {/* defaultValue={props.data.date_of_birth} type="date" style={{width: '100%'}}  */}

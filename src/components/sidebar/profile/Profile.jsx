@@ -11,7 +11,7 @@ const Profile = () => {
     const [category, setcategory] = useState(0);
     const [categoryList, setCategoryList] = useState([]);
     const [profileList,setProfileList] = useState([]);
-    const [pageCount,setPageCount]=useState([]);
+    const [pageCount, setPageCount] = useState([]);
 
     const headers = { 
         'Authorization': 'Bearer my-token',
@@ -22,6 +22,7 @@ const Profile = () => {
          axiosInstanse.get("/get-categories", { headers })
         .then(response => {
             setCategoryList(response.data.body);
+            setPageCount(response.data.body.page_count);
             console.log(response.data.body);
         })
         .catch(ex => {
@@ -37,12 +38,6 @@ const Profile = () => {
         
         getProfile(1);
     },[category]);
-
-    // let url = '/get-posts?page=' + page;
-    // if(profileId !==''){
-    //  url = '/get-posts?page=' + page+'&profile_id='+profileId;
-    // }
-    // axiosInstanse.get(url, { headers })
 
     async function getProfile(page){
         let url = '/get-profile?page='+page;
@@ -60,33 +55,6 @@ const Profile = () => {
         });
 
     }
-    
-    // useEffect(()=>{
-    //     getProfile();
-    //   },[category]);
-
-    //   useEffect(()=>{
-    //     getProfile();
-    //   },[categoryList]);
-    // async function getProfile(){
-    //     let tempType=null;
-  
-    //     if(categoryList!="0"){
-    //         tempType=categoryList;
-    //     }
-    //     let analytic = {
-    //         categoryList: tempType,
-    //     };
-      
-    //      axiosInstanse.post("/get-categories",{headers})
-    //     .then(response=>{
-    //       setCategoryList(response.data.body);
-    //     })
-    //     .catch(error=>{
-    
-    //     });
-    
-    //   }
     
     return (
         <div className='content' >
@@ -107,7 +75,7 @@ const Profile = () => {
                                             }
                                         </select>
             </Stack>
-            <ProfileTable category={categoryList} pageCount={[pageCount,setPageCount]} data={[profileList,setProfileList]}  getProfile={getProfile} />
+            <ProfileTable category={categoryList} pageCount={[pageCount, setPageCount]} data={[profileList,setProfileList]}  getProfile={getProfile} />
         </div>
     )
 }

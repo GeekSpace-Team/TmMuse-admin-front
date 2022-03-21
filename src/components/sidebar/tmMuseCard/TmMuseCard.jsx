@@ -5,6 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import './tmMuseCard.css'
 import AddTmCard from './addTmCard/AddTmCard';
 import { axiosInstanse } from '../../utils/axiosInstanse';
+import { CSVLink } from 'react-csv';
 
 
 const TmMuseCard = () => {
@@ -21,7 +22,7 @@ const TmMuseCard = () => {
         setCardList(response.data.body.cards);
         setPageCount(response.data.body.page_count);
       })
-      .cath(error => {
+      .catch(error => {
 
       });
     }
@@ -33,9 +34,21 @@ const TmMuseCard = () => {
             </Col>
             <Col lg={6} md={1} xs={1} sm={1}></Col>
             <Col lg={3} md={5} xs={5} sm={5}>
-                <AddTmCard getCard={getCard} />
+                <AddTmCard getCard={getCard} cardList={[cardList, setCardList]} />
             </Col>
         </Row>
+        <div className="withLine">
+      <div className="saveContainer">
+        <img src="images/save.svg" alt="" />
+        <CSVLink 
+        data={cardList}
+        filename={"TmMuse"+new Date()+".csv"}
+        >Save to excel</CSVLink>
+      </div>
+      <div className="lineImg">
+        <img src="images/line.svg" alt="" />
+      </div>
+    </div>
         <TmMuseTable getCard={getCard} cardList={[cardList, setCardList]} pageCount={[pageCount, setPageCount]} />
         
       

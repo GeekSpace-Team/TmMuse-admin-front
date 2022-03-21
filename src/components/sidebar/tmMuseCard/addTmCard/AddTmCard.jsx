@@ -7,6 +7,7 @@ import { IoMdClose } from 'react-icons/io';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { showError, showSuccess, showWarning } from '../../../toast/toast';
 import { ToastContainer } from 'react-toastify';
+import { CSVLink } from 'react-csv';
 
 
 const style = {
@@ -101,6 +102,7 @@ const AddTmCard = (props) => {
         props.getCard(1);
         setToAdd(false);
         showSuccess('Successfully added!!!');
+
       }).catch(ex => {
         setToAdd(false);
         // alert("Adding error:" + ex);
@@ -117,6 +119,18 @@ const AddTmCard = (props) => {
   return (
     <div>
       <button className='Addbuttons' onClick={handleOpen} style={{ marginLeft: '90px', marginBottom: "30px" }}>+ Add cards</button>
+      {/* <div className="withLine">
+      <div className="saveContainer">
+        <img src="images/save.svg" alt="" />
+        <CSVLink 
+        data={cardList}
+        filename={"TmMuse"+new Date()+".csv"}
+        >Save to excel</CSVLink>
+      </div>
+      <div className="lineImg">
+        <img src="images/line.svg" alt="" />
+      </div>
+    </div> */}
       <Modal
         open={open}
         onClose={handleClose}

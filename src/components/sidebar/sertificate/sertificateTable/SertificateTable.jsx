@@ -13,8 +13,8 @@ import Empty from '../../../empty/Empty';
 const SertificateTable = (props) => {
     const certificateList = props.certificateList;
     const [isEmpty, setIsEmpty] = props.isEmpty;
-    const [page,setPage]=useState(1);
-    const pageCount =props.pageCount;
+    const[page,setPage]=useState(1);
+    const [pageCount,setPageCount]= props.pageCount;
     const [open, setOpen] = React.useState(false);
     const [element,setElement] = useState();
     const handleOpen = (element) => {setOpen(true);setElement(element)}

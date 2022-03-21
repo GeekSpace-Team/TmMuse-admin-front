@@ -8,7 +8,7 @@ import Loading from '../../loading/Loading';
 
 const Sertificate = () => {
   const [certificateList, setCertificateList] = useState([]);
-  const [pageCount, setPageCount] = useState([]);
+  const [pageCount, setPageCount] = useState([]); 
   const [allProfileList, setAllProfileList] = useState([]);
   const [isEmpty, setIsEmpty] = useState(false);
 
@@ -23,6 +23,7 @@ const Sertificate = () => {
     axiosInstanse.get("/get-name-profile", { headers })
       .then((response) => {
         setAllProfileList(response.data.body);
+        setPageCount(response.data.body.page_count);
         if(response.data.body==null || response.data.body.certificateList.length==0){
           setIsEmpty(true);
         }
@@ -34,7 +35,7 @@ const Sertificate = () => {
 
   
   async function getCertificate(page) {
-     axiosInstanse.get('/get-certificates?page=' + 1, { headers })
+     axiosInstanse.get('/get-certificates?page=' + page, { headers })
       .then((response) => {
         setCertificateList(response.data.body.certificates);
         setPageCount(response.data.body.page_count);
@@ -52,7 +53,7 @@ const Sertificate = () => {
                 <p className='titleNames'>Certificate</p>
                 <AddCertificate getCertificate={getCertificate} />
             </Stack>
-              <SertificateTable getCertificate={getCertificate} isEmpty={[isEmpty,setIsEmpty]} allProfileList={allProfileList}  certificateList={certificateList} pageCount={pageCount} />
+              <SertificateTable getCertificate={getCertificate} isEmpty={[isEmpty,setIsEmpty]} allProfileList={allProfileList}  certificateList={certificateList} pageCount={[pageCount, setPageCount]} />
             
         </div>
     )

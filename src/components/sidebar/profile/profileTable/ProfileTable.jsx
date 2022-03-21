@@ -32,6 +32,9 @@ const ProfileTable = (props) => {
     const handleChange = (event, value) => {
         setPage(value);
       };
+      useEffect(() => {
+        props.getProfile(page);
+    }, [page]);
     return (
         <div>
              <Modal
