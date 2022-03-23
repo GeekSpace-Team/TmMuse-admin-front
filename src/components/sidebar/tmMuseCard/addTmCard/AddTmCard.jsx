@@ -31,7 +31,7 @@ const AddTmCard = (props) => {
   const [date_of_birth, setDate_of_birth] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
-  const [is_sms, setIs_sms] = useState('');
+  const [is_sms, setIs_sms] = useState(true);
   const [status, setStatus] = useState('');
   const [fullname, setFullname] = useState('');
   const [phone_number, setPhone_number] = useState('');
