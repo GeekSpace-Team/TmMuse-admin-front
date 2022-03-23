@@ -55,7 +55,7 @@ const ProfileModal = (props) => {
     const [loading, setLoading] = useState(false);
     const [arrayOfTopSliderImages, setarrayOfTopSliderImages] = useState([]);
     const [arrayOfGalleryLargeImages, setarrayOfGalleryLargeImages] = useState([]);
-    const [serverUrl, setServerUrl] = useState("http://10.192.168.60:5000/");
+    const [serverUrl, setServerUrl] = useState("http://95.85.119.162:5000/");
     const [phone_number, setPhone_number] = useState('');
     const [isAdd, setIsAdd] = useState(false);
     const [categoryList, setCategoryList] = props.category;
@@ -507,7 +507,7 @@ const ProfileModal = (props) => {
         }
 
         setLoading(true);
-        fetch('http://10.192.168.60:5000/add-profile', {
+        fetch('http://95.85.119.162:5000/add-profile', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
