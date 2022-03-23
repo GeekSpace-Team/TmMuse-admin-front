@@ -20,10 +20,7 @@ const Navbar = () => {
         <Col lg={7} md={6} sm={12} xs={12}>
           <Stack direction='horizontal' gap={4}>
 
-            <Stack direction='horizontal' className="searchBar">
-              <FiSearch />
-              <input placeholder="Search..." type='text' autoFocus />
-            </Stack>
+            
            
               <FiLogOut className="ms-auto" onClick={logout}/>
             <FiBell />
