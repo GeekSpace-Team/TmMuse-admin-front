@@ -100,7 +100,7 @@ const EditProfileModal = (props) => {
     let newPhones = [];
     let tempTagTM='';
     let tempTagRU='';
-    if(typeof props.data.phone_numbers !== 'undefined' && props.data.phone_numbers!=null){
+    if(typeof props.data.tags !== 'undefined' && props.data.tags!=null){
         for(let j=0;j<props.data?.tags.length;j++){
             tempTagTM+=props.data.tags[j].tagTM;
             tempTagRU+=props.data.tags[j].tagRU;

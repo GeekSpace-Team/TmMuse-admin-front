@@ -26,8 +26,6 @@ const AddTmCard = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-
   const [date_of_birth, setDate_of_birth] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
@@ -37,7 +35,6 @@ const AddTmCard = (props) => {
   const [phone_number, setPhone_number] = useState('');
   const [ card_id, setCard_id ] = useState('');
   const [ expired, setExpired ] = useState('');
-
   const [toAdd, setToAdd] = useState(false);
   const handleAdd = () => {
     setToAdd(!toAdd);
@@ -46,12 +43,9 @@ const AddTmCard = (props) => {
     setGender(e.target.value);
   }
 
-
   const handleSelectIsSms = (e) => {
     setIs_sms(e.target.value);
   }
-
-  
 
   const handleSelectStatus = (e) => {
     setStatus(e.target.value);
@@ -66,9 +60,6 @@ const AddTmCard = (props) => {
       return;
     }
 
-
-
-
     const card = {
       date_of_birth: date_of_birth,
       gender: gender,
@@ -80,9 +71,6 @@ const AddTmCard = (props) => {
       fullname: fullname,
       phone_number: phone_number
     }
-
-    console.log(card);
-
 
     const headers = {
       'Authorization': 'Bearer my-token',
@@ -109,28 +97,12 @@ const AddTmCard = (props) => {
         showError("Adding error:" + ex);
       });
   }
-
-
-
   useEffect(() => {
-
     addCard();
   }, [toAdd]);
   return (
     <div>
       <button className='Addbuttons' onClick={handleOpen} style={{ marginLeft: '90px', marginBottom: "30px" }}>+ Add cards</button>
-      {/* <div className="withLine">
-      <div className="saveContainer">
-        <img src="images/save.svg" alt="" />
-        <CSVLink 
-        data={cardList}
-        filename={"TmMuse"+new Date()+".csv"}
-        >Save to excel</CSVLink>
-      </div>
-      <div className="lineImg">
-        <img src="images/line.svg" alt="" />
-      </div>
-    </div> */}
       <Modal
         open={open}
         onClose={handleClose}
