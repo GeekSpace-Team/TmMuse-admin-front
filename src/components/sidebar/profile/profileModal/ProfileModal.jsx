@@ -129,7 +129,7 @@ const ProfileModal = (props) => {
     const onFinsih = (id) => {
         setLoading(false);
         setShow(false)
-        console.log("ok")
+        // console.log("ok")
         // setinsertedProfileId(0);
         // setinsertedCategoryId(0);
         setNameTM('');
