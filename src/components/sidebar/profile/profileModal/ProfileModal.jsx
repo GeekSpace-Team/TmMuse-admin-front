@@ -145,14 +145,14 @@ const ProfileModal = (props) => {
         setworkhours('');
         setfreetime('');
         setisVIP('');
-        setorderInList('');
+        setorderInList('0');
         setstatus('');
         settmmusecard('0');
         setowncard('0');
         setOwn_promotion('0');
         // setcategory('');
         setdelivery('');
-        setavaragecheck('');
+        setavaragecheck('0');
         setkitchenTM('');
         setkitchenRU('');
         setcash('');
