@@ -18,24 +18,30 @@ const Users = () => {
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState([]);
 
+
+
+
+    const headers = {
+        'Authorization': 'Bearer my-token',
+        'My-Custom-Header': 'foobar'
+    };
+
     useEffect(() => {
 
 
         getUser();
     }, [page]);
 
+
     async function getUser() {
-        const headers = {
-            'Authorization': 'Bearer my-token',
-            'My-Custom-Header': 'foobar'
-        };
-        await axiosInstanse.get('/get-users?page=' + page, { headers })
+        
+         axiosInstanse.get('/get-users?page=' + page, { headers })
             .then(response => {
                 setUserList(response.data.body.users)
                 setPageCount(response.data.body.page_count)
+
             })
             .catch(error => {
-                // alert(error)
                 showError(error);
             });
 
@@ -67,7 +73,7 @@ const Users = () => {
                                 <td><center>{element.interest_items.length == 0 ?
                                     <label>No interests</label> :
                                     element.interest_items.map((item, i) => {
-                                        return (item.titleTM + ",")
+                                        if(item!=null) return (item.titleTM + ",")
                                     })
                                 }
                                 </center></td>

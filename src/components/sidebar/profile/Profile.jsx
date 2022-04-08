@@ -35,7 +35,6 @@ const Profile = () => {
     },[])
 
     useEffect(()=>{
-        
         getProfile(1);
     },[category]);
 
