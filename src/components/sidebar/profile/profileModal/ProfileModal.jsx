@@ -69,11 +69,12 @@ const ProfileModal = (props) => {
     const [phoneNumberList, setphoneNumberList] = useState([""]);
     const [largeVrImage, setLargeVrImage] = useState('');
     const [smallVrImage, setSmallVrImage] = useState('');
-    const [promoCount, setPromoCount] = useState(0);
+    const [promoCount, setPromo_count] = useState(0);
     const [isCertificate, setisCertificate] = useState(false);
     const [movieTime, setMovieTime] = useState('');
     const [cinema_id, setCinema_id] = useState(0);
     const [own_promotion, setOwn_promotion] = useState(0);
+    const [is_promo, setPromoCount] = useState(false);
 
 
     const phoneNumberUpdateById = (value, index) => {
@@ -487,14 +488,14 @@ const ProfileModal = (props) => {
             tempSite = movieTime;
         }
         let vip = 0;
-        let isPromo = false;
+        let is_promo = false;
         if (isVIP) {
             vip = 1;
         }
 
         if (promoCount != '') {
             if (promoCount > 0) {
-                isPromo = true;
+                is_promo = true;
             }
         }
 
@@ -537,7 +538,7 @@ const ProfileModal = (props) => {
                 is_active_card: isActiveCard,
                 tm_muse_card: tmmusecard,
                 is_certificate: isCertificate,
-                is_promo: isPromo,
+                is_promo: is_promo,
                 status: status,
                 is_VIP: vip,
                 WiFi: isWifi,
@@ -885,7 +886,7 @@ const ProfileModal = (props) => {
                                 <Col lg={3} md={3} sm={12} xs={12}>
                                     <Stack direction='column' spacing={0}>
                                         <p className='inputTitle'>Promo count:</p>
-                                        <input type="number" value={promoCount} onInput={e => setPromoCount(e.target.value)} />
+                                        <input type="number" value={promoCount} onInput={e => setPromo_count(e.target.value)} />
                                     </Stack>
                                 </Col>
                                 <Col lg={3} md={3} sm={12} xs={12}>
