@@ -54,7 +54,7 @@ const SidebarDesign = () => {
                                 <img src='images/logo.svg'/>
                                 <Stack className='toolbarTitle'>
                                     <p>TmMuse</p>
-                                    <p>admin panel</p>
+                                    <p>Admin panel</p>
                                 </Stack>
                             </Stack>
                             <div className='line'></div>
