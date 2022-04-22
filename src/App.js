@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Router, Route, Routes } from 'react-router-dom';
 import Login from './components/loginPage/LoginPage';
 import SidebarDesign from './components/sidebar/Sidebar/SidebarDesign';
@@ -18,9 +18,18 @@ import Pop from './components/sidebar/pop/Pop';
 import Constants from './components/sidebar/constants/Constants';
 import Interests from './components/sidebar/interests/Interests';
 import TmMuseCard from './components/sidebar/tmMuseCard/TmMuseCard';
+import { GlobalDebug } from './GlobalDebug';
 
 
 function App() {
+  useEffect(() => {
+    (process.env.NODE_ENV === "production" ||
+     process.env.REACT_APP_ENV === "STAGING") &&
+      GlobalDebug(false);
+  }, []);
+  
+  console.log = function() {}
+  console.error=function(){}
   return (
    <div>
      rashit

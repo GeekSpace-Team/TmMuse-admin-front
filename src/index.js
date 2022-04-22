@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter,
   Routes,
-  Route,Navigate
+  Route,Navigate, HashRouter
 } from "react-router-dom";
 import Login from './components/loginPage/LoginPage';
 import SidebarDesign from './components/sidebar/Sidebar/SidebarDesign';
@@ -28,8 +28,11 @@ import TmMuseCard from './components/sidebar/tmMuseCard/TmMuseCard';
 import { isLogin } from "./utils/isLogin";
 import history from "./utils/history";
 import Cinema from './components/sidebar/cinema/Cinema';
+
+
 ReactDOM.render(
-  <BrowserRouter history={history}>
+  <Suspense>
+  <HashRouter history={history}>
   <Routes>
     <Route exact path="/login" element={<Login/>}/>
     <Route path='/' element={isLogin()?<SidebarDesign/>:<Navigate to="/login" replace />}>
@@ -52,7 +55,8 @@ ReactDOM.render(
 
     </Route>
   </Routes>
-</BrowserRouter>,
+</HashRouter>
+</Suspense>,
   document.getElementById('root')
 );
 reportWebVitals();

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Sidebar.css'
 import { Sidebar, SidebarItem } from "react-responsive-sidebar";
 import Navbar from '../../navbar/Navbar';
@@ -25,11 +25,17 @@ const SidebarDesign = () => {
     const location = useLocation();
     const GetCurrentRoute = () => {
         return location.pathname;
+        
     }
     const activeItem='activeItem';
     const passiveItem='passiveItem';
     const [userToken,setCookie] =useCookies(['userToken','userType']);
     let history=useNavigate();
+
+
+    useEffect(() => {
+        window.scrollTo(0,0);
+    }, [location])
 
     // if(userToken.userToken==null){
     //     document.location.href='/login';

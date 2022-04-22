@@ -1,6 +1,7 @@
 .inboxContainer {
   padding-left: 12px;
   display: flex;
+  align-items: center;
   border: 0.5px solid #adb5bd;
 }
 .inboxContainer:hover{
@@ -24,16 +25,30 @@
   height: 1000vh;
   cursor: pointer;
 }
-.imgContainer {
+/* .imgContainer {
   display: flex;
   align-items: center;
   padding: 12px;
-  margin-top: 20px;
+  justify-content: center;
   background-repeat: no-repeat;
   background-image: url(../../../images/circul.svg);
 }
 .imgContainer h2{
   color: white;
+  font-size: 14px;
+} */
+.imgContainer {
+  width: 38px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(134.99deg, #7C057B 0%, #CD2791 77.02%);
+  color: white;
+  display: flex;
+  padding-top: 5px;
+  align-items: center;
+  justify-content: center;
+}
+.imgContainer h2 {
   font-size: 14px;
 }
 .inboxTitleContainer {
@@ -131,9 +146,9 @@
 }
 .sentButtonInbox button {
   background: linear-gradient(134.99deg, #7C057B 0%, #CD2791 77.02%);
-border-radius: 6px;
-width: 117px;
-border: transparent;
-height: 35px;
-color: white;
+  border-radius: 6px;
+  width: 117px;
+  border: transparent;
+  height: 35px;
+  color: white;
 }
