@@ -64,25 +64,24 @@ const PostTable = (props) => {
                 {(postList.length==0 && !isEmpty)?<Empty/>
                 :<Table responsive borderless className='profileTable'>
                     <tr>
-                        <th><center>ID</center></th>    
-                        <th><center>Image</center></th>
-                        <th><center>Title</center></th>
-                        <th><center>Promotion</center></th>
-                        <th><center>Profile</center></th>
-
-                        <th><center>Delete</center></th>
-                        <th><center>Edit</center></th>
+                        <th>ID</th>    
+                        <th style={{paddingLeft:'40px'}}>Image</th>
+                        <th style={{paddingLeft:'80px'}}>Title</th>
+                        <th>Promotion</th>
+                        <th>Profile</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
                     </tr>
                     {postList.map((element, i) => {
                         return (
                            element.id!=0 && <tr>
-                                <td><center>{element.id}</center></td>
-                                <td><center><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }} /></center></td>
-                                <td><center>{element.titleTM}</center></td>
-                                <td><center>{element.promotion}</center></td>
-                                <td><center>{element.profile_id == 0 ? element.site_url : element.profile_id}</center></td>
-                                <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                                <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                                <td>{element.id}</td>
+                                <td style={{paddingLeft:'40px'}}><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }} /></td>
+                                <td style={{paddingLeft:'80px'}}>{element.titleTM}</td>
+                                <td style={{paddingRight:'50px'}}>{element.promotion}</td>
+                                <td style={{paddingRight:'50px'}}>{element.profile_id == 0 ? element.site_url : element.profile_id}</td>
+                                <td style={{paddingRight:'50px'}}><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                                <td style={{paddingRight:'50px'}}><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></td>
                             </tr>
                         )
                     })

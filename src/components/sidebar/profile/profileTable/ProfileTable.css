@@ -7,7 +7,9 @@
   background: #31456a;
   height: 45px;
   color: #ffffff;
+  padding-left: 20px;
 }
 .profileTable td {
   height: 50px;
+  padding-left: 20px;
 }

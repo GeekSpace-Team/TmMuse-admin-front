@@ -60,24 +60,24 @@ const TmMuseTable = (props) => {
       {cardList.length == 0 ? <Empty /> :
         <Table responsive borderless className='profileTable'>
           <tr>
-            <th><center>ID</center></th>
-            <th><center>Full name</center></th>
-            <th><center>Email</center></th>
-            <th><center>User</center></th>
-            <th><center>Status</center></th>
-            <th><center>Delete</center></th>
-            <th><center>Edit</center></th>
+            <th>ID</th>
+            <th>Full name</th>
+            <th>Email</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Delete</th>
+            <th>Edit</th>
           </tr>
           {cardList.map((element, i) => {
             return (
               <tr>
-                <td><center>{element.id}</center></td>
-                <td><center>{element.fullname}</center></td>
-                <td><center>{element.email}</center></td>
-                <td><center>{element.user_id}</center></td>
-                <td><center>{element.status}</center></td>
-                <td><center><img onClick={() => handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                <td><center><img src="images/Edit.svg" onClick={() => handleOpen(element)} alt="" /></center></td>
+                <td>{element.id}</td>
+                <td>{element.fullname}</td>
+                <td>{element.email}</td>
+                <td>{element.user_id}</td>
+                <td>{element.status}</td>
+                <td><img onClick={() => handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                <td style={{paddingRight:'50px'}}><img src="images/Edit.svg" onClick={() => handleOpen(element)} alt="" /></td>
               </tr>
             )
           })

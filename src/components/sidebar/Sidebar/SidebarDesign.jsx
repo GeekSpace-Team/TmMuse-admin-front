@@ -70,11 +70,7 @@ const SidebarDesign = () => {
                                 </Stack>
                             </NavLink>
 
-                            <NavLink to="/category" style={{ textDecoration: 'none' }} >
-                                <Stack direction='horizontal' className={GetCurrentRoute()=='/category'?activeItem:passiveItem} gap={3}>
-                                    <FiGrid/><label>Category</label><FiChevronRight className='ms-auto'/>
-                                </Stack>
-                            </NavLink>
+                            
 
 
                             <NavLink to="/banner" style={{ textDecoration: 'none' }} >

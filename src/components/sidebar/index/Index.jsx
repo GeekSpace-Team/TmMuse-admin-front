@@ -2,7 +2,6 @@ import React from 'react'
 import { useLocation } from 'react-router-dom';
 import Ads from '../ads/Ads';
 import Banner from '../banner/Banner';
-import Category from '../category/Category';
 import Dashboard from '../dashboard/Dashboard';
 import Inbox from '../inbox/Inbox';
 import Post from '../post/Post';
@@ -36,9 +35,7 @@ const Index = () => {
     if (GetCurrentRoute() == '/profile') {
         page = <Profile />
     }
-    if (GetCurrentRoute() == '/category') {
-        page = <Category />
-    }
+   
 
     if (GetCurrentRoute() == '/banner') {
         page = <Banner />

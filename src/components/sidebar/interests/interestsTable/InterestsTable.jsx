@@ -56,21 +56,21 @@ const InterestsTable = (props) => {
                 {(interestList.length==0 && !isEmpty)?<Empty/>
                 :<Table responsive borderless className='profileTable'>
             <tr>
-                <th><center>ID</center></th>
-                <th><center>Title</center></th>
-                <th><center>Items Count</center></th>
-                <th><center>Delete</center></th>
-                <th><center>Edit</center></th>
+                <th style={{paddingLeft:'50px'}}>ID</th>
+                <th style={{paddingLeft:'80px'}}>Title</th>
+                <th style={{paddingLeft:'400px'}}>Items Count</th>
+                <th style={{paddingLeft:'30px'}}>Delete</th>
+                <th>Edit</th>
             </tr>
             {interestList.map((element, i) => {
 
                 return (
                     <tr>
-                        <td><center>{element.id}</center></td>
-                        <td><center>{element.titleTM}</center></td>
-                        <td><center>{element.items_count}</center></td>
-                        <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                         <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                        <td style={{paddingLeft:'50px'}}>{element.id}</td>
+                        <td style={{paddingLeft:'80px'}}>{element.titleTM}</td>
+                        <td style={{paddingLeft:'400px'}}>{element.items_count}</td>
+                        <td style={{paddingRight:'80px', paddingLeft:"30px"}}><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                         <td style={{paddingRight:'80px'}}><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></td>
                     </tr>)
             }
             )

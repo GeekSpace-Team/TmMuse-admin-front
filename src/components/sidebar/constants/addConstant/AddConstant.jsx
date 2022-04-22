@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef  } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
@@ -7,17 +7,21 @@ import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { showError, showSuccess, showWarning } from '../../../toast/toast';
 import { ToastContainer } from 'react-toastify';
+import JoditEditor from "jodit-react";
 
 
 const style = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 1100,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    height: '99%',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    overflow: 'scroll',
+    p: 4,
+    display: 'block',
 };
 
 const AddConstant = (props) => {
@@ -25,21 +29,37 @@ const AddConstant = (props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  
+
 
   const [titleTM, setTitleTM] = useState('');
   const [titleRU, setTitleRU] = useState('');
-  const [contentTM, setContentTm] = useState('');
-  const [contentRU, setContentRU] = useState('');
-  const [ contentTM_dark, setContentTM_dark ] = useState('');
-  const [ contentRU_dark, setContentRU_dark ] = useState('');
+  const [contentTM, setContentTm] = useState("Start writing");
+  const [contentRU, setContentRU] = useState("Start writing");
+  const [ contentTM_dark, setContentTM_dark ] = useState("Start writing");
+  const [ contentRU_dark, setContentRU_dark ] = useState("Start writing");
   const [type, setType] = useState('');
 
+
+ 
   const [toAdd, setToAdd] = useState(false);
 
   const handleAdd = () => {
     setToAdd(!toAdd);
   }
 
+
+  const editor = useRef(null);
+  const config = {
+    readonly: false,
+    height: 400
+  };
+
+  const configDark = {
+    readonly: false,
+    height: 400,
+    theme : 'dark'
+  };
 
 
 
@@ -100,6 +120,8 @@ async function addConstant() {
   }, [toAdd]);
 
 
+ 
+
 
   return <div>
     <button onClick={handleOpen} className='Addbuttons' style={{marginTop: '10px', width: '150px'}}>+ Add constant</button>
@@ -133,25 +155,49 @@ async function addConstant() {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>Content tm:</p>
-              <textarea name="" id="" cols="30" rows="5" value={contentTM} onInput={e => setContentTm(e.target.value)}></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentTM}
+              config={config}
+              onBlur={newContent => setContentTm(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" value={contentTM} onInput={e => setContentTm(e.target.value)}></textarea> */}
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>Content ru:</p>
-              <textarea name="" id="" cols="30" rows="5" value={contentRU} onInput={e => setContentRU(e.target.value)}></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentRU}
+              config={config}
+              onBlur={newContent => setContentRU(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" value={contentRU} onInput={e => setContentRU(e.target.value)}></textarea> */}
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>ContentTM dark:</p>
-              <textarea name="" id="" cols="30" rows="5" value={contentTM_dark} onInput={e => setContentTM_dark(e.target.value)}></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentTM_dark}
+              config={configDark}
+              onBlur={newContent => setContentTM_dark(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" value={contentTM_dark} onInput={e => setContentTM_dark(e.target.value)}></textarea> */}
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>ContentRU dark:</p>
-              <textarea name="" id="" cols="30" rows="5" value={contentRU_dark} onInput={e => setContentRU_dark(e.target.value)}></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentRU_dark}
+              config={configDark}
+              onBlur={newContent => setContentRU_dark(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" value={contentRU_dark} onInput={e => setContentRU_dark(e.target.value)}></textarea> */}
             </Stack>
           </Col>
           <Col lg={3} md={6} xs={12} sm={12}>

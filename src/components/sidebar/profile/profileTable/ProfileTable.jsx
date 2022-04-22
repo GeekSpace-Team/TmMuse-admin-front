@@ -43,7 +43,7 @@ const ProfileTable = (props) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 >
-                    <EditProfileModal handleClose={handleClose} category={props.category} page={page} getData={props.getProfile}   data={element} />
+                    <EditProfileModal handleClose={handleClose} category={props.category} page={page} profileList={profileList}  getData={props.getProfile}   data={element} />
                 </Modal>
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -61,26 +61,24 @@ const ProfileTable = (props) => {
             {profileList.length==0?<Empty/>:
             <Table responsive borderless className='profileTable'>
             <tr>
-                <th><center>ID</center></th>
-                <th><center>Name</center></th>
-                <th><center>Image</center></th>
-                <th><center>Category</center></th>
-                <th><center>VIP status</center></th>
-                <th><center>Status</center></th>
-                <th><center>View count</center></th>
-                <th><center>Like</center></th>
-                <th><center>Dislike</center></th>
-                <th><center>Delete</center></th>
-                <th><center>Edit</center></th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Category</th>
+                <th>View count</th>
+                <th>Like</th>
+                <th>Dislike</th>
+                <th>Delete</th>
+                <th>Edit</th>
             </tr>
             {
                 
                 profileList?.map((element,i)=>{
                     return(
                         <tr>
-                        <td><center>{element.id}</center></td>
-                        <td><center>{element.nameTM}</center></td>
-                        <td><center>
+                        <td>{element.id}</td>
+                        <td>{element.nameTM}</td>
+                        <td>
                             {
                             element?.sliders &&  element?.sliders[0] && (element?.sliders[0].small_image ?  
                             <img src={ip+element?.sliders[0]?.small_image}  width={150} height={100}/>
@@ -88,15 +86,13 @@ const ProfileTable = (props) => {
                             :<img src="../../../images/place.jpg" width={150} height={100}/>))
                             }
                            
-                        </center></td>
-                        <td><center>{element.category_id}</center></td>
-                        <td><center>{element.is_VIP}</center></td>
-                        <td><center>{element.status}</center></td>
-                        <td><center>{element.view_count}</center></td>
-                        <td><center>{element.like}</center></td>
-                        <td><center>{element.dislike}</center></td>
-                        <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                        <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                        </td>
+                        <td>{element.category_id}</td>
+                        <td>{element.view_count}</td>
+                        <td>{element.like}</td>
+                        <td>{element.dislike}</td>
+                        <td><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                        <td style={{paddingRight:'20px'}}><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></td>
                         {/* <td><center><DeleteProfileModal getCategory={props.getProfile} profileId={element.id}/></center></td>
                         <td><center><EditProfileModal category={props.category} getProfile={props.getCategory} data={element}/></center></td> */}
                     </tr>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
@@ -8,17 +8,20 @@ import { Col, Row } from 'react-bootstrap';
 import { axiosInstanse } from '../../../utils/axiosInstanse';
 import { ToastContainer } from 'react-toastify';
 import { showSuccess } from '../../../toast/toast';
-
+import JoditEditor from "jodit-react";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 1100,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    height: '99%',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    overflow: 'scroll',
+    p: 4,
+    display: 'block',
 };
 
 const UpCons = (props) => {
@@ -59,6 +62,18 @@ const UpCons = (props) => {
 
   }
 
+  const editor = useRef(null);
+  const config = {
+    readonly: false,
+    height: 400
+  };
+
+  const configDark = {
+    readonly: false,
+    height: 400,
+    theme : 'dark'
+  };
+
   return <div>
     <img src="images/Edit.svg" onClick={handleOpen} alt="" />
    
@@ -86,25 +101,49 @@ const UpCons = (props) => {
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>Content tm:</p>
-              <textarea name="" id="" cols="30" rows="5" onChange={(e)=>setContentTM(e.target.value)} defaultValue={props.data.contentTM}></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentTM}
+              config={config}
+              onBlur={newContent => setContentTM(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" onChange={(e)=>setContentTM(e.target.value)} defaultValue={props.data.contentTM}></textarea> */}
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>Content ru:</p>
-              <textarea name="" id="" cols="30" rows="5"  onChange={(e)=>setContentRU(e.target.value)} defaultValue={props.data.contentRU}></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentRU}
+              config={config}
+              onBlur={newContent => setContentRU(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5"  onChange={(e)=>setContentRU(e.target.value)} defaultValue={props.data.contentRU}></textarea> */}
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>ContentTM dark:</p>
-              <textarea name="" id="" cols="30" rows="5" onChange={(e)=>setContentTM_dark(e.target.value)} defaultValue={props.data.contentTM_dark} ></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentTM_dark}
+              config={configDark}
+              onBlur={newContent => setContentTM_dark(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" onChange={(e)=>setContentTM_dark(e.target.value)} defaultValue={props.data.contentTM_dark} ></textarea> */}
             </Stack>
           </Col>
           <Col lg={6} md={6} xs={12} sm={12}>
             <Stack direction='column' marginTop={3} spacing={-2}>
               <p style={{ color: '#31456A', fontSize: '15px' }}>ContentRU dark:</p>
-              <textarea name="" id="" cols="30" rows="5" onChange={(e)=>setContentRU_dark(e.target.value)} defaultValue={props.data.contentRU_dark} ></textarea>
+              <JoditEditor
+              ref={editor}
+              value={contentRU_dark}
+              config={configDark}
+              onBlur={newContent => setContentRU_dark(newContent)}
+            />
+              {/* <textarea name="" id="" cols="30" rows="5" onChange={(e)=>setContentRU_dark(e.target.value)} defaultValue={props.data.contentRU_dark} ></textarea> */}
             </Stack>
           </Col>
           <Col lg={3} md={6} xs={12} sm={12}>

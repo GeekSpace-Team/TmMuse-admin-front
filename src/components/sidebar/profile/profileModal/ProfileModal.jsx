@@ -12,6 +12,8 @@ import Compress from 'compress.js'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { showError, showSuccess } from '../../../toast/toast';
+import dataImg from '../dataImg';
+import { ImageList, ImageListItem } from '@mui/material';
 
 
 
@@ -714,6 +716,11 @@ const ProfileModal = (props) => {
 
 
                                 }
+                                <Col lg={12} md={12} xs={12} sm={12}>
+                                    <Stack >
+                                        <p>Top Slider Images:</p>
+                                    </Stack>
+                                </Col>
 
 
 
@@ -828,16 +835,16 @@ const ProfileModal = (props) => {
                                         phoneNumberList?.map((element, i) => {
                                             return (
                                                 <Col key={"keyyyyyyy" + element.id} lg={4} md={12} sm={12} xs={12}>
-                                                    <Stack direction='column' spacing={0}>
+                                                    <Stack direction='column'>
                                                         <p className='inputTitle'>Phone number {i + 1}:</p>
-                                                        <input type="text" value={element.phoneNumber} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
+                                                        <input type="text" style={{width:'160px'}} value={element.phoneNumber} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
                                                     </Stack>
                                                 </Col>
                                             )
                                         })
                                     }
                                     <Col lg={4} md={12} sm={12} xs={12}>
-                                        <Stack direction='column' spacing={0} marginLeft={-14} marginTop={-1}>
+                                        <Stack direction='column'>
                                             <p className='addPhoneNumber' onClick={addPhoneNumber}> +Add phone number:</p>
                                         </Stack>
                                     </Col>
@@ -903,7 +910,21 @@ const ProfileModal = (props) => {
                                 </Col>
                                 <Col lg={9} md={9} sm={12} xs={12}></Col>
                                 <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}><button onClick={() => addProfile()}>Add</button></Col>
-
+                                <Col lg={12} md={12} xs={12} sm={12}>
+                                    <Stack >
+                                        <p>Gallery Images:</p>
+                                    </Stack>
+                                </Col>
+                                <Col lg={12} md={12} xs={12} sm={12}>
+                                <ImageList sx={{ maxWidth: 500, maxHeight: 230 }} gap={10} cols={4} rowHeight={100}>
+                                    {dataImg.map((item) => {
+                                        return(
+                                    <ImageListItem key={item.image}>
+                                        <img src={item.image} alt="#" />
+                                    </ImageListItem>
+                                    )})}
+                                </ImageList>
+                                </Col>
 
                             </Row>
                         </Col>

@@ -7,7 +7,6 @@ import Dashboard from './components/sidebar/dashboard/Dashboard';
 import AnalyticsPage from './components/sidebar/dashboard/analyticsPage/AnalyticsPage';
 import Profile from './components/sidebar/profile/Profile';
 import Banner from './components/sidebar/banner/Banner';
-import Category from './components/sidebar/category/Category';
 import Ads from './components/sidebar/ads/Ads';
 import Inbox from './components/sidebar/inbox/Inbox';
 import Post from './components/sidebar/post/Post';

@@ -58,25 +58,25 @@ const Users = () => {
             {userList.length == 0 ? <Empty /> :
                 <Table responsive borderless className='profileTable'>
                     <tr>
-                        <th><center>ID</center></th>
-                        <th><center>Full name</center></th>
-                        <th><center>Phone number</center></th>
-                        <th><center>User's interests</center></th>
+                        <th>ID</th>
+                        <th>Full name</th>
+                        <th>Phone number</th>
+                        <th>User's interests</th>
                     </tr>
                     {
 
                         userList.map((element, i) => {
                             return (element.id == 0 ? null : <tr>
-                                <td><center>{element.id}</center></td>
-                                <td><center>{element.fullname}</center></td>
-                                <td><center>{element.phone_number}</center></td>
-                                <td><center>{element.interest_items.length == 0 ?
+                                <td>{element.id}</td>
+                                <td>{element.fullname}</td>
+                                <td>{element.phone_number}</td>
+                                <td>{element.interest_items.length == 0 ?
                                     <label>No interests</label> :
                                     element.interest_items.map((item, i) => {
                                         if(item!=null) return (item.titleTM + ",")
                                     })
                                 }
-                                </center></td>
+                                </td>
                             </tr>)
                         }
                         )}

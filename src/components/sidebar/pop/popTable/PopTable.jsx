@@ -54,22 +54,22 @@ const PopTable = (props) => {
       {popupList.length==0?<Empty/>:
       <Table responsive borderless className='profileTable'>
             <tr>
-                <th><center>ID</center></th>
-                <th><center>Image</center></th>
-                <th><center>Comment of admin</center></th>
-                <th><center>Profile || Site URL</center></th>
-                <th><center>Delete</center></th>
-                <th><center>Edit</center></th>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Comment of admin</th>
+                <th>Profile || Site URL</th>
+                <th>Delete</th>
+                <th>Edit</th>
             </tr>
             {popupList.map((element,i) => {
                 
             return(<tr>
-                <td><center>{element.id}</center></td>
-                <td><center><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }}/></center></td>
-                <td><center>{element.comment_of_admin.substring(0,100)}{element.comment_of_admin.length>100 ? <span>...</span> : null}</center></td>
-                <td><center>{element.profile_id==0?element.site_url:element.profile_id}</center></td>
-                <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                <td>{element.id}</td>
+                <td><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }}/></td>
+                <td>{element.comment_of_admin.substring(0,100)}{element.comment_of_admin.length>100 ? <span>...</span> : null}</td>
+                <td>{element.profile_id==0?element.site_url:element.profile_id}</td>
+                <td><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                <td style={{paddingRight:'50px'}}><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></td>
                 </tr>)
             }
             )

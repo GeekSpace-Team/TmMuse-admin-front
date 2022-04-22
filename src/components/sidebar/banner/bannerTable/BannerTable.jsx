@@ -60,24 +60,24 @@ const BannerTable = (props) => {
         {bannerList.length==0?<Empty/>:
               <Table responsive borderless className='profileTable'>
               <tr>
-                  <th><center>ID</center></th>
-                  <th><center>Image</center></th>
-                  <th><center>Link</center></th>
-                  <th><center>Profile Name</center></th>
-                  <th><center>Order</center></th>
-                  <th><center>Delete</center></th>
-                  <th><center>Edit</center></th>
+                  <th>ID</th>
+                  <th>Image</th>
+                  <th>Link</th>
+                  <th>Profile Name</th>
+                  <th>Order</th>
+                  <th>Delete</th>
+                  <th>Edit</th>
               </tr>
               {  bannerList.map((element,i)=>{
                     return(
                             <tr>
-                            <td><center>{element.id}</center></td>
-                            <td><center><img src={ip+element.image} style={{width: '150px', height: '100px', objectFit: 'cover'}} /></center></td>
-                            <td><center>{element.link}</center></td>
-                            <td><center>{element.profile_id}</center></td>
-                            <td><center>{element.order}</center></td>
-                            <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                           <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                            <td>{element.id}</td>
+                            <td><img src={ip+element.image} style={{width: '150px', height: '100px', objectFit: 'cover'}} /></td>
+                            <td>{element.link}</td>
+                            <td>{element.profile_id}</td>
+                            <td>{element.order}</td>
+                            <td><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                           <td style={{paddingRight:'20px'}}><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></td>
                         </tr>
                          )
                      })

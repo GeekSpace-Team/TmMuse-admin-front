@@ -14,7 +14,6 @@ import Dashboard from './components/sidebar/dashboard/Dashboard';
 import AnalyticsPage from './components/sidebar/dashboard/analyticsPage/AnalyticsPage';
 import Profile from './components/sidebar/profile/Profile';
 import Banner from './components/sidebar/banner/Banner';
-import Category from './components/sidebar/category/Category';
 import Ads from './components/sidebar/ads/Ads';
 import Inbox from './components/sidebar/inbox/Inbox';
 import Post from './components/sidebar/post/Post';
@@ -38,7 +37,6 @@ ReactDOM.render(
       <Route path="analyticsPage" element={<AnalyticsPage/>}/>
       <Route path="profile" element={isLogin()?<Profile/>:<Navigate to="/login" replace />} />
       <Route path="banner" element={<Banner/>} />
-      <Route path="category" element={isLogin()?<Category/>:<Navigate to="/login" replace />} />
       <Route path="ads" element={<Ads/>} />
       <Route path="inbox" element={<Inbox/>} />
       <Route path="post" element={<Post/>} />

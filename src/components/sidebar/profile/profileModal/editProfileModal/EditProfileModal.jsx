@@ -13,6 +13,10 @@ import { IoMdClose } from 'react-icons/io';
 import './EditProfileModal.css'
 import { ToastContainer, toast } from 'react-toastify';
 import { showError } from '../../../../toast/toast';
+import dataImg from '../../dataImg';
+import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
+import { Delete } from '@mui/icons-material';
+import ip from '../../../server_adress/serveradress';
 
 
 
@@ -678,7 +682,16 @@ const EditProfileModal = (props) => {
 
                             }
 
-
+                                {/* <Col lg={12} md={12} xs={12} sm={12}>
+                                    <ImageList sx={{ maxWidth: 500, maxHeight: 230 }} gap={10} cols={4} rowHeight={100}>
+                                        {dataImg.map((item) => {
+                                            return(
+                                        <ImageListItem key={item.image}>
+                                            <img src={item.image} alt="#" />
+                                        </ImageListItem>
+                                        )})}
+                                    </ImageList>
+                                </Col> */}
 
                         </Row>
                     </Col>
@@ -887,8 +900,127 @@ const EditProfileModal = (props) => {
                             <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}>
                                 <button onClick={() => UpdateProfile(props.data.id)}>Update</button>
                             </Col>
+                            {/* <Col lg={12} md={12} xs={12} sm={12}>
+                                    <ImageList sx={{ maxWidth: 500, maxHeight: 230 }} gap={10} cols={4} rowHeight={100}>
+                                        {dataImg.map((item) => {
+                                            return(
+                                        <ImageListItem key={item.image}>
+                                            <img src={item.image} alt="#" />
+                                        </ImageListItem>
+                                        )})}
+                                    </ImageList>
+                                </Col> */}
 
-
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={12} md={12} xs={12} sm={12}>
+                        <Row style={{marginTop:'20px'}}>
+                            <Col lg={3} md={3} xs={12} sm={6}>
+                                <p>Top Slider:</p>
+                            <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                            {props.data.sliders.map((element) => {
+                                               if(element.isVR == false) { return(
+                                            <ImageListItem key={element.small_image}>
+                                                
+                                                <img src={ip+element.small_image} alt="#" /> 
+                                                
+                                                <ImageListItemBar
+                                                    actionIcon={
+                                                    <IconButton
+                                                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                                        aria-label={`info about`}
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                    }
+                                                />
+                                               
+                                                
+                                            
+                                            </ImageListItem>
+                                               
+                                            )}})}
+                                        </ImageList>
+                            </Col>
+                            <Col lg={3} md={3} xs={12} sm={6}>
+                                <p>Gallery Image:</p>
+                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                            {props.data.galleries?.map((element) => {
+                                                return(
+                                            <ImageListItem key={element.image}>
+                                                <img src={ip+element.medium_image} alt="#" />
+                                                <ImageListItemBar
+                                                    actionIcon={
+                                                    <IconButton
+                                                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                                        aria-label={`info about`}
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                    }
+                                                />
+                                            </ImageListItem>
+                                            )})}
+                                        </ImageList>
+                            </Col>
+                            <Col lg={3} md={3} xs={12} sm={6}>
+                                <p>VR small Image:</p>
+                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                            {props.data.sliders?.map((element) => {
+                                                if(element.isVR == true) { return(
+                                                    <ImageListItem key={element.small_image}>
+                                                        
+                                                        <img src={ip+element.small_image} alt="#" /> 
+                                                        
+                                                        <ImageListItemBar
+                                                            actionIcon={
+                                                            <IconButton
+                                                                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                                                aria-label={`info about`}
+                                                            >
+                                                                <Delete />
+                                                            </IconButton>
+                                                            }
+                                                        />
+                                                       
+                                                        
+                                                    
+                                                    </ImageListItem>
+                                                       
+                                                    )}
+                                            })}
+                                        </ImageList>
+                            </Col>
+                            <Col lg={3} md={3} xs={12} sm={6}>
+                                <p>VR large Image:</p>
+                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                            {props.data.sliders.map((element) => {
+                                                 if(element.isVR == true) { return(
+                                                    <ImageListItem key={element.large_image}>
+                                                        
+                                                        <img src={ip+element.large_image} alt="#" /> 
+                                                        
+                                                        <ImageListItemBar
+                                                            actionIcon={
+                                                            <IconButton
+                                                                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                                                aria-label={`info about`}
+                                                            >
+                                                                <Delete />
+                                                            </IconButton>
+                                                            }
+                                                        />
+                                                       
+                                                        
+                                                    
+                                                    </ImageListItem>
+                                                       
+                                                    )}
+                                               })}
+                                        </ImageList>
+                            </Col>
                         </Row>
                     </Col>
                 </Row>

@@ -6,7 +6,7 @@ import './Ads.css'
 import Pagination from '@mui/material/Pagination';
 import ip from '../../server_adress/serveradress';
 import Loading from '../../../loading/Loading'
-import { Backdrop, Modal } from '@mui/material';
+import { Backdrop, Modal, Stack } from '@mui/material';
 import Empty from '../../../empty/Empty';
 
 
@@ -58,26 +58,26 @@ const AdsTable = (props) => {
                 {(adsList.length==0 && !isEmpty)?<Empty/>
       :<Table responsive borderless className='profileTable'>
             <tr>
-                <th><center>ID</center></th>
-                <th><center>Image</center></th>
-                <th><center>Name</center></th>
-                <th><center>Comment of admin</center></th>
-                <th><center>Profile || Site URL</center></th>
-                <th><center>Delete</center></th>
-                <th><center>Edit</center></th> 
+                <th>ID</th>
+                <th>Image</th>
+                <th style={{paddingLeft:'40px'}}>Name</th>
+                <th style={{paddingLeft:'50px'}}>Comment of admin</th>
+                <th style={{paddingLeft:'100px'}}>Profile || Site URL</th>
+                <th>Delete</th>
+                <th>Edit</th>
             </tr>
             {
                 
                 adsList.map((element,i)=>{
                     return(
                         <tr>
-                            <td><center>{element.id}</center></td>
+                            <td>{element.id}</td>
                             <td><img src={ip + element.image} alt="" style={{ width: '150px', height: '100px', objectFit: 'cover' }} /></td>
-                            <td><center>{element.nameTM}</center></td>
-                            <td><center>{element.comment_of_admin}</center></td>
-                            <td><center>{element.profile_id == 0 ? element.site_url : element.profile_id}</center></td>
-                            <td><center><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></center></td>
-                            <td><center><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></center></td>
+                            <td style={{paddingLeft:'40px'}}>{element.nameTM}</td>
+                            <td style={{paddingLeft:'50px'}}>{element.comment_of_admin}</td>
+                            <td style={{paddingLeft:'100px'}}>{element.profile_id == 0 ? element.site_url : element.profile_id}</td>
+                            <td style={{paddingRight:'40px'}}><img onClick={()=>handleOpen1(element.id)} src="images/Delete.svg" alt="" /></td>
+                            <td style={{paddingRight:'40px'}}><img src="images/Edit.svg" onClick={()=>handleOpen(element)} alt="" /></td>
                         </tr>
                     )
                 })
