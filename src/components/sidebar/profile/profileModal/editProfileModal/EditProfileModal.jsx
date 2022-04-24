@@ -936,7 +936,6 @@ const EditProfileModal = (props) => {
                                                     </IconButton>
                                                     }
                                                 />
-                                               
                                                 
                                             
                                             </ImageListItem>
