@@ -1,26 +1,22 @@
 import React, { useState } from 'react'
-import { Button, Col, Modal, Row } from 'react-bootstrap';
+import { Col, Modal, Row } from 'react-bootstrap';
 import Stack from '@mui/material/Stack';
 import './profileModal.css'
 import LeftSIdeModal from './LeftSideModal/LeftSIdeModal';
 import RightSideModal from './RightSideModal/RightSideModal';
 import { Player } from '@lottiefiles/react-lottie-player';
-import axios from 'axios';
 import { axiosInstanse } from "../../../utils/axiosInstanse";
 import { useEffect } from 'react';
 import Compress from 'compress.js'
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { showError, showSuccess } from '../../../toast/toast';
-import dataImg from '../dataImg';
-import { ImageList, ImageListItem } from '@mui/material';
 
 
 
 
 
 const ProfileModal = (props) => {
-    const [allProfile, setAllProfile] = useState([]);
     const [allCinema, setAllCinema] = useState([]);
     const [cinemaId, setCinemaId] = useState(0);
     const navigate = useNavigate();
@@ -57,8 +53,6 @@ const ProfileModal = (props) => {
     const [loading, setLoading] = useState(false);
     const [arrayOfTopSliderImages, setarrayOfTopSliderImages] = useState([]);
     const [arrayOfGalleryLargeImages, setarrayOfGalleryLargeImages] = useState([]);
-    const [serverUrl, setServerUrl] = useState("http://95.85.119.162:5000/");
-    const [phone_number, setPhone_number] = useState('');
     const [isAdd, setIsAdd] = useState(false);
     const [categoryList, setCategoryList] = props.category;
     const [isCafe, setIsCafe] = useState(false);
@@ -74,7 +68,6 @@ const ProfileModal = (props) => {
     const [promoCount, setPromo_count] = useState(0);
     const [isCertificate, setisCertificate] = useState(false);
     const [movieTime, setMovieTime] = useState('');
-    const [cinema_id, setCinema_id] = useState(0);
     const [own_promotion, setOwn_promotion] = useState(0);
     const [is_promo, setPromoCount] = useState(false);
 
@@ -128,7 +121,7 @@ const ProfileModal = (props) => {
             }).catch((err) => {
                 console.log(err);
             })
-    }, [])
+    },[])
     const onFinsih = (id) => {
         setLoading(false);
         setShow(false)
@@ -153,28 +146,17 @@ const ProfileModal = (props) => {
         settmmusecard(0);
         setowncard(0);
         setOwn_promotion(0);
-        // setcategory('');
         setdelivery(false);
         setavaragecheck(0);
         setkitchenTM('');
         setkitchenRU('');
         setcash(false);
         setterminal(false);
-        // setrequired_promotion('');
-        // setisActiveCard('');
-        // setinsertedProfileId('');
-        // setinsertedCategoryId('');
-        // setPhone_number('');
-        // setCategoryList('');
-        // setIsCafe('');
-        // setIsMovie('');
         setTagsTM('');
         setTagsRU('');
         setIsWifi(false);
         setphoneNumberList([""]);
         setPromoCount(0);
-        // setisCertificate('');
-        // setMovieTime('');
         props.getCategory(1);
         showSuccess('Successufully added')
     }
@@ -182,13 +164,13 @@ const ProfileModal = (props) => {
 
 
     useEffect(() => {
-        if (category == 4) {
+        if (category === 4) {
             setIsCafe(true);
         } else {
             setIsCafe(false);
         }
 
-        if (category == 2) {
+        if (category === 2) {
             setIsMovie(true);
         } else {
             setIsMovie(false);
@@ -230,7 +212,7 @@ const ProfileModal = (props) => {
                 let file = Compress.convertBase64ToFile(base64str, imgExt)
                 console.log(file);
                 newArray = [...newArray, file]
-                if (k == data.length - 1) {
+                if (k === data.length - 1) {
                     setCompressedSliders(newArray);
                 }
 
@@ -265,7 +247,7 @@ const ProfileModal = (props) => {
             console.log(data.data);
             if(arrayOfGalleryLargeImages.length>0)
                 onFileUploadGalleryLargeImages(id);
-            else if(largeVrImage!='' && smallVrImage!=''){
+            else if(largeVrImage!=='' && smallVrImage!==''){
                 uploadLargeVrImage();
             } else {
                 addTags(id);
@@ -311,7 +293,7 @@ const ProfileModal = (props) => {
                 let file = Compress.convertBase64ToFile(base64str, imgExt)
                 console.log(file);
                 newArray = [...newArray, file]
-                if (k == data.length - 1) {
+                if (k === data.length - 1) {
                     setCompressedGallery(newArray);
                 }
 
@@ -344,7 +326,7 @@ const ProfileModal = (props) => {
         };
         axiosInstanse.post("/add-galleries?profile_id=" + id, formData, config).then((data) => {
             console.log(data.data);
-            if(largeVrImage!='' && smallVrImage!=''){
+            if(largeVrImage!=='' && smallVrImage!==''){
                 uploadLargeVrImage();
             } else {
                 addTags(id);
@@ -366,12 +348,12 @@ const ProfileModal = (props) => {
 
 
     const addTags = async (id) => {
-        if (id == 0) {
+        if (id === 0) {
             return;
         }
         const tagsTmArray = tagsTM.split(',');
         const tagsRuArray = tagsRU.split(',');
-        if (tagsTmArray.length == 0 || tagsTmArray[0].trim()=='') {
+        if (tagsTmArray.length === 0 || tagsTmArray[0].trim()==='') {
             onFinsih(id);
             return;
         }
@@ -401,7 +383,7 @@ const ProfileModal = (props) => {
 
 
     const uploadLargeVrImage = (id) => {
-        if (largeVrImage != '') {
+        if (largeVrImage !== '') {
             let data = new FormData()
             data.append('file', largeVrImage, "ok.jpg")
             let url = "/add-vr-large-image?profile_id=" + id;
@@ -429,7 +411,7 @@ const ProfileModal = (props) => {
 
 
     const uploadSmallVrImage = (id) => {
-        if (smallVrImage != '') {
+        if (smallVrImage !== '') {
             let data = new FormData()
             data.append('file', smallVrImage, "ok.jpg")
             let url = "/add-vr-small-image?profile_id=" + id;
@@ -456,7 +438,7 @@ const ProfileModal = (props) => {
 
     const addPhoneNumbers = (id) => {
         console.log(phoneNumberList);
-        if (id == 0 || phoneNumberList[0] == ''){
+        if (id === 0 || phoneNumberList[0] === ''){
             onFileUploadTopSliderImages(id);
             return;
         }
@@ -486,7 +468,7 @@ const ProfileModal = (props) => {
 
     const addProfile = () => {
         let tempSite = site;
-        if (category == 2) {
+        if (category === 2) {
             tempSite = movieTime;
         }
         let vip = 0;
@@ -495,7 +477,7 @@ const ProfileModal = (props) => {
             vip = 1;
         }
 
-        if (promoCount != '') {
+        if (promoCount !== '') {
             if (promoCount > 0) {
                 is_promo = true;
             }
@@ -504,7 +486,7 @@ const ProfileModal = (props) => {
         if (promotion_status === '') {
             setowncard(0);
             setisActiveCard(false);
-        } else if (promotion_status == 0) {
+        } else if (promotion_status === 0) {
             setisActiveCard(false);
         }
         else {
@@ -643,7 +625,7 @@ const ProfileModal = (props) => {
                                     </Stack>
                                 </Col>
                                 {
-                                    isMovie == true ?
+                                    isMovie === true ?
                                         <Row className="addMovie">
                                             <Col lg={12} md={12} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
@@ -771,7 +753,7 @@ const ProfileModal = (props) => {
                                 </Col>
 
                                 {
-                                    isCafe == true ?
+                                    isCafe === true ?
                                         <Row id="cafeRestaurantContainer1">
                                             <Col lg={3} md={3} sm={12} xs={12}>
                                                 <Stack direction='row' spacing={-5} marginTop={3} marginLeft={-5}>
@@ -902,8 +884,6 @@ const ProfileModal = (props) => {
                                 </Col>
                                 <Col lg={9} md={9} sm={12} xs={12}></Col>
                                 <Col className='fullSizeInput' lg={3} md={3} sm={12} xs={12}><button onClick={() => addProfile()}>Add</button></Col>
-                               
-                                
 
                             </Row>
                         </Col>

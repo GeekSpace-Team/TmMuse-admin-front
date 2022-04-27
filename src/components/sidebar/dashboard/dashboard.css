@@ -125,3 +125,15 @@ progress[value]::-webkit-progress-bar {
   font-size: 34px;
   line-height: 41px;
 }
+.newGridContainer {
+  background: rgba(52, 78, 209, 0.2);
+  border-radius: 8px;
+}
+@media (max-width: 992px) {
+  .dashboardContainer {
+    margin-top: 10px;
+  }
+  .informationContainer {
+    margin-top: 10px;
+  }
+}

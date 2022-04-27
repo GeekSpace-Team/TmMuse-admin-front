@@ -1,11 +1,11 @@
-import {React,useState} from 'react'
-import 'bootstrap/dist/css/bootstrap.css';
-import './Login.css'
+import { React, useState } from 'react'
 import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { NavLink, useNavigate} from 'react-router-dom';
-import {useCookies} from 'react-cookie';
-import {CookiesProvider} from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { CookiesProvider } from 'react-cookie';
+import 'bootstrap/dist/css/bootstrap.css';
+import './Login.css'
 
 
 
@@ -14,14 +14,10 @@ import {CookiesProvider} from 'react-cookie';
 const LoginPage = () => {
     const history = useNavigate()
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     const [userToken,setCookie] =useCookies(['userToken','userType']);
-
     const signIn = () => {
-        
         var username=document.getElementById("username");
         var password=document.getElementById("password");
         if(username.value==="" || password.value===""){
@@ -108,14 +104,14 @@ const LoginPage = () => {
                             <Row>
                             <Col lg={2} md={2} sm={2} xs={2}></Col>
                                 <Col lg={8} md={8} sm={8} xs={8} className='rightItems'>
-                                   <p>TmMuse Admin</p>
+                                   <p  onKeyDown={() => signIn()}>TmMuse Admin</p>
                                 </Col>
                                 <Col lg={2} md={2} sm={2} xs={2}></Col>
                             </Row>
-                            <Row>
+                            <Row >
                             <Col lg={2} md={2} sm={2} xs={2}></Col>
                                 <Col lg={8} md={8} sm={8} xs={8} className='usernameInput'>
-                                   <input placeholder='Username' id='username' required></input>
+                                   <input  onKeyDown={() => signIn()} placeholder='Username' id='username' required></input>
                                 </Col>
                                 <Col lg={2} md={2} sm={2} xs={2}></Col>
                             </Row>
