@@ -92,7 +92,7 @@ const UpdatePost = (props) => {
     
     },{headers}).then((data)=>{
       console.log("result",data.data.body);
-      if(selectedFile===null){
+      if(selectedFile==null){
         props.handleClose()
         props.getData(1);
         showSuccess("Successfully updated!!!")

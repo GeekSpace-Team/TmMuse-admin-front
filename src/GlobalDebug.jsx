@@ -6,7 +6,7 @@ export const GlobalDebug = (function () {
     */
     return function (debugOn, suppressAll) {
       var suppress = suppressAll || false;
-      if (debugOn === false) {
+      if (debugOn == false) {
         // supress the default console functionality
         console = {};
         console.log = function () {};

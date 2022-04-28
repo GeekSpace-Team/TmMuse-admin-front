@@ -11,6 +11,7 @@ import Compress from 'compress.js'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { showError, showSuccess } from '../../../toast/toast';
+import { Grid } from '@mui/material';
 
 
 
@@ -164,13 +165,13 @@ const ProfileModal = (props) => {
 
 
     useEffect(() => {
-        if (category === 4) {
+        if (category == 4) {
             setIsCafe(true);
         } else {
             setIsCafe(false);
         }
 
-        if (category === 2) {
+        if (category == 2) {
             setIsMovie(true);
         } else {
             setIsMovie(false);
@@ -212,7 +213,7 @@ const ProfileModal = (props) => {
                 let file = Compress.convertBase64ToFile(base64str, imgExt)
                 console.log(file);
                 newArray = [...newArray, file]
-                if (k === data.length - 1) {
+                if (k == data.length - 1) {
                     setCompressedSliders(newArray);
                 }
 
@@ -293,7 +294,7 @@ const ProfileModal = (props) => {
                 let file = Compress.convertBase64ToFile(base64str, imgExt)
                 console.log(file);
                 newArray = [...newArray, file]
-                if (k === data.length - 1) {
+                if (k == data.length - 1) {
                     setCompressedGallery(newArray);
                 }
 
@@ -348,12 +349,12 @@ const ProfileModal = (props) => {
 
 
     const addTags = async (id) => {
-        if (id === 0) {
+        if (id == 0) {
             return;
         }
         const tagsTmArray = tagsTM.split(',');
         const tagsRuArray = tagsRU.split(',');
-        if (tagsTmArray.length === 0 || tagsTmArray[0].trim()==='') {
+        if (tagsTmArray.length == 0 || tagsTmArray[0].trim()=='') {
             onFinsih(id);
             return;
         }
@@ -438,7 +439,7 @@ const ProfileModal = (props) => {
 
     const addPhoneNumbers = (id) => {
         console.log(phoneNumberList);
-        if (id === 0 || phoneNumberList[0] === ''){
+        if (id == 0 || phoneNumberList[0] == ''){
             onFileUploadTopSliderImages(id);
             return;
         }
@@ -468,7 +469,7 @@ const ProfileModal = (props) => {
 
     const addProfile = () => {
         let tempSite = site;
-        if (category === 2) {
+        if (category == 2) {
             tempSite = movieTime;
         }
         let vip = 0;
@@ -483,10 +484,10 @@ const ProfileModal = (props) => {
             }
         }
 
-        if (promotion_status === '') {
+        if (promotion_status == '') {
             setowncard(0);
             setisActiveCard(false);
-        } else if (promotion_status === 0) {
+        } else if (promotion_status == 0) {
             setisActiveCard(false);
         }
         else {
@@ -579,6 +580,45 @@ const ProfileModal = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     {/* <form method="post" enctype="multipart/form-data"> */}
+
+
+                    {/* New Version Profile Modal Starting here */}
+
+
+                    {/* <Grid container gap={2.8}>
+                        <Grid item xl={3} md={3} lg={3} sm={12} xs={12} >
+                                <label>Name TM:</label><br/>
+                                <input  style={{width:'98%'}} type="text" />
+                        </Grid>
+                        <Grid item xl={3} md={3} lg={3} sm={12} xs={12} >
+                                <label>Name TM:</label><br/>
+                                <input  style={{width:'98%'}} type="text" />
+                        </Grid>
+                        <Grid item xl={1} md={1} lg={1} sm={12} xs={12} >
+                                <label>Is VIP?</label><br/>
+                                <input type='checkbox' />
+                        </Grid>
+                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
+                                <label>Name TM:</label><br/>
+                                <input  style={{width:'95%'}} type="text" />
+                        </Grid>
+                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
+                                <label>Name TM:</label><br/>
+                                <select name="" id="" style={{width:'95%', height:'30px'}} />
+                        </Grid>
+                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
+                                <label>Name TM:</label><br/>
+                                <input  style={{width:'95%'}} type="text" />
+                        </Grid>
+                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
+                                <label>Name TM:</label><br/>
+                                <input  style={{width:'95%'}} type="text" />
+                        </Grid>
+                    </Grid> */}
+
+
+                    {/* New Version Profile Modal Ending here */}
+
                     <Row>
                         <Col lg={6} md={12} sm={12} xs={12}>
                             <Row className='leftinputItem'>
@@ -625,20 +665,20 @@ const ProfileModal = (props) => {
                                     </Stack>
                                 </Col>
                                 {
-                                    isMovie === true ?
+                                    isMovie == true ?
                                         <Row className="addMovie">
                                             <Col lg={12} md={12} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Movie time:
                                                         <pre>09/01/2022(13:00,22:30)*
                                                             <br />11/01/2022-12/01/2022(14:00,22:30)*</pre></p>
-                                                    <textarea name="" id="movie" cols="51.9" rows="5" onInput={e => setMovieTime(e.target.value)}></textarea>
+                                                    <textarea name="" id="movie" cols="51.9" rows="5" onChange={(e) => setsite(e.target.value)}></textarea>
                                                 </Stack>
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Address:</p>
-                                                    <input value={address} onInput={e => setaddress(e.target.value)} className='inputModal' type="text" />
+                                                    <input value={address} onChange={(e) => setaddress(e.target.value)} className='inputModal' type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
@@ -656,7 +696,7 @@ const ProfileModal = (props) => {
                                             <Col lg={3} md={3} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Price:</p>
-                                                    <input value={avaragecheck} onInput={e => setavaragecheck(e.target.value)} type="text" />
+                                                    <input value={avaragecheck} onChange={(e) => setavaragecheck(e.target.value)} type="text" />
                                                 </Stack>
                                             </Col>
 
@@ -665,33 +705,33 @@ const ProfileModal = (props) => {
                                         <Row>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
-                                                    <p className='inputTitle'>Site URl:</p>
-                                                    <input value={site} onInput={e => setsite(e.target.value)} className='inputModal' type="text" />
+                                                    <p className='inputTitle'>Site URL:</p>
+                                                    <input value={site} onChange={(e) => setsite(e.target.value)} className='inputModal' type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Location...</p>
-                                                    <input value={location} onInput={e => setlocation(e.target.value)} className='inputModal' type="text" />
+                                                    <input value={location} onChange={(e) => setlocation(e.target.value)} className='inputModal' type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Address:</p>
-                                                    <input value={address} onInput={e => setaddress(e.target.value)} className='inputModal' type="text" />
+                                                    <input value={address} onChange={(e) => setaddress(e.target.value)} className='inputModal' type="text" />
                                                 </Stack>
                                             </Col>
 
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Work hours(09:00-18:00):</p>
-                                                    <input value={workhours} onInput={e => setworkhours(e.target.value)} className='inputModal' type="text" />
+                                                    <input value={workhours} onChange={e => setworkhours(e.target.value)} className='inputModal' type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Free time(13:00-14:00):</p>
-                                                    <input value={freetime} onInput={e => setfreetime(e.target.value)} className='inputModal' type="text" />
+                                                    <input value={freetime} onChange={e => setfreetime(e.target.value)} className='inputModal' type="text" />
                                                 </Stack>
                                             </Col>
                                         </Row>
@@ -753,7 +793,7 @@ const ProfileModal = (props) => {
                                 </Col>
 
                                 {
-                                    isCafe === true ?
+                                    isCafe == true ?
                                         <Row id="cafeRestaurantContainer1">
                                             <Col lg={3} md={3} sm={12} xs={12}>
                                                 <Stack direction='row' spacing={-5} marginTop={3} marginLeft={-5}>
@@ -764,13 +804,13 @@ const ProfileModal = (props) => {
                                             <Col lg={3} md={3} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Avarage check:</p>
-                                                    <input value={avaragecheck} onInput={e => setavaragecheck(e.target.value)} type="text" />
+                                                    <input value={avaragecheck} onChange={e => setavaragecheck(e.target.value)} type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Kitchen TM:</p>
-                                                    <input value={kitchenTM} onInput={e => setkitchenTM(e.target.value)} id='kitchenTmInput' type="text" />
+                                                    <input value={kitchenTM} onChange={e => setkitchenTM(e.target.value)} id='kitchenTmInput' type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={3} md={3} sm={12} xs={12}>
@@ -788,7 +828,7 @@ const ProfileModal = (props) => {
                                             <Col lg={6} md={6} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Kitchen RU:</p>
-                                                    <input value={kitchenRU} onInput={e => setkitchenRU(e.target.value)} id='kitchenTmInput' type="text" />
+                                                    <input value={kitchenRU} onChange={e => setkitchenRU(e.target.value)} id='kitchenTmInput' type="text" />
                                                 </Stack>
                                             </Col>
                                             <Col lg={3} md={3} sm={12} xs={12}>

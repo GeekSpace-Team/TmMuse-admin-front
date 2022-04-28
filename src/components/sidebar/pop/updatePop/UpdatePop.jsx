@@ -101,7 +101,7 @@ const UpdatePop = (props) => {
 
       },{headers}).then((data)=>{
       console.log(data.data.body);
-      if(selectedFile===null){
+      if(selectedFile==null){
         props.handleClose()
         props.getData(1);
         showSuccess("Successfully updated!!!");

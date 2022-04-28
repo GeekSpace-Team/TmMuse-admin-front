@@ -23,8 +23,8 @@ import { GlobalDebug } from './GlobalDebug';
 
 function App() {
   useEffect(() => {
-    (process.env.NODE_ENV === "production" ||
-     process.env.REACT_APP_ENV === "STAGING") &&
+    (process.env.NODE_ENV == "production" ||
+     process.env.REACT_APP_ENV == "STAGING") &&
       GlobalDebug(false);
   }, []);
   

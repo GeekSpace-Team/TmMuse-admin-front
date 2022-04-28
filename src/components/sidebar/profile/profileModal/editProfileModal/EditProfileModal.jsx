@@ -541,7 +541,7 @@ const EditProfileModal = (props) => {
                 // alert("5 if");
                 addTags(id);
             }
-            //   if(phoneNumberList.length===null){
+            //   if(phoneNumberList.length==null){
             //     props.handleClose()
             //     props.getData(1);
             //   }else{
@@ -647,7 +647,7 @@ const EditProfileModal = (props) => {
                                     <Row>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Stack direction='column' spacing={0}>
-                                                <p className='inputTitle'>Site URl:</p>
+                                                <p className='inputTitle'>Site URL:</p>
                                                 <input onChange={(e) => setsite(e.target.value)} defaultValue={props.data.site} className='inputModal' type="text" />
                                             </Stack>
                                         </Col>
@@ -825,14 +825,14 @@ const EditProfileModal = (props) => {
                                             <Col key={"keyyyyyyy" + element.id} lg={4} md={12} sm={12} xs={12}>
                                                 <Stack direction='column' spacing={0}>
                                                     <p className='inputTitle'>Phone number {i + 1}:</p>
-                                                    <input type="text" value={element} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
+                                                    <input type="text" style={{width:'160px'}} value={element} onInput={e => phoneNumberUpdateById(e.target.value, i)} className='normalSize' />
                                                 </Stack>
                                             </Col>
                                         )
                                     })
                                 }
                                 <Col lg={4} md={12} sm={12} xs={12}>
-                                    <Stack direction='column' spacing={0} marginLeft={-14} marginTop={-1}>
+                                    <Stack direction='column'>
                                         <p className='addPhoneNumber' onClick={addPhoneNumber}> +Add phone number:</p>
                                     </Stack>
                                 </Col>
@@ -919,18 +919,20 @@ const EditProfileModal = (props) => {
                         <Row style={{marginTop:'20px'}}>
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>Top Slider:</p>
-                            <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                            <ImageList sx={{ maxWidth: 500 }} gap={5} cols={3}>
                                             {props.data.sliders.map((element) => {
                                                if(element.isVR == false) { return(
                                             <ImageListItem key={element.small_image}>
                                                 
-                                                <img src={ip+element.small_image} alt="#" /> 
+                                                <img style={{height:'150px', width:'130px'}} src={ip+element.small_image} alt="#" /> 
                                                 
                                                 <ImageListItemBar
+                                                style={{width:'130px'}}
                                                     actionIcon={
                                                     <IconButton
                                                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                                         aria-label={`info about`}
+                                                        
                                                     >
                                                         <Delete />
                                                     </IconButton>
@@ -945,12 +947,13 @@ const EditProfileModal = (props) => {
                             </Col>
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>Gallery Image:</p>
-                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={3}>
                                             {props.data.galleries?.map((element) => {
                                                 return(
                                             <ImageListItem key={element.image}>
-                                                <img src={ip+element.medium_image} alt="#" />
+                                                <img style={{height:'150px', width:'130px'}} src={ip+element.medium_image} alt="#" />
                                                 <ImageListItemBar
+                                                style={{width:'130px'}}
                                                     actionIcon={
                                                     <IconButton
                                                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
@@ -966,14 +969,15 @@ const EditProfileModal = (props) => {
                             </Col>
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>VR small Image:</p>
-                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={3}>
                                             {props.data.sliders?.map((element) => {
                                                 if(element.isVR == true) { return(
                                                     <ImageListItem key={element.small_image}>
                                                         
-                                                        <img src={ip+element.small_image} alt="#" /> 
+                                                        <img style={{height:'150px', width:'130px'}} src={ip+element.small_image} alt="#" /> 
                                                         
                                                         <ImageListItemBar
+                                                        style={{width:'130px'}}
                                                             actionIcon={
                                                             <IconButton
                                                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
@@ -994,14 +998,15 @@ const EditProfileModal = (props) => {
                             </Col>
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>VR large Image:</p>
-                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={2}>
+                                <ImageList sx={{ maxWidth: 500 }} gap={10} cols={3}>
                                             {props.data.sliders.map((element) => {
                                                  if(element.isVR == true) { return(
                                                     <ImageListItem key={element.large_image}>
                                                         
-                                                        <img src={ip+element.large_image} alt="#" /> 
+                                                        <img style={{height:'150px', width:'130px'}} src={ip+element.large_image} alt="#" /> 
                                                         
                                                         <ImageListItemBar
+                                                        style={{width:'130px'}}
                                                             actionIcon={
                                                             <IconButton
                                                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}

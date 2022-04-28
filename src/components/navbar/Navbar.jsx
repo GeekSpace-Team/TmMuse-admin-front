@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 
 const Navbar = () => {
-  if(localStorage.getItem("tkn")==null || typeof localStorage.getItem("tkn")==='undefined' || localStorage.getItem("tkn")==''){
+  if(localStorage.getItem("tkn")==null || typeof localStorage.getItem("tkn")=='undefined' || localStorage.getItem("tkn")==''){
     window.location.href="/login";
   }
   const logout=()=>{

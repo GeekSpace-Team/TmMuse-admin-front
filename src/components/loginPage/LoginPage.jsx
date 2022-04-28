@@ -20,7 +20,7 @@ const LoginPage = () => {
     const signIn = () => {
         var username=document.getElementById("username");
         var password=document.getElementById("password");
-        if(username.value==="" || password.value===""){
+        if(username.value=="" || password.value==""){
             alert("Enter full information!");
             return;
         }
@@ -40,7 +40,7 @@ const LoginPage = () => {
         .then(response => response.json())
         .then(data => {
             handleClose()
-            if(data.error===true){
+            if(data.error==true){
                 alert("Username or password is wrong!");
             } else{
                 if(data.body!=null && !data.error){
