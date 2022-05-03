@@ -74,7 +74,7 @@ const EditProfileModal = (props) => {
     const [loading, setLoading] = useState(false);
     const [arrayOfTopSliderImages, setarrayOfTopSliderImages] = useState([]);
     const [arrayOfGalleryLargeImages, setarrayOfGalleryLargeImages] = useState([]);
-    const [serverUrl, setServerUrl] = useState("http://95.85.119.162:5000/");
+    const [serverUrl, setServerUrl] = useState("http://95.85.125.22:5000/");
     const [phone_number, setPhone_number] = useState(props.data.phone_numbers);
     const [isAdd, setIsAdd] = useState(props.data.isAdd);
     const categoryList = props.category;

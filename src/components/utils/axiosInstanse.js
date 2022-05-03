@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BaseURL = "http://95.85.119.162:5000/";
+export const BaseURL = "http://95.85.125.22:5000/";
 
 export const axiosInstanse = axios.create({
     baseURL:BaseURL,

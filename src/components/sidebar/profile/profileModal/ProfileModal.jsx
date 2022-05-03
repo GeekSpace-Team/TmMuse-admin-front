@@ -495,7 +495,7 @@ const ProfileModal = (props) => {
         }
 
         setLoading(true);
-        fetch('http://95.85.119.162:5000/add-profile', {
+        fetch('http://95.85.125.22:5000/add-profile', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -580,44 +580,6 @@ const ProfileModal = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     {/* <form method="post" enctype="multipart/form-data"> */}
-
-
-                    {/* New Version Profile Modal Starting here */}
-
-
-                    {/* <Grid container gap={2.8}>
-                        <Grid item xl={3} md={3} lg={3} sm={12} xs={12} >
-                                <label>Name TM:</label><br/>
-                                <input  style={{width:'98%'}} type="text" />
-                        </Grid>
-                        <Grid item xl={3} md={3} lg={3} sm={12} xs={12} >
-                                <label>Name TM:</label><br/>
-                                <input  style={{width:'98%'}} type="text" />
-                        </Grid>
-                        <Grid item xl={1} md={1} lg={1} sm={12} xs={12} >
-                                <label>Is VIP?</label><br/>
-                                <input type='checkbox' />
-                        </Grid>
-                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
-                                <label>Name TM:</label><br/>
-                                <input  style={{width:'95%'}} type="text" />
-                        </Grid>
-                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
-                                <label>Name TM:</label><br/>
-                                <select name="" id="" style={{width:'95%', height:'30px'}} />
-                        </Grid>
-                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
-                                <label>Name TM:</label><br/>
-                                <input  style={{width:'95%'}} type="text" />
-                        </Grid>
-                        <Grid item xl={1} md={2} lg={2} sm={12} xs={12} >
-                                <label>Name TM:</label><br/>
-                                <input  style={{width:'95%'}} type="text" />
-                        </Grid>
-                    </Grid> */}
-
-
-                    {/* New Version Profile Modal Ending here */}
 
                     <Row>
                         <Col lg={6} md={12} sm={12} xs={12}>

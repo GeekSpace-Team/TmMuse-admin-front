@@ -25,7 +25,7 @@ const LoginPage = () => {
             return;
         }
         handleShow()
-        fetch('http://95.85.119.162:5000/sign-in', {
+        fetch('http://95.85.125.22:5000/sign-in', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
