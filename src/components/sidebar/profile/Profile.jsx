@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import ProfileModal from './profileModal/ProfileModal';
 import { axiosInstanse } from '../../utils/axiosInstanse';
+import { ToastContainer } from 'react-toastify';
 
 
 const Profile = () => {
@@ -57,6 +58,7 @@ const Profile = () => {
     
     return (
         <div className='content' >
+              <ToastContainer />
             <Stack className='profileName' marginTop='10' direction='row' justifyContent='space-between' >
                 <p>Profiles</p>
                 <span className='ProfileModalAddButton'><ProfileModal category={[categoryList, setCategoryList]}  getCategory={getProfile}/></span>

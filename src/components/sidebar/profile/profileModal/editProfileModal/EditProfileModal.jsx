@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import { IoMdClose } from 'react-icons/io';
 import './EditProfileModal.css'
 import { ToastContainer, toast } from 'react-toastify';
-import { showError } from '../../../../toast/toast';
+import { showError, showSuccess } from '../../../../toast/toast';
 import dataImg from '../../dataImg';
 import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
@@ -100,6 +100,9 @@ const EditProfileModal = (props) => {
     const [cinema_id, setCinema_id] = useState(props.data.cinema_id);
     const [tm_muse_card, setTm_muse_card] = useState(props.data.tm_muse_card);
     const [own_promotion, setOwn_promotion] = useState(props.data.own_promotion);
+
+    const [sldrs,setSldrs]=useState(props.data.sliders);
+    const [glrs,setGlrs]=useState(props.data.galleries);
 
     let newPhones = [];
     let tempTagTM='';
@@ -554,6 +557,29 @@ const EditProfileModal = (props) => {
         })
 
     }
+
+
+    const deleteProfileImage=(id,type,i,array)=>{
+        axiosInstanse.delete('/delete-slider?type='+type+'&id='+id,{headers})
+        .then(response=>{
+          if(response.data.error){
+          showError("Error");
+          } else{
+              let temp=array.filter((item,i)=>item.id!=id);
+              if(type=='image'){
+                  setSldrs(temp);
+              } else{
+                  setGlrs(temp)
+              }
+              console.log(temp.length)
+            
+              showSuccess('Successfully deleted!!!');
+          }
+        })
+        .catch(ex=>{
+            showError("Error");
+        });
+      }
     return (
         <div className='updateProfilee'>
             <Box sx={style}>
@@ -920,7 +946,7 @@ const EditProfileModal = (props) => {
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>Top Slider:</p>
                             <ImageList sx={{ maxWidth: 500 }} gap={5} cols={3}>
-                                            {props.data.sliders.map((element) => {
+                                            {sldrs.map((element,i) => {
                                                if(element.isVR == false) { return(
                                             <ImageListItem key={element.small_image}>
                                                 
@@ -930,11 +956,12 @@ const EditProfileModal = (props) => {
                                                 style={{width:'130px'}}
                                                     actionIcon={
                                                     <IconButton
+                                                    onClick={()=>deleteProfileImage(element.id,'image',i,sldrs)}
                                                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                                         aria-label={`info about`}
                                                         
                                                     >
-                                                        <Delete />
+                                                        <Delete  />
                                                     </IconButton>
                                                     }
                                                 />
@@ -948,7 +975,7 @@ const EditProfileModal = (props) => {
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>Gallery Image:</p>
                                 <ImageList sx={{ maxWidth: 500 }} gap={10} cols={3}>
-                                            {props.data.galleries?.map((element) => {
+                                            {glrs?.map((element,i) => {
                                                 return(
                                             <ImageListItem key={element.image}>
                                                 <img style={{height:'150px', width:'130px'}} src={ip+element.medium_image} alt="#" />
@@ -956,10 +983,11 @@ const EditProfileModal = (props) => {
                                                 style={{width:'130px'}}
                                                     actionIcon={
                                                     <IconButton
+                                                        onClick={()=>deleteProfileImage(element.id,'gallery',i,glrs)}
                                                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                                         aria-label={`info about`}
                                                     >
-                                                        <Delete />
+                                                        <Delete   />
                                                     </IconButton>
                                                     }
                                                 />
@@ -970,7 +998,7 @@ const EditProfileModal = (props) => {
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>VR small Image:</p>
                                 <ImageList sx={{ maxWidth: 500 }} gap={10} cols={3}>
-                                            {props.data.sliders?.map((element) => {
+                                            {sldrs?.map((element,i) => {
                                                 if(element.isVR == true) { return(
                                                     <ImageListItem key={element.small_image}>
                                                         
@@ -980,6 +1008,7 @@ const EditProfileModal = (props) => {
                                                         style={{width:'130px'}}
                                                             actionIcon={
                                                             <IconButton
+                                                                onClick={()=>deleteProfileImage(element.id,'image',i,sldrs)}
                                                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                                                 aria-label={`info about`}
                                                             >
@@ -999,7 +1028,7 @@ const EditProfileModal = (props) => {
                             <Col lg={3} md={3} xs={12} sm={6}>
                                 <p>VR large Image:</p>
                                 <ImageList sx={{ maxWidth: 500 }} gap={10} cols={3}>
-                                            {props.data.sliders.map((element) => {
+                                            {sldrs.map((element,i) => {
                                                  if(element.isVR == true) { return(
                                                     <ImageListItem key={element.large_image}>
                                                         
@@ -1009,10 +1038,11 @@ const EditProfileModal = (props) => {
                                                         style={{width:'130px'}}
                                                             actionIcon={
                                                             <IconButton
+                                                            onClick={()=>deleteProfileImage(element.id,'image',i,sldrs)}
                                                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                                                 aria-label={`info about`}
                                                             >
-                                                                <Delete />
+                                                                <Delete  />
                                                             </IconButton>
                                                             }
                                                         />
