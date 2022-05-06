@@ -96,8 +96,7 @@ const UpdatePop = (props) => {
         descriptionTM: descriptionTM,
         descriptionRU: descriptionRU,
         comment_of_admin: comment_of_admin,
-        site_url: site_url,
-        posts_id:posts_id
+        site_url: site_url
 
       },{headers}).then((data)=>{
       console.log(data.data.body);

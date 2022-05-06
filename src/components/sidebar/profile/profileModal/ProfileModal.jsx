@@ -722,7 +722,7 @@ const ProfileModal = (props) => {
                                         <select style={{ height: '30px' }} onChange={e => setstatus(e.target.value)} name="" id="">
                                             <option value="0">Status</option>
                                             <option value="1">Active</option>
-                                            <option value="2">Passive</option>
+                                            <option value="0">Passive</option>
                                         </select>
                                     </Stack>
                                 </Col>
